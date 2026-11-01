@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T06:46:54.625988+00:00",
+  "title": "Design System: Linfei Technology homepage",
+  "extensions": {
+    "scope": {
+      "surface": "Default public homepage only",
+      "sources": [
+        "web/src/styles/lftech-home.css",
+        "web/src/features/home/components/landing-page.tsx",
+        "web/src/features/home/components/landing-console-preview.tsx",
+        "web/src/features/home/components/hero-terminal-demo.tsx"
+      ],
+      "excludes": [
+        "Customer and admin console themes",
+        "Custom homepage HTML, Markdown, and URL branches"
+      ],
+      "tonalRampNote": "Tonal ramps are synthesized OKLCH preview metadata, not additional production tokens. Frontmatter values are canonical.",
+      "snippetNote": "Static previews expand homepage styling for the panel. Production must continue using shared React components; snippets do not replace keyboard behavior, i18n, or formatting. No input or chip is documented because neither is introduced by this homepage."
+    },
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "Gateway Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0475 265)",
+          "oklch(0.26 0.1045 265)",
+          "oklch(0.38 0.1520 265)",
+          "oklch(0.50 0.1900 265)",
+          "oklch(0.62 0.1900 265)",
+          "oklch(0.74 0.1615 265)",
+          "oklch(0.86 0.0950 265)",
+          "oklch(0.95 0.0342 265)"
+        ]
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Gateway Blue Hover",
+        "tonalRamp": [
+          "oklch(0.15 0.0425 265)",
+          "oklch(0.26 0.0935 265)",
+          "oklch(0.38 0.1360 265)",
+          "oklch(0.50 0.1700 265)",
+          "oklch(0.62 0.1700 265)",
+          "oklch(0.74 0.1445 265)",
+          "oklch(0.86 0.0850 265)",
+          "oklch(0.95 0.0306 265)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "tonalRamp": [
+          "oklch(0.15 0.0063 255)",
+          "oklch(0.26 0.0138 255)",
+          "oklch(0.38 0.0200 255)",
+          "oklch(0.50 0.0250 255)",
+          "oklch(0.62 0.0250 255)",
+          "oklch(0.74 0.0213 255)",
+          "oklch(0.86 0.0125 255)",
+          "oklch(0.95 0.0045 255)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Blue Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.0175 255)",
+          "oklch(0.26 0.0385 255)",
+          "oklch(0.38 0.0560 255)",
+          "oklch(0.50 0.0700 255)",
+          "oklch(0.62 0.0700 255)",
+          "oklch(0.74 0.0595 255)",
+          "oklch(0.86 0.0350 255)",
+          "oklch(0.95 0.0126 255)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Slate Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0138 255)",
+          "oklch(0.26 0.0303 255)",
+          "oklch(0.38 0.0440 255)",
+          "oklch(0.50 0.0550 255)",
+          "oklch(0.62 0.0550 255)",
+          "oklch(0.74 0.0467 255)",
+          "oklch(0.86 0.0275 255)",
+          "oklch(0.95 0.0099 255)"
+        ]
+      },
+      "soft": {
+        "role": "primary",
+        "displayName": "Pale Blue Field",
+        "tonalRamp": [
+          "oklch(0.15 0.0150 255)",
+          "oklch(0.26 0.0330 255)",
+          "oklch(0.38 0.0480 255)",
+          "oklch(0.50 0.0600 255)",
+          "oklch(0.62 0.0600 255)",
+          "oklch(0.74 0.0510 255)",
+          "oklch(0.86 0.0300 255)",
+          "oklch(0.95 0.0108 255)"
+        ]
+      },
+      "deep": {
+        "role": "primary",
+        "displayName": "Deep Gateway",
+        "tonalRamp": [
+          "oklch(0.15 0.0300 265)",
+          "oklch(0.26 0.0660 265)",
+          "oklch(0.38 0.0960 265)",
+          "oklch(0.50 0.1200 265)",
+          "oklch(0.62 0.1200 265)",
+          "oklch(0.74 0.1020 265)",
+          "oklch(0.86 0.0600 265)",
+          "oklch(0.95 0.0216 265)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Cloud Line",
+        "tonalRamp": [
+          "oklch(0.15 0.0112 255)",
+          "oklch(0.26 0.0248 255)",
+          "oklch(0.38 0.0360 255)",
+          "oklch(0.50 0.0450 255)",
+          "oklch(0.62 0.0450 255)",
+          "oklch(0.74 0.0382 255)",
+          "oklch(0.86 0.0225 255)",
+          "oklch(0.95 0.0081 255)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "tonalRamp": [
+          "oklch(0.15 0.0000 0)",
+          "oklch(0.26 0.0000 0)",
+          "oklch(0.38 0.0000 0)",
+          "oklch(0.50 0.0000 0)",
+          "oklch(0.62 0.0000 0)",
+          "oklch(0.74 0.0000 0)",
+          "oklch(0.86 0.0000 0)",
+          "oklch(0.95 0.0000 0)"
+        ]
+      },
+      "focus": {
+        "role": "tertiary",
+        "displayName": "Warm Focus",
+        "tonalRamp": [
+          "oklch(0.15 0.0375 55)",
+          "oklch(0.26 0.0825 55)",
+          "oklch(0.38 0.1200 55)",
+          "oklch(0.50 0.1500 55)",
+          "oklch(0.62 0.1500 55)",
+          "oklch(0.74 0.1275 55)",
+          "oklch(0.86 0.0750 55)",
+          "oklch(0.95 0.0270 55)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Cool Paper Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0112 255)",
+          "oklch(0.26 0.0248 255)",
+          "oklch(0.38 0.0360 255)",
+          "oklch(0.50 0.0450 255)",
+          "oklch(0.62 0.0450 255)",
+          "oklch(0.74 0.0382 255)",
+          "oklch(0.86 0.0225 255)",
+          "oklch(0.95 0.0081 255)"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Blue Ink Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0063 255)",
+          "oklch(0.26 0.0138 255)",
+          "oklch(0.38 0.0200 255)",
+          "oklch(0.50 0.0250 255)",
+          "oklch(0.62 0.0250 255)",
+          "oklch(0.74 0.0213 255)",
+          "oklch(0.86 0.0125 255)",
+          "oklch(0.95 0.0045 255)"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Slate Blue Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0112 255)",
+          "oklch(0.26 0.0248 255)",
+          "oklch(0.38 0.0360 255)",
+          "oklch(0.50 0.0450 255)",
+          "oklch(0.62 0.0450 255)",
+          "oklch(0.74 0.0382 255)",
+          "oklch(0.86 0.0225 255)",
+          "oklch(0.95 0.0081 255)"
+        ]
+      },
+      "soft-dark": {
+        "role": "primary",
+        "displayName": "Pale Blue Field Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0163 255)",
+          "oklch(0.26 0.0358 255)",
+          "oklch(0.38 0.0520 255)",
+          "oklch(0.50 0.0650 255)",
+          "oklch(0.62 0.0650 255)",
+          "oklch(0.74 0.0553 255)",
+          "oklch(0.86 0.0325 255)",
+          "oklch(0.95 0.0117 255)"
+        ]
+      },
+      "deep-dark": {
+        "role": "primary",
+        "displayName": "Deep Gateway Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0275 265)",
+          "oklch(0.26 0.0605 265)",
+          "oklch(0.38 0.0880 265)",
+          "oklch(0.50 0.1100 265)",
+          "oklch(0.62 0.1100 265)",
+          "oklch(0.74 0.0935 265)",
+          "oklch(0.86 0.0550 265)",
+          "oklch(0.95 0.0198 265)"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Cloud Line Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0150 255)",
+          "oklch(0.26 0.0330 255)",
+          "oklch(0.38 0.0480 255)",
+          "oklch(0.50 0.0600 255)",
+          "oklch(0.62 0.0600 255)",
+          "oklch(0.74 0.0510 255)",
+          "oklch(0.86 0.0300 255)",
+          "oklch(0.95 0.0108 255)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Editorial display",
+        "purpose": "Hero headline; inherits full Latin/CJK serif stack."
+      },
+      "headline": {
+        "displayName": "Section headline",
+        "purpose": "Major homepage section headings."
+      },
+      "title": {
+        "displayName": "Model introduction",
+        "purpose": "Sticky model introduction on desktop."
+      },
+      "body": {
+        "displayName": "Explanatory body",
+        "purpose": "Inherits the active shared body font selection."
+      },
+      "lead": {
+        "displayName": "Model lead",
+        "purpose": "Introductory copy in the pale model field."
+      },
+      "label": {
+        "displayName": "Compact label",
+        "purpose": "Console illustration metadata and labels."
+      },
+      "code": {
+        "displayName": "Protocol code",
+        "purpose": "Original HeroTerminalDemo request and response content."
+      }
+    },
+    "shadows": [
+      {
+        "name": "compact-header",
+        "value": "0 8px 24px #07102015",
+        "purpose": "The fixed header after scrolling."
+      },
+      {
+        "name": "protocol-terminal",
+        "value": "0 16px 36px #07102035",
+        "purpose": "The reused terminal on its deep blue parent."
+      },
+      {
+        "name": "console-illustration",
+        "value": "0 18px 36px #07102030",
+        "purpose": "The illustrative customer console."
+      }
+    ],
+    "motion": [
+      {
+        "name": "header-compact",
+        "value": "0.35s ease",
+        "purpose": "Height, padding, and shadow as the shared header compacts."
+      },
+      {
+        "name": "hero-art-arrive",
+        "value": "1.1s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Scale artwork from 1.045 to 1."
+      },
+      {
+        "name": "request-path",
+        "value": "1.3s linear infinite",
+        "purpose": "Translate the white path highlight from -32px to 110px only while in view."
+      },
+      {
+        "name": "model-row",
+        "value": "transform 0.4s ease",
+        "purpose": "Shift visible model rows 10px right."
+      },
+      {
+        "name": "console-arrive",
+        "value": "0.7s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Translate the console from 24px below."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Disable all homepage animation and transition, use automatic scrolling behavior, and remove model-row translation. The homepage terminal never auto-cycles."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "header-tight",
+        "value": "1100px"
+      },
+      {
+        "name": "stack-sections",
+        "value": "800px"
+      },
+      {
+        "name": "phone",
+        "value": "500px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The shared Button with the homepage blue action treatment.",
+      "html": "<button class=\"ds-primary\">Register and get started</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;border-radius:6px;height:46px;padding:0 22px;text-decoration:none;cursor:pointer;transition:background-color .15s,transform .15s;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;background:var(--lf-blue,#1559df);color:#fff}.ds-primary:hover{background:#1049b8}.ds-primary:focus-visible{outline:3px solid #ff9d54;outline-offset:4px;}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.5;pointer-events:none}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Inverse action",
+      "kind": "button",
+      "refersTo": "button-light",
+      "description": "The shared Button on a deep blue homepage section.",
+      "html": "<div class=\"ds-inverse-stage\"><button class=\"ds-inverse\">Go to Dashboard</button></div>",
+      "css": ".ds-inverse-stage{background:var(--lf-deep,#103780);padding:24px}.ds-inverse{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid transparent;border-radius:6px;height:46px;padding:0 22px;text-decoration:none;cursor:pointer;transition:background-color .15s,transform .15s;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;background:#fff;color:#1246a0}.ds-inverse:hover{background:#fff}.ds-inverse:focus-visible{outline:3px solid #ff9d54;outline-offset:4px;}.ds-inverse:active{transform:translateY(1px)}.ds-inverse:disabled{opacity:.5;pointer-events:none}@media(prefers-reduced-motion:reduce){.ds-inverse{transition:none}}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "A shared link-style Button; unavailable sales actions retain the shared disabled state.",
+      "html": "<a class=\"ds-text-action\" href=\"#models\">View models and pricing <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-text-action{display:inline-flex;align-items:center;gap:6px;color:var(--lf-ink,#10284b);padding:0;text-align:start;text-decoration:none;text-underline-offset:4px;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;}.ds-text-action:hover{text-decoration:underline}.ds-text-action:focus-visible{outline:3px solid #ff9d54;outline-offset:4px;}.ds-text-action:active{transform:translateY(1px)}.ds-text-action[aria-disabled=true]{opacity:.5;pointer-events:none}"
+    },
+    {
+      "name": "Homepage navigation",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Section links inserted into the existing fixed PublicHeader. The preview shows the homepage link treatment, not a replacement menu.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage\"><a href=\"#models\">View models and pricing</a><a href=\"#integration\">Read the integration guide</a><a href=\"#usage\">Usage</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;flex-wrap:wrap;background:var(--lf-paper,#f4f8ff);min-height:80px;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;}.ds-nav a{padding:8px 10px;color:var(--lf-ink,#10284b);text-decoration:none;font-weight:400}.ds-nav a:hover{color:var(--lf-blue,#1559df)}.ds-nav a:focus-visible{outline:3px solid #ff9d54;outline-offset:4px;}.ds-nav a:active{color:#1049b8}"
+    },
+    {
+      "name": "API story panel",
+      "kind": "card",
+      "refersTo": "api-panel",
+      "description": "The deep container that composes the original interactive demo with the request path and onboarding row.",
+      "html": "<section class=\"ds-api\"><h2>From request<br>to response.</h2><p>From your application, through our platform, to the model.</p><div class=\"ds-path\"><span>Your application</span><i></i><span>Linfei platform</span><i></i><span>Model</span></div><small>Illustrative requests and responses. No live API calls or performance claims.</small></section>",
+      "css": ".ds-api{padding:36px;border-radius:14px;background:var(--lf-deep,#103780);color:white;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;}.ds-api h2{font-family:var(--font-serif,Lora,Georgia,serif);font-size:36px;font-weight:500;line-height:1.3;letter-spacing:-.025em;margin:0}.ds-api p{font-size:16px;line-height:1.9;color:#e0ecff;max-width:330px;margin:24px 0 0}.ds-path{display:flex;align-items:center;gap:9px;margin-top:28px;font-size:13px;max-width:400px}.ds-path span{flex-shrink:0}.ds-path i{height:2px;flex:1;background:#7eaceb}.ds-api small{display:block;color:#d3e3fc;font-size:12px;line-height:1.8;margin-top:32px}@media(max-width:800px){.ds-api{padding:24px}}"
+    },
+    {
+      "name": "Customer console illustration",
+      "kind": "custom",
+      "refersTo": "console-preview",
+      "description": "Homepage-only balance, usage, and request history illustration. Values are examples, not real customer data.",
+      "html": "<section class=\"ds-console\"><header><strong>Customer console</strong><span>Illustrative preview</span></header><dl><div><dt>Available Balance</dt><dd>1,000</dd><span>Top up as needed</span></div><div><dt>Monthly requests</dt><dd>12,480</dd><span>Requests</span></div><div><dt>Monthly usage</dt><dd>2.4M</dd><span>tokens</span></div></dl><div class=\"ds-records\"><h3>Recent requests</h3><table><thead><tr><th>Model</th><th>Usage</th><th>Status</th></tr></thead><tbody><tr><td>your-model</td><td>27 tokens</td><td>Completed</td></tr><tr><td>your-model</td><td>31 tokens</td><td>Completed</td></tr></tbody></table></div><p>Example data only. These are not real customer records.</p></section>",
+      "css": ".ds-console{border-radius:14px;overflow:hidden;background:var(--lf-paper,#f4f8ff);color:var(--lf-ink,#10284b);box-shadow:0 18px 36px #07102030;font-family:var(--font-body,'Public Sans',sans-serif);font-size:14px;font-weight:500;}.ds-console header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 25px;border-bottom:1px solid var(--lf-line,#b8cde7)}.ds-console header span,.ds-console dt,.ds-console dl span{display:block;font-size:12px;color:var(--lf-muted,#405c7c)}.ds-console dl{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;margin:0;padding:24px 25px}.ds-console dl>div{min-width:0}.ds-console dd{margin:12px 0;font-size:clamp(19px,2vw,27px);font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.ds-records{padding:0 25px}.ds-records h3{font-size:14px;font-weight:600;margin:0 0 14px}.ds-console table{width:100%;border-collapse:collapse;text-align:start;font-size:12px}.ds-console th{font-weight:500;text-align:start;color:var(--lf-muted,#405c7c);padding:10px 0;border-block:1px solid var(--lf-line,#b8cde7)}.ds-console td{padding:13px 0;border-bottom:1px solid var(--lf-line,#b8cde7);overflow-wrap:anywhere}.ds-console td:last-child{color:var(--lf-blue,#1559df)}.ds-console p{font-size:11px;color:var(--lf-muted,#405c7c);margin:16px 25px 20px}@media(max-width:500px){.ds-console header{padding:18px}.ds-console dl{padding:20px 18px;gap:10px}.ds-console dd{font-size:19px}.ds-records{padding-inline:18px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Blue Optical Gateway",
+    "overview": "This system applies only to the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and `web/src/styles/lftech-home.css`. Vivid blue, pale blue and deep blue fields frame a single optical-ribbon hero image. Editorial serif headings give the enterprise-facing page a composed voice; the existing UI typography keeps examples and actions practical.\n\nHomepage tokens remain scoped to `.lf-home`. This document does not redefine the customer console, administration screens, custom homepage content, or the shared theme system. Preserve the New API identity, QuantumNous attribution, and existing legal notices. The console shown on this page is an illustrative preview of usage and balance, rather than evidence of customer activity.",
+    "keyCharacteristics": [
+      "One optical-ribbon image, with typography and tonal fields doing the remaining visual work.",
+      "Serif display text paired with the existing configurable UI font and code face.",
+      "A compact progression from introduction to API example, model discovery, and customer console preview.",
+      "Shared components, keyboard operation, dark theme, and a complete reduced-motion fallback."
+    ],
+    "rules": [
+      {
+        "name": "The Local Palette Rule",
+        "body": "Keep homepage color properties inside `.lf-home`; do not promote them into console theme defaults.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Use the serif face for the homepage's major narrative headings and keep operational text, model rows, navigation, and controls in the existing UI face.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** scope homepage tokens locally and preserve the console's existing design system.",
+      "**Do** keep one optical-ribbon hero image and the approved compact homepage sequence.",
+      "**Do** reuse the shared header, footer, buttons, tabs, and original interactive protocol demo.",
+      "**Do** retain keyboard access, translated copy, visible focus, dark surfaces, and reduced-motion behavior.",
+      "**Do** preserve New API identity, QuantumNous attribution, and existing legal notices."
+    ],
+    "donts": [
+      "**Don't** add generated images beyond the approved hero asset.",
+      "**Don't** restore removed tail chapters as separate stacked homepage sections.",
+      "**Don't** present illustrative console records or protocol metrics as customer evidence or measured performance.",
+      "**Don't** create a new console theme or duplicate shared navigation and demo behavior to match the homepage."
+    ]
+  }
+}

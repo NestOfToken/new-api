@@ -48,10 +48,10 @@ type SystemBrandProps = {
 export function SystemBrand(props: SystemBrandProps) {
   const { t } = useTranslation()
   const { status } = useStatus()
-  const { logo } = useSystemConfig()
+  const { logo, systemName } = useSystemConfig()
 
   const variant = props.variant ?? 'sidebar'
-  const name = status?.system_name || props.defaultName || 'New API'
+  const name = systemName || props.defaultName
   const version =
     status?.version || props.defaultVersion || t('Unknown version')
 
@@ -72,7 +72,7 @@ export function SystemBrand(props: SystemBrandProps) {
             className='size-full rounded-md object-cover'
           />
         </div>
-        <span className='max-w-[12rem] truncate'>{name}</span>
+        <span className='brand-wordmark max-w-[12rem] truncate'>{name}</span>
       </Link>
     )
   }
@@ -93,7 +93,7 @@ export function SystemBrand(props: SystemBrandProps) {
             />
           </div>
           <div className='grid flex-1 text-start text-sm leading-tight group-data-[collapsible=icon]:hidden'>
-            <span className='truncate font-semibold'>{name}</span>
+            <span className='brand-wordmark truncate'>{name}</span>
             <span className='truncate text-xs'>{version}</span>
           </div>
         </SidebarMenuButton>

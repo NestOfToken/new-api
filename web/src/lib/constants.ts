@@ -21,8 +21,8 @@ For commercial licensing, please contact support@quantumnous.com
  */
 
 // System Configuration Defaults
-export const DEFAULT_SYSTEM_NAME = 'New API'
-export const DEFAULT_LOGO = '/logo.png'
+export const DEFAULT_SYSTEM_NAME = '麟飞科技'
+export const DEFAULT_LOGO = '/images/lftech/brand-mark.svg'
 
 // LocalStorage Keys
 export const STORAGE_KEYS = {

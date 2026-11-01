@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useQuery } from '@tanstack/react-query'
-import { Construction } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { PublicLayout } from '@/components/layout'
 import { RichContent } from '@/components/rich-content'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useSystemConfig } from '@/hooks/use-system-config'
 import { isHttpUrl, isLikelyHtml } from '@/lib/content-format'
 import { requireServerSuccess } from '@/lib/server-error-message'
 
@@ -30,19 +30,24 @@ import { getAboutContent } from './api'
 
 function EmptyAboutState() {
   const { t } = useTranslation()
+  const { systemName, logo } = useSystemConfig()
   const currentYear = new Date().getFullYear()
 
   return (
     <div className='flex min-h-[60vh] items-center justify-center p-8'>
       <div className='max-w-2xl space-y-6 text-center'>
         <div className='flex justify-center'>
-          <Construction className='text-muted-foreground h-24 w-24' />
+          <img
+            src={logo}
+            alt=''
+            className='h-16 w-16 rounded-2xl object-contain'
+          />
         </div>
         <div className='space-y-2'>
-          <h2 className='text-2xl font-bold'>{t('No About Content Set')}</h2>
+          <h2 className='brand-wordmark text-2xl'>{systemName}</h2>
           <p className='text-muted-foreground'>
             {t(
-              'The administrator has not configured any about content yet. You can set it in the settings page, supporting HTML or URL.'
+              'Connect to language models through one API. Manage calls, usage, and account balance in one place.'
             )}
           </p>
         </div>

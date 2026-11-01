@@ -1,0 +1,705 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/* Linfei homepage. Keep these tokens local so console themes stay independent. */
+.lf-home {
+  --lf-paper: #f4f8ff;
+  --lf-ink: #10284b;
+  --lf-muted: #405c7c;
+  --lf-blue: #1559df;
+  --lf-soft: #dceaff;
+  --lf-deep: #103780;
+  --lf-line: #b8cde7;
+  color: var(--lf-ink);
+  background: var(--lf-paper);
+}
+.lf-home > div {
+  background: var(--lf-paper);
+  color: var(--lf-ink);
+}
+.lf-container {
+  width: 88%;
+  max-width: 1300px;
+  margin-inline: auto;
+}
+.lf-home :is(h1, h2, h3, p) {
+  margin: 0;
+}
+.lf-home :is(h1, h2, .lf-model-intro h3) {
+  font-family: var(--font-ui-sans);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.lf-home h2 {
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  line-height: 1.3;
+}
+.lf-home :is(section, [id]) {
+  scroll-margin-top: 100px;
+}
+.lf-home .lf-primary {
+  background: var(--lf-blue);
+  color: white;
+  height: 46px;
+  padding-inline: 22px;
+  border-radius: 6px;
+}
+.lf-home .lf-primary:hover {
+  background: #1049b8;
+}
+.lf-home .lf-text-link {
+  color: var(--lf-ink);
+  padding-inline: 0;
+  height: auto;
+  white-space: normal;
+  text-align: start;
+}
+.lf-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.lf-home [data-slot='button'][data-disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.lf-home-header {
+  color: var(--lf-ink);
+}
+.lf-home-header > div {
+  max-width: 1500px;
+  padding: 0 6%;
+  transition: padding 0.35s ease;
+}
+.lf-home-header nav {
+  height: 80px;
+  border-radius: 0;
+  padding-inline: 0;
+  background: var(--lf-paper);
+  box-shadow: none;
+  transition:
+    height 0.35s ease,
+    box-shadow 0.35s ease;
+  backdrop-filter: none;
+}
+.lf-home-header > div[class*='pt-3'] {
+  max-width: none;
+  background: var(--lf-paper);
+}
+.lf-home-header > div[class*='pt-3'] nav {
+  height: 66px;
+  box-shadow: 0 8px 24px #07102015;
+}
+.lf-home-header .brand-wordmark {
+  flex-shrink: 0;
+  font-family: var(--font-ui-sans);
+  font-size: 23px;
+  font-weight: 650;
+  white-space: nowrap;
+  margin-right: 16px;
+}
+.lf-home-header [class*='@container/system-brand'] {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.lf-home-header :is(.text-muted-foreground, .text-foreground) {
+  color: var(--lf-muted);
+}
+.lf-home-header .lf-primary {
+  height: 38px;
+  padding-inline: 16px;
+}
+.lf-header-link {
+  padding: 8px 10px;
+  font-size: 14px;
+  color: var(--lf-ink);
+}
+.lf-header-link:hover {
+  color: var(--lf-blue);
+}
+.lf-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 720px;
+  padding-top: 80px;
+  overflow: hidden;
+  background: #eaf4ff;
+}
+.lf-hero-art {
+  position: absolute;
+  inset: 80px 0 0;
+  width: 100%;
+  height: calc(100% - 80px);
+  object-fit: cover;
+  z-index: -2;
+  animation: lf-art-arrive 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-hero::after {
+  content: '';
+  position: absolute;
+  inset: 80px 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    #f4f8ffe8 0%,
+    #f4f8ff9c 28%,
+    #f4f8ff00 65%
+  );
+}
+.lf-hero-copy {
+  padding-block: 75px 110px;
+}
+.lf-hero h1 {
+  max-width: 900px;
+  font-size: clamp(2.6rem, 4.6vw, 4.15rem);
+  line-height: 1.28;
+}
+.lf-hero h1 em {
+  color: var(--lf-blue);
+  font-style: normal;
+}
+.lf-hero-copy > p {
+  max-width: 470px;
+  font-size: 18px;
+  line-height: 1.9;
+  color: #29466b;
+  margin-top: 26px;
+}
+.lf-api-section {
+  padding-block: 72px;
+}
+.lf-api {
+  display: grid;
+  grid-template-columns: 0.85fr 1.4fr;
+  gap: 26px 35px;
+  align-items: center;
+  background: var(--lf-deep);
+  color: white;
+  padding: 36px;
+  border-radius: 14px;
+}
+.lf-api-story h2 {
+  font-size: 36px;
+}
+.lf-api-story p {
+  color: #e0ecff;
+  max-width: 330px;
+  font-size: 16px;
+  line-height: 1.9;
+  margin-top: 24px;
+}
+.lf-api-story small {
+  display: block;
+  color: #d3e3fc;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 32px;
+}
+.lf-request-path {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 28px;
+  font-size: 13px;
+}
+.lf-request-path span {
+  flex-shrink: 0;
+}
+.lf-request-path i {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: #7eaceb;
+  overflow: hidden;
+}
+.lf-request-path i::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 30px;
+  background: white;
+  animation: lf-request-travel 1.3s linear infinite paused;
+}
+.lf-api.lf-in-view .lf-request-path i::after {
+  animation-play-state: running;
+}
+.lf-api .lf-terminal {
+  min-width: 0;
+  max-width: none;
+  color: var(--lf-ink);
+}
+.lf-terminal [data-slot='tabs'] {
+  gap: 0;
+  background: var(--lf-paper);
+  border: none;
+  backdrop-filter: none;
+  box-shadow: 0 16px 36px #07102035;
+}
+.lf-terminal .lf-demo-tabs {
+  min-height: 48px;
+  border-color: var(--lf-line);
+  flex-wrap: wrap;
+}
+.lf-terminal [data-slot='tabs-trigger'] {
+  border-width: 0 0 2px;
+  flex: 0 1 auto;
+  height: 48px;
+  min-width: 0;
+  border-radius: 0;
+  font-size: 12px;
+  padding-inline: 10px;
+}
+.lf-terminal [data-slot='tabs-trigger'][data-active] {
+  border-color: var(--lf-blue);
+  color: var(--lf-blue);
+}
+.dark .lf-terminal [data-slot='tabs-trigger'][data-active] {
+  color: #8fbcff;
+  border-color: #8fbcff;
+}
+.lf-terminal [data-slot='tabs-trigger']::after {
+  display: none;
+}
+.lf-terminal .lf-demo-code {
+  grid-template-columns: 1fr 1fr;
+  min-height: 255px;
+}
+.lf-terminal .lf-demo-code > div {
+  min-width: 0;
+}
+.lf-terminal .lf-demo-code > div + div {
+  border-left: 1px solid var(--lf-line);
+}
+.lf-terminal [class*='text-foreground/'] {
+  color: var(--lf-muted);
+}
+.lf-terminal .text-foreground\/30 {
+  font-size: 11px;
+}
+.lf-onboarding {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #7195c4;
+}
+.lf-onboarding ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 34px;
+  list-style: decimal;
+  padding-left: 20px;
+  margin: 0;
+  font-size: 14px;
+}
+.lf-onboarding li {
+  padding-left: 4px;
+}
+.lf-onboarding [data-slot='button'] {
+  color: #fff;
+  padding: 0;
+  white-space: normal;
+  text-align: start;
+}
+.lf-models {
+  background: var(--lf-soft);
+  padding: 80px 0;
+}
+.lf-lead {
+  color: var(--lf-muted);
+  max-width: 700px;
+  font-size: 18px;
+  line-height: 1.8;
+  margin-top: 24px !important;
+}
+.lf-model-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 55px;
+  margin-top: 36px;
+  align-items: start;
+}
+.lf-model-intro {
+  position: sticky;
+  top: 100px;
+}
+.lf-model-intro h3 {
+  font-size: 36px;
+  line-height: 1.35;
+  margin-bottom: 20px;
+}
+.lf-model-list {
+  border-top: 1px solid #91acce;
+}
+.lf-model-list article {
+  padding: 28px 0;
+  border-bottom: 1px solid #91acce;
+  transition: transform 0.4s ease;
+}
+.lf-model-list article.lf-in-view {
+  transform: translateX(10px);
+}
+.lf-model-list h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.lf-model-list p {
+  color: var(--lf-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.lf-operations {
+  background: var(--lf-deep);
+  color: white;
+  padding: 72px 0;
+}
+.lf-operations-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.15fr;
+  gap: 65px;
+  align-items: center;
+}
+.lf-operations p {
+  max-width: 430px;
+  color: #e0ecff;
+  font-size: 16px;
+  line-height: 1.9;
+  margin-top: 22px;
+}
+.lf-home .lf-light-button {
+  height: 46px;
+  padding-inline: 22px;
+  background: white;
+  color: #1246a0;
+  border-radius: 6px;
+}
+.lf-home .lf-light-link {
+  color: white;
+  padding: 0;
+  white-space: normal;
+  text-align: start;
+}
+.lf-console {
+  min-width: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--lf-paper);
+  color: var(--lf-ink);
+  box-shadow: 0 18px 36px #07102030;
+}
+.lf-console.lf-in-view {
+  animation: lf-console-arrive 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-console-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid var(--lf-line);
+}
+.lf-console-toolbar span {
+  color: var(--lf-muted);
+  font-size: 12px;
+}
+.lf-console-summary {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 18px;
+  margin: 0;
+  padding: 24px 25px;
+}
+.lf-console-summary > div {
+  min-width: 0;
+}
+.lf-console-summary :is(dt, span) {
+  display: block;
+  font-size: 12px;
+  color: var(--lf-muted);
+}
+.lf-console-summary dd {
+  margin: 12px 0;
+  font-size: clamp(19px, 2vw, 27px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.lf-console-records {
+  padding: 0 25px;
+}
+.lf-console-records h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.lf-console-records table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: start;
+  font-size: 12px;
+}
+.lf-console-records th {
+  text-align: start;
+  font-weight: 500;
+  color: var(--lf-muted);
+  padding: 10px 0;
+  border-block: 1px solid var(--lf-line);
+}
+.lf-console-records td {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--lf-line);
+  overflow-wrap: anywhere;
+}
+.lf-console-records td:last-child {
+  color: var(--lf-blue);
+}
+.lf-operations .lf-console-note {
+  font-size: 11px;
+  color: var(--lf-muted);
+  margin: 16px 25px 20px;
+}
+.lf-home-footer {
+  background: var(--lf-paper);
+  color: var(--lf-ink);
+}
+.lf-home-footer > div {
+  padding-block: 28px;
+}
+.lf-home-footer > div > div:last-child {
+  margin-top: 24px;
+}
+.lf-home-footer [class*='text-muted-foreground'] {
+  color: var(--lf-muted);
+}
+.lf-home ::selection {
+  background: #bcd8ff;
+  color: #10284b;
+}
+.lf-home :focus-visible {
+  outline-color: #ff9d54;
+  outline-offset: 4px;
+}
+@keyframes lf-art-arrive {
+  from {
+    transform: scale(1.045);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes lf-request-travel {
+  from {
+    transform: translateX(-32px);
+  }
+  to {
+    transform: translateX(110px);
+  }
+}
+@keyframes lf-console-arrive {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.dark .lf-home {
+  --lf-paper: #0c1d36;
+  --lf-ink: #edf4ff;
+  --lf-muted: #b4c8e4;
+  --lf-soft: #162f53;
+  --lf-deep: #102b60;
+  --lf-line: #3b567a;
+}
+.dark .lf-hero {
+  background: #eaf4ff;
+  color: #10284b;
+}
+.dark .lf-hero h1 em {
+  color: #1559df;
+}
+.dark .lf-hero .lf-text-link {
+  color: #10284b;
+}
+.dark .lf-console-records td:last-child {
+  color: #8fbcff;
+}
+@media (max-width: 1100px) {
+  .lf-home-header .brand-wordmark {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+  .lf-home-header [class*='@container/system-brand'] > a > span {
+    max-width: 100px;
+  }
+  .lf-home-header .lf-primary {
+    font-size: 12px;
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 800px) {
+  .lf-api,
+  .lf-model-layout,
+  .lf-operations-layout {
+    grid-template-columns: 1fr;
+  }
+  .lf-api-story p {
+    max-width: 65ch;
+  }
+  .lf-request-path {
+    max-width: 400px;
+  }
+  .lf-model-intro {
+    position: static;
+  }
+  .lf-api-section {
+    padding-block: 48px;
+  }
+  .lf-api {
+    padding: 24px;
+    gap: 28px;
+  }
+  .lf-api-story small {
+    margin-top: 20px;
+  }
+  .lf-models,
+  .lf-operations {
+    padding-block: 55px;
+  }
+  .lf-operations-layout {
+    gap: 30px;
+  }
+  .lf-onboarding {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+  }
+  .lf-hero {
+    padding-top: 80px;
+    min-height: 0;
+  }
+  .lf-hero-copy {
+    padding-block: 48px 0;
+  }
+  .lf-hero::after {
+    display: none;
+  }
+  .lf-hero-art {
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    display: block;
+    height: 280px;
+    object-position: 65% center;
+    margin-top: 32px;
+  }
+  .lf-hero {
+    display: flex;
+    flex-direction: column;
+  }
+  .lf-hero-copy {
+    order: 0;
+  }
+  .lf-hero-art {
+    order: 1;
+  }
+  .lf-hero h1 {
+    font-size: 42px;
+  }
+  .lf-hero-copy > p {
+    font-size: 16px;
+  }
+  .lf-home-header .brand-wordmark {
+    font-size: 18px;
+  }
+  .lf-home-header .lf-primary {
+    height: 34px;
+    max-width: 150px;
+    white-space: normal;
+  }
+  .lf-home-header nav {
+    gap: 6px;
+  }
+}
+@media (max-width: 500px) {
+  .lf-home-header .brand-wordmark {
+    max-width: 98px;
+    white-space: normal;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .lf-terminal .lf-demo-code {
+    grid-template-columns: 1fr;
+    min-height: 400px;
+  }
+  .lf-terminal .lf-demo-code > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--lf-line);
+  }
+  .lf-terminal .lf-demo-tabs {
+    gap: 0;
+    padding-inline: 6px;
+  }
+  .lf-terminal [data-slot='tabs-trigger'] {
+    font-size: 11px;
+    padding-inline: 6px;
+  }
+  .lf-terminal .lf-demo-tabs > div {
+    display: none;
+  }
+  .lf-model-layout {
+    gap: 28px;
+  }
+  .lf-model-intro h3 {
+    font-size: 30px;
+  }
+  .lf-console-toolbar {
+    padding: 18px;
+  }
+  .lf-console-summary {
+    padding: 20px 18px;
+    gap: 10px;
+  }
+  .lf-console-summary dd {
+    font-size: 19px;
+  }
+  .lf-console-records {
+    padding-inline: 18px;
+  }
+  .lf-home-header > div {
+    padding-inline: 4%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-home *,
+  .lf-home *::before,
+  .lf-home *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .lf-model-list article.lf-in-view {
+    transform: none;
+  }
+}

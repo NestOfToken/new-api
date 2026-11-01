@@ -47,6 +47,13 @@ For commercial licensing, please contact support@quantumnous.com
 
 /* Shiki dual themes: token colors follow dark theme (pre background stays `bg-background` on the block) */
 @layer components {
+  .brand-wordmark {
+    font-family: var(--font-public-sans);
+    font-weight: 650;
+    letter-spacing: 0.015em;
+    line-height: 1.35;
+  }
+
   .shiki span {
     color: var(--shiki-light) !important;
     font-style: var(--shiki-light-font-style) !important;

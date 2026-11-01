@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface FooterLink {
@@ -126,7 +127,7 @@ function LegalLinks(props: { leadingSeparator?: boolean }) {
 function ProjectAttribution(props: { currentYear: number; inline?: boolean }) {
   const { t } = useTranslation()
   const content = (
-    <span className='text-muted-foreground/45'>
+    <span className='text-muted-foreground'>
       &copy; {props.currentYear}{' '}
       <a
         href='https://github.com/QuantumNous/new-api'
@@ -136,6 +137,15 @@ function ProjectAttribution(props: { currentYear: number; inline?: boolean }) {
       >
         {t('New API')}
       </a>
+      {' · '}
+      <a
+        href='https://github.com/QuantumNous'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='hover:text-foreground transition-colors'
+      >
+        QuantumNous
+      </a>
       . {t(NEW_API_FOOTER_ATTRIBUTION_KEY)}
     </span>
   )
@@ -143,7 +153,7 @@ function ProjectAttribution(props: { currentYear: number; inline?: boolean }) {
     return content
   }
   return (
-    <div className='text-muted-foreground/45 text-center text-xs sm:text-right'>
+    <div className='text-muted-foreground text-center text-xs sm:text-right'>
       {content}
     </div>
   )
@@ -158,8 +168,8 @@ export function Footer(props: FooterProps) {
     demoSiteEnabled,
   } = useSystemConfig()
 
-  const displayLogo = systemLogo || props.logo || '/logo.png'
-  const displayName = systemName || props.name || 'New API'
+  const displayLogo = systemLogo || props.logo || DEFAULT_LOGO
+  const displayName = systemName || props.name || DEFAULT_SYSTEM_NAME
   const isDemoSiteMode = Boolean(demoSiteEnabled)
   const currentYear = new Date().getFullYear()
 
@@ -236,7 +246,7 @@ export function Footer(props: FooterProps) {
               className='custom-footer text-muted-foreground min-w-0 text-center text-sm sm:text-left'
               dangerouslySetInnerHTML={{ __html: footerHtml }}
             />
-            <div className='border-border/60 text-muted-foreground/45 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t pt-4 text-xs sm:w-auto sm:justify-end sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5'>
+            <div className='border-border/60 text-muted-foreground flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t pt-4 text-xs sm:w-auto sm:justify-end sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5'>
               <LegalLinks />
               <ProjectAttribution currentYear={currentYear} inline />
             </div>
@@ -260,9 +270,7 @@ export function Footer(props: FooterProps) {
                 alt={displayName}
                 className='size-7 rounded-lg object-contain'
               />
-              <span className='text-sm font-semibold tracking-tight'>
-                {displayName}
-              </span>
+              <span className='brand-wordmark text-base'>{displayName}</span>
             </Link>
             <p className='text-muted-foreground/60 mt-3 max-w-[200px] text-xs leading-relaxed'>
               {t('Powerful API Management Platform')}
@@ -272,14 +280,14 @@ export function Footer(props: FooterProps) {
           {/* Links columns */}
           {isDemoSiteMode && (
             <div className='grid grid-cols-3 gap-8 md:gap-16'>
-              {displayColumns.map((column, index) => (
-                <div key={index}>
+              {displayColumns.map((column) => (
+                <div key={column.title}>
                   <p className='text-muted-foreground/50 mb-3 text-xs font-medium tracking-wider uppercase'>
                     {t(column.title)}
                   </p>
                   <ul className='space-y-2.5'>
-                    {column.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
+                    {column.links.map((link) => (
+                      <li key={`${link.text}:${link.href}`}>
                         <FooterLinkItem link={link} />
                       </li>
                     ))}
