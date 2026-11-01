@@ -1,0 +1,210 @@
+name: LFTech build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: 'Optional full ancestor commit SHA; blank builds the workflow commit'
+        required: false
+        type: string
+      deploy:
+        description: 'Deploy the verified image through Tencent Cloud TAT'
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lftech-new-api-production
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'NestOfToken/new-api' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+      version: ${{ steps.source.outputs.version }}
+      bun: ${{ steps.source.outputs.bun }}
+    steps:
+      - name: Check organization publishing secret is available
+        env:
+          HUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: test -n "$HUB_TOKEN" || { echo 'DOCKERHUB_TOKEN is not available to this repository.' >&2; exit 1; }
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve trusted source commit
+        id: source
+        env:
+          REQUESTED_SHA: ${{ inputs.source_sha }}
+          WORKFLOW_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha="${REQUESTED_SHA:-$WORKFLOW_SHA}"
+          [[ "$sha" =~ ^[a-f0-9]{40}$ ]]
+          git cat-file -e "$sha^{commit}"
+          git merge-base --is-ancestor "$sha" "$WORKFLOW_SHA"
+          version="lftech-${sha:0:12}"
+          if [[ "$sha" == 7d8b91268dab69d7150f345c448b5e250163146a ]]; then
+            version=v1.0.0-rc.46
+          fi
+          bun=$(git show "$sha:Dockerfile" | python3 -c 'import re,sys; print(re.search(r"(?m)^FROM oven/bun:([0-9.]+)",sys.stdin.read()).group(1))')
+          [[ "$bun" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          printf 'sha=%s\nversion=%s\nbun=%s\n' "$sha" "$version" "$bun" >> "$GITHUB_OUTPUT"
+
+  backend:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GOWORK: 'off'
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+            relaykit/go.sum
+            tokenkit/go.sum
+      - name: Check backend modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p web/dist
+          touch web/dist/index.html
+          go vet ./...
+          (cd relaykit && go vet ./...)
+          (cd tokenkit && go vet ./...)
+          make test
+
+  frontend:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: ${{ needs.prepare.outputs.bun }}
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run test
+
+  build:
+    needs: [prepare, backend, frontend]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+      - name: Validate publishing settings
+        env:
+          HUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          HUB_IMAGE: ${{ vars.DOCKERHUB_IMAGE }}
+          HUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$HUB_USERNAME" == exlau && "$HUB_IMAGE" == exlau/lftech-newapi ]]
+          test -n "$HUB_TOKEN" || { echo 'DOCKERHUB_TOKEN is missing or not available to this repository.' >&2; exit 1; }
+          printf '%s\n' "$APP_VERSION" > VERSION
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+      - uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and publish image
+        id: build
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ vars.DOCKERHUB_IMAGE }}:sha-${{ needs.prepare.outputs.sha }}
+          labels: |
+            org.opencontainers.image.title=new-api
+            org.opencontainers.image.source=https://github.com/NestOfToken/new-api
+            org.opencontainers.image.revision=${{ needs.prepare.outputs.sha }}
+            org.opencontainers.image.version=${{ needs.prepare.outputs.version }}
+            org.opencontainers.image.licenses=AGPL-3.0
+          cache-from: type=gha,scope=lftech-amd64
+          cache-to: type=gha,mode=max,scope=lftech-amd64
+          provenance: mode=max
+          sbom: true
+      - name: Verify the published image starts
+        env:
+          IMAGE_REF: ${{ vars.DOCKERHUB_IMAGE }}@${{ steps.build.outputs.digest }}
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull "$IMAGE_REF"
+          trap 'docker rm -f lftech-image-check >/dev/null 2>&1 || true' EXIT
+          docker run --detach --name lftech-image-check -p 127.0.0.1:13000:3000 \
+            -e SESSION_SECRET="$(openssl rand -hex 32)" \
+            -e CRYPTO_SECRET="$(openssl rand -hex 32)" \
+            -e GENERATE_DEFAULT_TOKEN=false "$IMAGE_REF"
+          for attempt in {1..30}; do
+            if curl --fail --silent --max-time 3 http://127.0.0.1:13000/api/status \
+              | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["success"] is True and d["data"]["version"] == sys.argv[1]' "$APP_VERSION"; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Published image failed its isolated startup check.' >&2
+          exit 1
+
+  deploy:
+    needs: [prepare, build]
+    if: github.event_name != 'workflow_dispatch' || inputs.deploy
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    steps:
+      # Deployment tooling comes from the workflow commit, even when rebuilding
+      # an earlier application revision through workflow_dispatch.
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Install TAT client
+        run: python -m pip install --disable-pip-version-check -r .github/scripts/requirements-tat.txt
+      - name: Deploy and wait for TAT result
+        env:
+          TENCENTCLOUD_SECRET_ID: ${{ secrets.TENCENTCLOUD_SECRET_ID }}
+          TENCENTCLOUD_SECRET_KEY: ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
+          TENCENTCLOUD_REGION: ${{ secrets.TENCENTCLOUD_REGION }}
+          TENCENTCLOUD_INSTANCE_ID: ${{ secrets.TENCENTCLOUD_INSTANCE_ID }}
+          DEPLOY_DIR: ${{ vars.DEPLOY_DIR }}
+          LFTECH_IMAGE_REF: ${{ vars.DOCKERHUB_IMAGE }}@${{ needs.build.outputs.digest }}
+          LFTECH_SOURCE_SHA: ${{ needs.prepare.outputs.sha }}
+          LFTECH_VERSION: ${{ needs.prepare.outputs.version }}
+          LFTECH_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: python .github/scripts/tat_deploy.py
