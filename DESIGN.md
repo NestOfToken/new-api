@@ -221,3 +221,5 @@ Use only `web/public/images/lftech/api-ribbon.webp` as the generated hero image.
 ## Product brand
 
 Customer-facing default branding is 麟飞科技 (Linfei Technology), using `/images/lftech/brand-mark.svg`. Public Sans is self-hosted and shared with explicit Chinese sans-serif fallbacks; the wordmark uses weight 650. Homepage display headings use weight 600. The default app action, focus-ring, and sidebar accent use the same #1559df blue as the homepage. Code retains its monospace face. Explicit user font preferences remain available in the console. New API, QuantumNous, and One API authorship and license notices remain in attribution surfaces. Legacy default names and local logo paths are normalized before rendering, including cached settings.
+
+The hero artwork stays absolutely positioned behind the hero copy on mobile as well as desktop. Use the mobile light overlay to preserve text contrast; never turn the artwork into a separate stacked image row. The hero height grows with content, with a 620px mobile minimum.
