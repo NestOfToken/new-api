@@ -20,6 +20,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 @theme inline {
   --font-sans: var(--font-ui-sans);
+  --font-google-sans: 'Google Sans', Arial, sans-serif;
   --font-public-sans:
     'Public Sans Variable', 'Public Sans', 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC', 'Noto Sans TC',
@@ -104,7 +105,7 @@ For commercial licensing, please contact support@quantumnous.com
   --app-rev: '2k6e8r7p';
   /* Share the self-hosted Latin face and CJK fallbacks across public and app UI.
    * Explicit user font preferences remain available in theme-presets.css. */
-  --font-ui-sans: var(--font-public-sans);
+  --font-ui-sans: var(--font-google-sans);
   --font-body: var(--font-ui-sans);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

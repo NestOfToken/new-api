@@ -48,8 +48,8 @@ For commercial licensing, please contact support@quantumnous.com
 /* Shiki dual themes: token colors follow dark theme (pre background stays `bg-background` on the block) */
 @layer components {
   .brand-wordmark {
-    font-family: var(--font-public-sans);
-    font-weight: 650;
+    font-family: var(--font-google-sans);
+    font-weight: 700;
     letter-spacing: 0.015em;
     line-height: 1.35;
   }

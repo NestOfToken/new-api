@@ -52,7 +52,7 @@ export function LandingConsolePreview() {
         </div>
       </dl>
       <div className='lf-console-records'>
-        <h3>{t('Recent requests')}</h3>
+        <h4>{t('Recent requests')}</h4>
         <table>
           <caption className='sr-only'>
             {t('Illustrative model call history')}

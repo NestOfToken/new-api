@@ -199,6 +199,51 @@ describe('enterprise homepage', () => {
     expect(menu).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('lets customers switch application needs without changing the API example', async () => {
+    const user = userEvent.setup()
+    await renderHome()
+    const needs = screen.getByRole('tablist', { name: 'Application needs' })
+    await user.click(
+      within(needs).getByRole('tab', { name: 'Understanding and analysis' })
+    )
+    expect(
+      screen.getByText(
+        'Explore models and integration options that fit your tasks.'
+      )
+    ).toBeVisible()
+    expect(screen.getByRole('tab', { name: 'Chat' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    )
+    await user.click(
+      within(needs).getByRole('tab', { name: 'Choose as you need' })
+    )
+    expect(
+      screen.getByText('Find model availability and pricing in the catalog.')
+    ).toBeVisible()
+    expect(
+      screen.getByRole('button', { name: 'View models and pricing' })
+    ).toHaveAttribute('href', '/pricing')
+  })
+
+  it('keeps registration available inside the mobile navigation', async () => {
+    const user = userEvent.setup()
+    await renderHome()
+    await user.click(
+      screen.getByRole('button', { name: 'Toggle navigation menu' })
+    )
+    const navigation = document.querySelector<HTMLElement>(
+      '#public-mobile-navigation'
+    )
+    expect(navigation).not.toBeNull()
+    if (!navigation) throw new Error('Mobile navigation is missing')
+    expect(
+      within(navigation).getByRole('button', {
+        name: 'Register and get started',
+      })
+    ).toHaveAttribute('href', '/sign-up')
+  })
+
   it('preserves the configured custom homepage URL and its sandbox', async () => {
     homeContent = 'https://example.com/customer-home'
     await renderHome()
