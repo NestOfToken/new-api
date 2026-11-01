@@ -2,6 +2,15 @@
 
 DO NOT send optional commentary
 
+## LFTech deployment automation
+
+- This fork publishes `exlau/lftech-newapi` using `.github/workflows/lftech-build-deploy.yml`. A push to `main` runs checks, builds the submitted application revision, and deploys its image digest through Tencent Cloud TAT.
+- The first bootstrap is a manual rebuild of RC46 source `7d8b91268dab69d7150f345c448b5e250163146a`. Later automatic builds use the new main commit; review application and database upgrade compatibility before merging.
+- `.github/workflows/lftech-deploy-image.yml` manually deploys an existing digest without rebuilding. Database recovery is not automatic. Both workflows use the same deployment concurrency group.
+- Cloud credentials are Secrets in the `production` Environment. Region and instance ID are repository Secrets, Docker Hub credentials are an organization Secret, and non-sensitive publishing settings are repository Variables. Never print or copy Secret values into source, image layers, or TAT command content.
+- The root-managed server deployment script is maintained in the private `NestOfToken/new-api-deploy` repository. It preserves server credentials, backs up PostgreSQL, and only replaces the New API service. Runtime image overrides and release records remain on the server.
+- Inherited upstream publishing/release workflows are disabled for this fork. Preserve upstream attribution and do not accidentally re-enable publication to upstream image repositories.
+
 ## Overview
 
 This is an AI API gateway/proxy built with Go. It aggregates 40+ upstream AI providers (OpenAI, Claude, Gemini, Azure, AWS Bedrock, etc.) behind a unified API, with user management, billing, rate limiting, and an admin dashboard.
