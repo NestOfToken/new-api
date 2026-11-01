@@ -13,12 +13,17 @@ function createTrayIcon() {
   // Clear canvas
   ctx.clearRect(0, 0, 22, 22);
 
-  // Draw a simple "API" icon
-  ctx.fillStyle = '#000000';
-  ctx.font = 'bold 10px system-ui';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('API', 11, 11);
+  // Use the same rising LF path as the web brand mark.
+  ctx.scale(22 / 64, 22 / 64);
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(16, 16); ctx.lineTo(16, 48); ctx.lineTo(48, 48);
+  ctx.moveTo(26, 38); ctx.lineTo(48, 16);
+  ctx.moveTo(32, 16); ctx.lineTo(48, 16); ctx.lineTo(48, 32);
+  ctx.stroke();
 
   // Save as PNG
   const buffer = canvas.toBuffer('image/png');

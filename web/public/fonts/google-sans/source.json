@@ -1,0 +1,24 @@
+{
+  "family": "Google Sans",
+  "source": "https://github.com/google/fonts/tree/main/ofl/googlesans",
+  "sourceSha256": "d0a87d835a944b8b40d0e82a5651bb59ab97b936a2aeed5946eb57e7b2a3a90a",
+  "license": "OFL-1.1",
+  "transformation": "Subset Latin, extended Latin, Greek, Cyrillic, Vietnamese, combining marks and punctuation. Retain original weight, optical size and grade axes.",
+  "axes": {
+    "opsz": [
+      17.0,
+      18.0,
+      18.0
+    ],
+    "wght": [
+      400.0,
+      400.0,
+      700.0
+    ],
+    "GRAD": [
+      -50.0,
+      0.0,
+      200.0
+    ]
+  }
+}

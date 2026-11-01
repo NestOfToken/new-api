@@ -22,6 +22,7 @@ import { useEffect, useCallback } from 'react'
 import { DEFAULT_LOGO } from '@/lib/constants'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import { ensureStatus } from '@/lib/status-query'
+import { resolveSystemLogo, resolveSystemName } from '@/lib/system-branding'
 import { useSystemConfigStore } from '@/stores/system-config-store'
 
 interface UseSystemConfigOptions {
@@ -63,6 +64,10 @@ export function useSystemConfig(options: UseSystemConfigOptions = {}) {
   const { config, loading, loadedLogoUrl, setLoadedLogoUrl, setLoading } =
     useSystemConfigStore()
 
+  // Resolve persisted upstream defaults before the first render or network refresh.
+  const systemName = resolveSystemName(config.systemName)
+  const logo = resolveSystemLogo(config.logo)
+
   // Load config from backend via the shared `/api/status` cache.
   // `ensureStatus` writes the mapped config into this store itself, so there is
   // no second request and no second mapping path here.
@@ -84,8 +89,6 @@ export function useSystemConfig(options: UseSystemConfigOptions = {}) {
 
   // Preload logo image when URL changes
   useEffect(() => {
-    const { logo } = config
-
     // Skip if logo is already loaded
     if (!logo || logo === loadedLogoUrl) return
 
@@ -106,11 +109,13 @@ export function useSystemConfig(options: UseSystemConfigOptions = {}) {
       }
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config.logo, loadedLogoUrl, setLoadedLogoUrl])
+  }, [logo, loadedLogoUrl, setLoadedLogoUrl])
 
   return {
     ...config,
+    systemName,
+    logo,
     loading,
-    logoLoaded: config.logo === loadedLogoUrl && !!loadedLogoUrl,
+    logoLoaded: logo === loadedLogoUrl && !!loadedLogoUrl,
   }
 }

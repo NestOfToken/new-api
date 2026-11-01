@@ -46,6 +46,7 @@ func sendResendEmail(apiKey, from, subject, receiver, content string) error {
 	if sender.Name == "" {
 		sender.Name = SystemName
 	}
+	sender.Name = ResolveSystemName(sender.Name)
 	to := make([]string, 0)
 	for address := range strings.SplitSeq(receiver, ";") {
 		recipient, err := mail.ParseAddress(strings.TrimSpace(address))

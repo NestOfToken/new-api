@@ -62,7 +62,7 @@ func GetStatus(c *gin.Context) {
 		"telegram_oauth_configured":   oauth.TelegramConfigurationError() == nil,
 		"telegram_bot_name":           common.TelegramBotName,
 		"theme":                       "default",
-		"system_name":                 common.SystemName,
+		"system_name":                 common.ResolveSystemName(common.SystemName),
 		"logo":                        common.Logo,
 		"footer_html":                 common.Footer,
 		"wechat_qrcode":               common.WeChatAccountQRCodeImageURL,
@@ -231,7 +231,7 @@ func SendEmailVerification(c *gin.Context) {
 	common.RegisterVerificationCodeWithKey(email, code, common.EmailVerificationPurpose)
 	// The address may not belong to an account yet, so the mail follows the
 	// request language.
-	systemName := map[string]any{"SystemName": common.SystemName}
+	systemName := map[string]any{"SystemName": common.ResolveSystemName(common.SystemName)}
 	subject := i18n.T(c, i18n.MsgEmailVerificationSubject, systemName)
 	content := fmt.Sprintf("<p>%s</p>"+
 		"<p>%s</p>"+
@@ -265,7 +265,7 @@ func SendPasswordResetEmail(c *gin.Context) {
 		if lang == "" {
 			lang = i18n.StatedLang(c)
 		}
-		systemName := map[string]any{"SystemName": common.SystemName}
+		systemName := map[string]any{"SystemName": common.ResolveSystemName(common.SystemName)}
 		linkParams := map[string]any{"Link": link}
 		subject := i18n.Translate(lang, i18n.MsgEmailPasswordResetSubject, systemName)
 		content := fmt.Sprintf("<p>%s</p>"+

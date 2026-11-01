@@ -64,7 +64,7 @@ export default defineConfig(({ envMode }) => {
     },
     html: {
       template: './index.html',
-      favicon: './public/favicon.ico',
+      favicon: './public/images/lftech/brand-mark.svg',
     },
     server: {
       host: '0.0.0.0',

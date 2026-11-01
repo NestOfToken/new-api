@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T10:17:57.628665+00:00",
+  "title": "Design System: Linfei Technology homepage",
+  "extensions": {
+    "scope": {
+      "surface": "Default public homepage palette and composition; Google Sans is the shared default UI font",
+      "sources": [
+        "web/src/styles/lftech-home.css",
+        "web/src/styles/theme.css",
+        "web/src/styles/index.css",
+        "web/index.html",
+        "web/public/fonts/google-sans/font-face.css",
+        "web/src/features/home/components/landing-page.tsx",
+        "web/src/features/home/components/landing-model-explorer.tsx",
+        "web/src/features/home/components/landing-console-preview.tsx",
+        "web/src/features/home/components/hero-terminal-demo.tsx"
+      ],
+      "excludes": [
+        "Console and administration palettes",
+        "Authentication layout redesign",
+        "Custom homepage HTML, Markdown, and URL branches"
+      ],
+      "authority": "User-pinned official Google Chrome website and Google Sans; code-led implementation, no approved composition mockup; seed:05acc2a60743c5af",
+      "fontCoverage": "Self-hosted Google Sans has no CJK glyphs; Arial and system sans fallback remain essential. Explicit application font preferences are preserved.",
+      "cssVariableNote": "Homepage variables are scoped to .lf-home, so snippets provide literal production-value fallbacks for standalone shadow-DOM rendering.",
+      "snippetNote": "Static styling previews only. Production reuses shared React components for interactions, routing, accessibility and i18n. The homepage introduces no text-input component or chip primitive; model selectors are shared Tabs.",
+      "tonalRampNote": "Synthesized OKLCH strips are preview metadata, not production palette additions. DESIGN.md frontmatter owns canonical colors.",
+      "responsiveNavigation": "At 500px and below, hide the redundant header-toolbar CTA and show its equivalent shared Button registration/dashboard action in the mobile menu via navContent. Hero and closing actions remain available. At 380px and below, the hero heading is 34px."
+    },
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "Action Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0450 260)",
+          "oklch(0.26 0.0990 260)",
+          "oklch(0.38 0.1440 260)",
+          "oklch(0.50 0.1800 260)",
+          "oklch(0.62 0.1800 260)",
+          "oklch(0.74 0.1530 260)",
+          "oklch(0.86 0.0900 260)",
+          "oklch(0.95 0.0324 260)"
+        ]
+      },
+      "blue-text": {
+        "role": "primary",
+        "displayName": "Readable Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0425 260)",
+          "oklch(0.26 0.0935 260)",
+          "oklch(0.38 0.1360 260)",
+          "oklch(0.50 0.1700 260)",
+          "oklch(0.62 0.1700 260)",
+          "oklch(0.74 0.1445 260)",
+          "oklch(0.86 0.0850 260)",
+          "oklch(0.95 0.0306 260)"
+        ]
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Pressed Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0400 260)",
+          "oklch(0.26 0.0880 260)",
+          "oklch(0.38 0.1280 260)",
+          "oklch(0.50 0.1600 260)",
+          "oklch(0.62 0.1600 260)",
+          "oklch(0.74 0.1360 260)",
+          "oklch(0.86 0.0800 260)",
+          "oklch(0.95 0.0288 260)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "White Canvas",
+        "tonalRamp": [
+          "oklch(0.15 0.0000 0)",
+          "oklch(0.26 0.0000 0)",
+          "oklch(0.38 0.0000 0)",
+          "oklch(0.50 0.0000 0)",
+          "oklch(0.62 0.0000 0)",
+          "oklch(0.74 0.0000 0)",
+          "oklch(0.86 0.0000 0)",
+          "oklch(0.95 0.0000 0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Near-black Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.0015 260)",
+          "oklch(0.26 0.0033 260)",
+          "oklch(0.38 0.0048 260)",
+          "oklch(0.50 0.0060 260)",
+          "oklch(0.62 0.0060 260)",
+          "oklch(0.74 0.0051 260)",
+          "oklch(0.86 0.0030 260)",
+          "oklch(0.95 0.0011 260)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Quiet Gray",
+        "tonalRamp": [
+          "oklch(0.15 0.0022 260)",
+          "oklch(0.26 0.0050 260)",
+          "oklch(0.38 0.0072 260)",
+          "oklch(0.50 0.0090 260)",
+          "oklch(0.62 0.0090 260)",
+          "oklch(0.74 0.0076 260)",
+          "oklch(0.86 0.0045 260)",
+          "oklch(0.95 0.0016 260)"
+        ]
+      },
+      "soft": {
+        "role": "primary",
+        "displayName": "Pale Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0125 260)",
+          "oklch(0.26 0.0275 260)",
+          "oklch(0.38 0.0400 260)",
+          "oklch(0.50 0.0500 260)",
+          "oklch(0.62 0.0500 260)",
+          "oklch(0.74 0.0425 260)",
+          "oklch(0.86 0.0250 260)",
+          "oklch(0.95 0.0090 260)"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Pale Green",
+        "tonalRamp": [
+          "oklch(0.15 0.0112 150)",
+          "oklch(0.26 0.0248 150)",
+          "oklch(0.38 0.0360 150)",
+          "oklch(0.50 0.0450 150)",
+          "oklch(0.62 0.0450 150)",
+          "oklch(0.74 0.0382 150)",
+          "oklch(0.86 0.0225 150)",
+          "oklch(0.95 0.0081 150)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Fine Gray",
+        "tonalRamp": [
+          "oklch(0.15 0.0020 260)",
+          "oklch(0.26 0.0044 260)",
+          "oklch(0.38 0.0064 260)",
+          "oklch(0.50 0.0080 260)",
+          "oklch(0.62 0.0080 260)",
+          "oklch(0.74 0.0068 260)",
+          "oklch(0.86 0.0040 260)",
+          "oklch(0.95 0.0014 260)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Cool Surface",
+        "tonalRamp": [
+          "oklch(0.15 0.0045 260)",
+          "oklch(0.26 0.0099 260)",
+          "oklch(0.38 0.0144 260)",
+          "oklch(0.50 0.0180 260)",
+          "oklch(0.62 0.0180 260)",
+          "oklch(0.74 0.0153 260)",
+          "oklch(0.86 0.0090 260)",
+          "oklch(0.95 0.0032 260)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Dark Canvas",
+        "tonalRamp": [
+          "oklch(0.15 0.0045 250)",
+          "oklch(0.26 0.0099 250)",
+          "oklch(0.38 0.0144 250)",
+          "oklch(0.50 0.0180 250)",
+          "oklch(0.62 0.0180 250)",
+          "oklch(0.74 0.0153 250)",
+          "oklch(0.86 0.0090 250)",
+          "oklch(0.95 0.0032 250)"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Light Ink",
+        "tonalRamp": [
+          "oklch(0.15 0.0022 260)",
+          "oklch(0.26 0.0050 260)",
+          "oklch(0.38 0.0072 260)",
+          "oklch(0.50 0.0090 260)",
+          "oklch(0.62 0.0090 260)",
+          "oklch(0.74 0.0076 260)",
+          "oklch(0.86 0.0045 260)",
+          "oklch(0.95 0.0016 260)"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Quiet Gray on Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0063 250)",
+          "oklch(0.26 0.0138 250)",
+          "oklch(0.38 0.0200 250)",
+          "oklch(0.50 0.0250 250)",
+          "oklch(0.62 0.0250 250)",
+          "oklch(0.74 0.0213 250)",
+          "oklch(0.86 0.0125 250)",
+          "oklch(0.95 0.0045 250)"
+        ]
+      },
+      "blue-dark": {
+        "role": "primary",
+        "displayName": "Action Blue on Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0350 260)",
+          "oklch(0.26 0.0770 260)",
+          "oklch(0.38 0.1120 260)",
+          "oklch(0.50 0.1400 260)",
+          "oklch(0.62 0.1400 260)",
+          "oklch(0.74 0.1190 260)",
+          "oklch(0.86 0.0700 260)",
+          "oklch(0.95 0.0252 260)"
+        ]
+      },
+      "blue-text-dark": {
+        "role": "primary",
+        "displayName": "Readable Blue on Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0300 260)",
+          "oklch(0.26 0.0660 260)",
+          "oklch(0.38 0.0960 260)",
+          "oklch(0.50 0.1200 260)",
+          "oklch(0.62 0.1200 260)",
+          "oklch(0.74 0.1020 260)",
+          "oklch(0.86 0.0600 260)",
+          "oklch(0.95 0.0216 260)"
+        ]
+      },
+      "soft-dark": {
+        "role": "primary",
+        "displayName": "Dark Blue Field",
+        "tonalRamp": [
+          "oklch(0.15 0.0150 260)",
+          "oklch(0.26 0.0330 260)",
+          "oklch(0.38 0.0480 260)",
+          "oklch(0.50 0.0600 260)",
+          "oklch(0.62 0.0600 260)",
+          "oklch(0.74 0.0510 260)",
+          "oklch(0.86 0.0300 260)",
+          "oklch(0.95 0.0108 260)"
+        ]
+      },
+      "green-dark": {
+        "role": "secondary",
+        "displayName": "Dark Green Field",
+        "tonalRamp": [
+          "oklch(0.15 0.0112 155)",
+          "oklch(0.26 0.0248 155)",
+          "oklch(0.38 0.0360 155)",
+          "oklch(0.50 0.0450 155)",
+          "oklch(0.62 0.0450 155)",
+          "oklch(0.74 0.0382 155)",
+          "oklch(0.86 0.0225 155)",
+          "oklch(0.95 0.0081 155)"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Dark Separator",
+        "tonalRamp": [
+          "oklch(0.15 0.0063 250)",
+          "oklch(0.26 0.0138 250)",
+          "oklch(0.38 0.0200 250)",
+          "oklch(0.50 0.0250 250)",
+          "oklch(0.62 0.0250 250)",
+          "oklch(0.74 0.0213 250)",
+          "oklch(0.86 0.0125 250)",
+          "oklch(0.95 0.0045 250)"
+        ]
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Dark Cool Surface",
+        "tonalRamp": [
+          "oklch(0.15 0.0075 250)",
+          "oklch(0.26 0.0165 250)",
+          "oklch(0.38 0.0240 250)",
+          "oklch(0.50 0.0300 250)",
+          "oklch(0.62 0.0300 250)",
+          "oklch(0.74 0.0255 250)",
+          "oklch(0.86 0.0150 250)",
+          "oklch(0.95 0.0054 250)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Centered hero heading; upright blue second line."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Large section headings and tonal phrase highlights."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product-panel headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Homepage descriptions; Google Sans is also the shared UI default."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Hero supporting text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Compact actions and protocol labels."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Existing monospace protocol examples."
+      }
+    },
+    "shadows": [
+      {
+        "name": "scrolled-header",
+        "value": "0 3px 12px #20212412",
+        "purpose": "Scroll-state surface change without header geometry change."
+      },
+      {
+        "name": "primary-hover",
+        "value": "0 3px 8px #174ea622",
+        "purpose": "Subtle primary-action hover depth."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-state",
+        "value": "0.18s",
+        "purpose": "Background, color, shadow, and transform transitions."
+      },
+      {
+        "name": "header-shadow",
+        "value": "0.25s",
+        "purpose": "Stable header surface response on scroll."
+      },
+      {
+        "name": "task-content",
+        "value": "0.24s ease-out; translateY(6px) to none; opacity .65 to 1",
+        "purpose": "Manual model-tab content entry."
+      },
+      {
+        "name": "api-window-settle",
+        "value": "linear; animation-timeline: view(block); animation-range: entry 0% cover 45%",
+        "purpose": "Native scroll-linked 8deg X tilt, -2deg roll, .9 scale, and 28px offset settle to rest; mobile uses zero tilt/roll and .96 scale. Focus within disables transform."
+      },
+      {
+        "name": "hero-depth",
+        "value": "linear; animation-timeline: --lf-hero; animation-range: exit 0% exit 100%",
+        "purpose": "Artwork moves from translateY(0) scale(1) to translateY(80px) scale(1.06)."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important",
+        "purpose": "Remove homepage motion and make header/button transitions effectively immediate."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-header-and-panels",
+        "value": "1100px"
+      },
+      {
+        "name": "stack-product-panels",
+        "value": "900px"
+      },
+      {
+        "name": "mobile-shell-and-code",
+        "value": "800px"
+      },
+      {
+        "name": "phone",
+        "value": "500px"
+      },
+      {
+        "name": "narrow-phone",
+        "value": "380px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Registration or dashboard action, rendered by the shared Button in production.",
+      "html": "<button class=\"ds-primary\">Register and get started<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-primary{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:999px;background:var(--lf-blue,#1a73e8);color:#fff;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,box-shadow .18s,transform .18s}.ds-primary:hover{background:#185abc;box-shadow:0 3px 8px #174ea622}.ds-primary:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.65;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Inverse action",
+      "kind": "button",
+      "refersTo": "button-light",
+      "description": "Light action inside the blue closing panel.",
+      "html": "<div class=\"ds-inverse-field\"><button class=\"ds-inverse\">Register and get started<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></div>",
+      "css": ".ds-inverse-field{padding:24px;border-radius:28px;background:var(--lf-blue-text,#1967d2)}.ds-inverse{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:999px;background:#fff;color:#185abc;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,transform .18s}.ds-inverse:hover{background:#e8f0fe}.ds-inverse:focus-visible{outline:2px solid #fff;outline-offset:4px}.ds-inverse:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-inverse{transition:none}}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "Low-emphasis shared link button; unavailable sales actions stay disabled.",
+      "html": "<button class=\"ds-text\">View models and pricing<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-text{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;gap:10px;padding:0;border:0;background:transparent;color:var(--lf-blue-text,#1967d2);font-size:16px;font-weight:500;text-align:start;cursor:pointer}.ds-text:hover{text-decoration:underline;text-underline-offset:5px}.ds-text:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-text:active{transform:translateY(1px)}.ds-text:disabled{opacity:.65;cursor:not-allowed}"
+    },
+    {
+      "name": "Homepage navigation",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Shared PublicHeader composition with stable height and a scroll shadow; at 500px and below its toolbar action moves into the mobile menu.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage preview\"><strong>Linfei Technology</strong><a href=\"#integration\">Integration guide</a><a href=\"#models\">Models and pricing</a></nav>",
+      "css": ".ds-nav{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;align-items:center;flex-wrap:wrap;min-height:72px;padding:0 28px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124);box-shadow:0 3px 12px #20212412}.ds-nav strong{margin-right:30px;font-size:19px;font-weight:700;letter-spacing:-.01em}.ds-nav a{padding:24px 16px;color:var(--lf-muted,#5f6368);font-size:15px;font-weight:500;text-decoration:none}.ds-nav a:hover{color:var(--lf-blue-text,#1967d2)}.ds-nav a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-nav a:active{color:#185abc}@media(max-width:800px){.ds-nav{min-height:64px;padding-inline:18px}.ds-nav strong{font-size:17px}.ds-nav a{padding:12px 9px;font-size:14px}}"
+    },
+    {
+      "name": "API window",
+      "kind": "card",
+      "refersTo": "api-window",
+      "description": "Browser-like frame for the existing live protocol demo; static panel preview only.",
+      "html": "<section class=\"ds-window\" aria-label=\"API window preview\"><div class=\"ds-window-bar\"><i></i><i></i><i></i><span>API</span></div><div class=\"ds-path\">Your application <b>→</b> Linfei platform <b>→</b> Model</div><div class=\"ds-protocols\"><button class=\"ds-protocol-selected\">OpenAI</button><button>Claude</button><button>Gemini</button></div><div class=\"ds-code\"><pre>POST /v1/chat/completions\n{ \"model\": \"your-model\" }</pre><pre>{ \"choices\": [ ... ] }</pre></div><p class=\"ds-window-note\">Illustrative requests and responses. No live API calls or performance claims.</p></section>",
+      "css": ".ds-window{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);overflow:hidden;border:1px solid var(--lf-line,#dadce0);border-radius:24px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124)}.ds-window-bar{display:flex;align-items:center;gap:7px;height:36px;padding-inline:20px;background:var(--lf-surface,#f8fafd);border-bottom:1px solid var(--lf-line,#dadce0)}.ds-window-bar i{width:7px;height:7px;border-radius:50%;background:#bdc1c6}.ds-window-bar span{margin-inline:auto;padding-right:35px;color:var(--lf-muted,#5f6368);font-size:11px}.ds-path{padding:18px 24px;text-align:center;font-size:13px;color:var(--lf-muted,#5f6368)}.ds-path b{padding-inline:14px;color:var(--lf-blue-text,#1967d2)}.ds-protocols{display:flex;padding-inline:20px;gap:8px;border-block:1px solid var(--lf-line,#dadce0)}.ds-protocols button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:10px 18px;height:46px;border:0;background:transparent;color:var(--lf-muted,#5f6368);font-size:14px;cursor:pointer}.ds-protocols .ds-protocol-selected{color:var(--lf-blue-text,#1967d2);box-shadow:inset 0 -3px var(--lf-blue,#1a73e8)}.ds-protocols button:hover{color:var(--lf-blue-text,#1967d2)}.ds-protocols button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-protocols button:active{background:var(--lf-soft,#e8f0fe)}.ds-code{display:grid;grid-template-columns:1.12fr 1fr}.ds-code pre{margin:0;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:monospace;font-size:13px;line-height:1.65}.ds-code pre+pre{border-left:1px solid var(--lf-line,#dadce0);background:var(--lf-surface,#f8fafd)}.ds-window-note{margin:0;padding:11px 24px;border-top:1px solid var(--lf-line,#dadce0);font-size:11px;color:var(--lf-muted,#5f6368)}@media(max-width:800px){.ds-code{grid-template-columns:1fr}.ds-code pre+pre{border-left:0;border-top:1px solid var(--lf-line,#dadce0)}}"
+    },
+    {
+      "name": "Model task panel",
+      "kind": "custom",
+      "refersTo": "model-panel",
+      "description": "Pale-blue panel with shared wrapping Tabs; panel preview does not implement tab switching.",
+      "html": "<article class=\"ds-model\"><h3>Choose models.<br>Connect your business.</h3><p>Explore models and prices for your application. Availability follows the current model catalog.</p><div class=\"ds-model-tabs\"><button class=\"ds-model-selected\">Content and answers</button><button>Understanding and analysis</button><button>Choose as you need</button></div><p class=\"ds-model-task\">Choose models for content generation, information processing, and question answering.</p></article>",
+      "css": ".ds-model{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:36px;border-radius:28px;background:var(--lf-soft,#e8f0fe);color:var(--lf-ink,#202124)}.ds-model h3{margin:0;font-size:clamp(1.8rem,2.8vw,2.5rem);font-weight:700;line-height:1.2;letter-spacing:-.02em}.ds-model>p{margin:20px 0 0;color:#43516a;font-size:16px;line-height:1.6}.ds-model-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;padding:2px}.ds-model-tabs button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);max-width:100%;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:#405679;font-size:13px;font-weight:500;text-align:start;white-space:normal;cursor:pointer}.ds-model-tabs .ds-model-selected{background:#fff;color:#174ea6}.ds-model-tabs button:hover{color:#174ea6;background:#ffffff80}.ds-model-tabs button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-model-tabs button:active{background:#fff}.ds-model .ds-model-task{padding-top:24px;font-size:22px;line-height:1.4;color:#263c5e}@media(max-width:500px){.ds-model{padding:26px 22px;border-radius:24px}}"
+    },
+    {
+      "name": "Customer console illustration",
+      "kind": "custom",
+      "refersTo": "console-preview",
+      "description": "Illustrative balance, usage, and request history inside the green management panel.",
+      "html": "<article class=\"ds-management\"><h3>Keep building.<br>Keep usage in sight.</h3><div class=\"ds-console\"><header><strong>Customer console</strong><span>Illustrative preview</span></header><dl><div><dt>Available Balance</dt><dd>¥1,000.00</dd></div><div><dt>Monthly requests</dt><dd>12,480</dd></div><div><dt>Monthly usage</dt><dd>2.4M</dd></div></dl><section><h4>Recent requests</h4><table><thead><tr><th>Model</th><th>Usage</th><th>Status</th></tr></thead><tbody><tr><td>your-model</td><td>27 tokens</td><td>Completed</td></tr></tbody></table></section><p>Example data only. These are not real customer records.</p></div></article>",
+      "css": ".ds-management{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:36px;border-radius:28px;background:var(--lf-green,#e6f4ea);color:var(--lf-ink,#202124)}.ds-management>h3{margin:0;font-size:clamp(1.8rem,2.8vw,2.5rem);font-weight:700;line-height:1.2;letter-spacing:-.02em}.ds-console{margin-top:26px;border-radius:14px;overflow:hidden;background:var(--lf-paper,#fff)}.ds-console header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--lf-line,#dadce0)}.ds-console header strong{font-size:14px;font-weight:500}.ds-console header span{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0;padding:20px 18px}.ds-console dt{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dd{margin:8px 0 3px;font-size:clamp(17px,2vw,24px);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.025em}.ds-console section{padding:0 18px 10px}.ds-console h4{margin:0 0 12px;font-size:12px;font-weight:500}.ds-console table{width:100%;border-collapse:collapse;text-align:start;font-size:11px}.ds-console th{padding-bottom:8px;color:var(--lf-muted,#5f6368);font-weight:400}.ds-console td{padding:8px 0;border-top:1px solid var(--lf-line,#dadce0);font-variant-numeric:tabular-nums}.ds-console td:last-child{color:#137333}.ds-console>p{margin:0;padding:0 18px 12px;font-size:10px;color:var(--lf-muted,#5f6368)}@media(max-width:500px){.ds-management{padding:26px 22px;border-radius:24px}.ds-console dl{gap:10px;padding-inline:14px}.ds-console dd{font-size:18px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Chrome-inspired product clarity",
+    "overview": "The user selected the official Google Chrome website as the visual reference: a white canvas, near-black Google Sans headings, blue pill actions, and generous pale blue and green product panels. Linfei Technology retains its own name, product mark, gateway content, and single optical-ribbon image. This refresh records the implemented direction; it supersedes the former serif and deep-blue homepage language.\n\nHomepage colors and composition apply only to the default public homepage in `web/src/features/home/components/landing-page.tsx` and `web/src/styles/lftech-home.css`. Google Sans is also the global default UI font through `--font-ui-sans` and `--font-body`; explicit user font preferences remain available. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.",
+    "keyCharacteristics": [
+      "Centered product storytelling, large balanced headings, and blue phrase emphasis.",
+      "One subdued ribbon background behind the hero at every breakpoint.",
+      "A wide protocol window followed by task exploration and an illustrative usage console.",
+      "Shared components, translated copy, keyboard access, dark surfaces, and reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The Local Palette Rule",
+        "body": "Keep homepage colors inside `.lf-home`; the console's shared theme remains its own source of truth.",
+        "section": "colors"
+      },
+      {
+        "name": "The Font Preference Rule",
+        "body": "Keep Google Sans as the shared default while preserving explicit user font choices and the monospace code face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Motion Access Rule",
+        "body": "Reduced motion disables homepage animations and smooth scrolling, and makes header/button transitions effectively immediate; content and controls stay usable without movement.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** follow the user's pinned Chrome reference and Google Sans preference for the default public homepage.",
+      "**Do** keep homepage colors local while retaining explicit application font preferences.",
+      "**Do** reuse the shared header, footer, buttons, tabs, and original interactive protocol demo.",
+      "**Do** retain keyboard access, translated copy, visible focus, dark surfaces, and reduced-motion behavior.",
+      "**Do** display the Linfei Technology brand and preserve New API / QuantumNous / One API attribution and legal notices.",
+      "**Do** keep the single ribbon raster behind hero copy on every breakpoint, with its provenance intact."
+    ],
+    "donts": [
+      "**Don't** add generated imagery beyond the approved ribbon asset or rasterize interactive content.",
+      "**Don't** restore the superseded serif/deep-blue homepage direction or removed tail chapters.",
+      "**Don't** present illustrative records, protocol metrics, or catalog availability as measured customer evidence.",
+      "**Don't** apply this homepage palette or composition to console themes, custom homepage branches, or authentication layouts.",
+      "**Don't** claim that the bundled Google Sans file covers CJK glyphs or remove system fallback behavior."
+    ]
+  }
+}
