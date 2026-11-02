@@ -75,8 +75,9 @@ def rollout(client, settings, targets):
             time.sleep(5)
         else:
             raise RuntimeError("Target failed its CLB health check; it remains drained")
-        if replacing:
-            change_weight(client, settings, target, target["weight"])
+        # Reassert unchanged weights on same-image runs as well, so those runs
+        # verify CLB write permission before a future release needs to drain.
+        change_weight(client, settings, target, target["weight"])
         print("Deployment verified:", target["name"], flush=True)
 
 

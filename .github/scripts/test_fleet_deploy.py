@@ -67,7 +67,7 @@ class FleetDeploymentTests(unittest.TestCase):
              patch.object(fleet_deploy, "change_weight") as weight:
             fleet_deploy.rollout(None, {}, targets)
             self.assertEqual(remote.call_count, 4)
-            weight.assert_not_called()
+            self.assertEqual([call.args[3] for call in weight.call_args_list], [10, 10])
 
 
 if __name__ == "__main__":
