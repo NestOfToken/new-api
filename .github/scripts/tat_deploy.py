@@ -14,7 +14,7 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.tat.v20201028 import models, tat_client
 
 
-def deploy():
+def deploy(status_only=False):
     required = (
         "TENCENTCLOUD_SECRET_ID", "TENCENTCLOUD_SECRET_KEY", "TENCENTCLOUD_REGION",
         "TENCENTCLOUD_INSTANCE_ID", "DEPLOY_DIR", "LFTECH_IMAGE_REF",
@@ -54,17 +54,23 @@ def deploy():
         "sudo", "-n", "--", deploy_dir.rstrip("/") + "/scripts/deploy-new-api.sh",
         image, source_sha, version, run_id,
     ])
+    if status_only:
+        command = shlex.join([
+            "sudo", "-n", "docker", "inspect", "nest-token-new-api-1", "--format",
+            '{"image":{{json .Config.Image}},"health":{{json .State.Health.Status}}}',
+        ])
     request = models.RunCommandRequest()
+    timeout = 60 if status_only else 1200
     request.from_json_string(json.dumps({
         "Content": base64.b64encode(command.encode()).decode(),
         "CommandType": "SHELL", "CommandName": "lftech-new-api-deploy",
         "InstanceIds": [os.environ["TENCENTCLOUD_INSTANCE_ID"]],
         "Username": "newapiops", "WorkingDirectory": deploy_dir,
-        "Timeout": 1200, "SaveCommand": False,
+        "Timeout": timeout, "SaveCommand": False,
     }))
     invocation_id = client.RunCommand(request).InvocationId
     print("TAT invocation:", invocation_id, flush=True)
-    deadline = time.monotonic() + 1260
+    deadline = time.monotonic() + timeout + 60
     active = {"PENDING", "DELIVERING", "DELIVER_DELAYED", "RUNNING"}
     last_status = None
     while time.monotonic() < deadline:
@@ -87,12 +93,12 @@ def deploy():
                     for name in ("TENCENTCLOUD_SECRET_ID", "TENCENTCLOUD_SECRET_KEY",
                                  "TENCENTCLOUD_REGION", "TENCENTCLOUD_INSTANCE_ID"):
                         output = output.replace(os.environ[name], "***")
-                    # Disable Actions log commands in remote command output.
-                    print("::stop-commands::lftech-tat-output", flush=True)
-                    print(output, flush=True)
-                    print("::lftech-tat-output::", flush=True)
+                    # Connection errors can contain runtime credentials. Keep
+                    # remote output in TAT, outside public Actions logs.
                 if task.TaskStatus != "SUCCESS" or not result or result.ExitCode != 0:
                     raise RuntimeError("Remote deployment failed; inspect the TAT invocation")
+                if status_only:
+                    return json.loads(output)
                 summary = os.environ.get("GITHUB_STEP_SUMMARY")
                 if summary:
                     with open(summary, "a", encoding="utf-8") as stream:
