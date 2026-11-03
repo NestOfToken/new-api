@@ -32,7 +32,7 @@ Operators configure providers and models, manage users and credentials, and moni
 
 ## Brand Commitments
 
-The customer-facing company is Linfei Technology (麟飞科技). No company logo or brand guide was supplied. The approved homepage uses a blue visual system and a single generated optical-ribbon image. The user pinned the official Google Chrome website as the default public homepage design reference and Google Sans as the global default UI font, preserving explicit font preferences.
+The customer-facing company is Linfei Technology (麟飞科技). No company logo or brand guide was supplied. The approved homepage retains the blue visual system and single generated glass-ribbon image. Its current composition follows the user-pinned SiliconFlow reference, adapted to Linfei Technology's actual enterprise model-access, usage, and balance capabilities. Google Sans remains the global default UI font from the earlier Chrome reference, with explicit font preferences and CJK fallback preserved.
 
 Use 麟飞科技 as the customer-facing product brand. Preserve New API / QuantumNous / One API attribution and legal notices. The project owner explicitly authorized this branding change.
 

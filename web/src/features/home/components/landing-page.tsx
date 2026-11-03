@@ -24,12 +24,14 @@ import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
 import { Button } from '@/components/ui/button'
 import { useStatus } from '@/hooks/use-status'
-import { useSystemConfig } from '@/hooks/use-system-config'
 import { isHttpUrl } from '@/lib/content-format'
 
 import { HeroTerminalDemo } from './hero-terminal-demo'
 import { LandingConsolePreview } from './landing-console-preview'
 import { LandingModelExplorer } from './landing-model-explorer'
+import { LandingOpticalRibbon } from './landing-optical-ribbon'
+import { LandingAccessCard, LandingBalanceCard } from './landing-product-cards'
+import { LandingRequestPath } from './landing-request-path'
 
 import '@/styles/lftech-home.css'
 
@@ -40,7 +42,6 @@ interface LandingPageProps {
 export function LandingPage(props: LandingPageProps) {
   const { t } = useTranslation()
   const { status } = useStatus()
-  const { logo } = useSystemConfig()
   const docsUrl =
     typeof status?.docs_link === 'string' && status.docs_link
       ? status.docs_link
@@ -105,13 +106,6 @@ export function LandingPage(props: LandingPageProps) {
               fetchPriority='high'
             />
             <div className='lf-container lf-hero-copy'>
-              <img
-                className='lf-hero-mark'
-                src={logo}
-                alt=''
-                width={64}
-                height={64}
-              />
               <h1 id='lf-hero-title'>
                 {t('Bring AI model capabilities')}
                 <em>{t('into every enterprise idea.')}</em>
@@ -148,10 +142,61 @@ export function LandingPage(props: LandingPageProps) {
           </section>
 
           <section
+            className='lf-container lf-capabilities'
+            id='models'
+            aria-labelledby='lf-models-title'
+          >
+            <LandingOpticalRibbon headingId='lf-models-title' />
+            <div className='lf-section-heading'>
+              <h2 id='lf-models-title'>
+                <span className='lf-heading-phrase'>
+                  {t('One entry point.')}
+                </span>{' '}
+                <span className='lf-highlight lf-highlight-green'>
+                  {t('More possibilities.')}
+                </span>
+              </h2>
+              <p>
+                {t(
+                  'Connect to language models through one API. Manage calls, usage, and account balance in one place.'
+                )}
+              </p>
+            </div>
+            <div className='lf-capability-grid'>
+              <LandingAccessCard />
+              <LandingModelExplorer />
+              <LandingBalanceCard />
+              <article
+                className='lf-manage-panel'
+                id='usage'
+                aria-labelledby='lf-operations-title'
+              >
+                <h3 id='lf-operations-title'>
+                  {t('Keep building.')}
+                  <br />
+                  {t('Keep usage in sight.')}
+                </h3>
+                <p className='lf-panel-description'>
+                  {t(
+                    'From the first request to everyday use, find call history, model usage, and your balance in the customer console.'
+                  )}
+                </p>
+                <LandingConsolePreview />
+                <p className='lf-manage-note'>
+                  {t(
+                    'Track consumption and top up as needed, so you can plan what comes next.'
+                  )}
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section
             className='lf-container lf-api-section'
             id='integration'
             aria-labelledby='lf-api-title'
           >
+            <LandingOpticalRibbon headingId='lf-api-title' />
             <div className='lf-section-heading'>
               <h2 id='lf-api-title'>
                 {t('From request')}{' '}
@@ -170,16 +215,7 @@ export function LandingPage(props: LandingPageProps) {
                 <i />
                 <span>API</span>
               </div>
-              <div
-                className='lf-request-path'
-                aria-label={t('API request path')}
-              >
-                <span>{t('Your application')}</span>
-                <i />
-                <span className='lf-path-brand'>{t('Linfei platform')}</span>
-                <i />
-                <span>{t('Model')}</span>
-              </div>
+              <LandingRequestPath />
               <HeroTerminalDemo
                 className='lf-terminal'
                 layout='split'
@@ -214,48 +250,6 @@ export function LandingPage(props: LandingPageProps) {
                 {t('Read the integration guide')}
                 <ArrowRight aria-hidden='true' />
               </Button>
-            </div>
-          </section>
-
-          <section
-            className='lf-container lf-capabilities'
-            id='models'
-            aria-labelledby='lf-models-title'
-          >
-            <div className='lf-section-heading'>
-              <h2 id='lf-models-title'>
-                <span className='lf-heading-phrase'>
-                  {t('One entry point.')}
-                </span>{' '}
-                <span className='lf-highlight lf-highlight-green'>
-                  {t('More possibilities.')}
-                </span>
-              </h2>
-            </div>
-            <div className='lf-capability-grid'>
-              <LandingModelExplorer />
-              <article
-                className='lf-manage-panel'
-                id='usage'
-                aria-labelledby='lf-operations-title'
-              >
-                <h3 id='lf-operations-title'>
-                  {t('Keep building.')}
-                  <br />
-                  {t('Keep usage in sight.')}
-                </h3>
-                <p className='lf-panel-description'>
-                  {t(
-                    'From the first request to everyday use, find call history, model usage, and your balance in the customer console.'
-                  )}
-                </p>
-                <LandingConsolePreview />
-                <p className='lf-manage-note'>
-                  {t(
-                    'Track consumption and top up as needed, so you can plan what comes next.'
-                  )}
-                </p>
-              </article>
             </div>
           </section>
 

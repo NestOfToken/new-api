@@ -93,6 +93,29 @@ async function renderHome() {
 }
 
 describe('enterprise homepage', () => {
+  it('presents model access, model selection, balance and usage before the API examples', async () => {
+    await renderHome()
+    const sections = [...document.querySelectorAll('#home-content > section')]
+    expect(sections.map((section) => section.id)).toEqual([
+      '',
+      'models',
+      'integration',
+      'start',
+    ])
+    const products = screen.getByRole('region', {
+      name: /One entry point.*More possibilities/,
+    })
+    expect(within(products).getAllByRole('article')).toHaveLength(4)
+    const details = within(products).getAllByRole('button', {
+      name: 'View details',
+    })
+    expect(details.map((link) => link.getAttribute('href'))).toEqual([
+      '/#integration',
+      '/#usage',
+    ])
+    expect(document.querySelectorAll('.lf-optical-light')).toHaveLength(2)
+  })
+
   it('routes visitors to registration, pricing, and the configured integration docs', async () => {
     await renderHome()
     expect(

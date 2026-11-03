@@ -1,0 +1,178 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+
+.lf-optical-light {
+  --light-period: max(1080px, 110vw);
+  --flow-duration: 50s;
+  --flow-delay: -18s;
+  --x-a: 15%;
+  --x-b: 36%;
+  --x-c: 64%;
+  --x-d: 85%;
+  --upper-a: 27%;
+  --upper-b: 20%;
+  --upper-c: 80%;
+  --upper-d: 73%;
+  --end-width: 23%;
+  --mid-width: 14%;
+  --width-a: 34%;
+  --width-b: 21%;
+  --width-c: 7%;
+  --width-d: 12%;
+}
+.lf-api-section .lf-optical-light {
+  --flow-duration: 56s;
+  --flow-delay: -34s;
+}
+/* Full-width optical ribbons: fixed CSS surfaces, translated by one repeating tile. */
+.lf-home .lf-optical-light {
+  display: block;
+  position: absolute;
+  inset: 0 calc((100% - 100vw) / 2);
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.lf-home main {
+  overflow-x: clip;
+}
+.lf-home .lf-capabilities {
+  position: relative;
+  isolation: isolate;
+}
+
+.lf-optical-lane {
+  position: absolute;
+  top: var(--lane-top);
+  left: 0;
+  width: 100%;
+  height: clamp(160px, 20vw, 220px);
+  transform: translateY(-50%);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0.62;
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+}
+.lf-optical-track {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  display: flex;
+  width: calc(2 * var(--light-period));
+  animation: lf-optical-flow var(--flow-duration) linear var(--flow-delay)
+    infinite;
+  animation-play-state: paused;
+}
+.lf-optical-tile {
+  position: relative;
+  flex: 0 0 var(--light-period);
+  height: 100%;
+}
+.lf-optical-surface,
+.lf-optical-surface::after {
+  --surface-scale: 1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #eaf8ff00,
+    #4db5e815 28%,
+    #2775df1a 48%,
+    #9ad9f22a 66%,
+    #d9f4ff16
+  );
+  clip-path: shape(
+    from 0% 50%,
+    curve to 50% 50% with var(--x-a) var(--upper-a) / var(--x-b) var(--upper-b),
+    curve to 100% 50% with var(--x-c) var(--upper-c) / var(--x-d) var(--upper-d),
+    line to 100% calc(50% + var(--end-width) * var(--surface-scale)),
+    curve to 50% calc(50% + var(--mid-width) * var(--surface-scale)) with
+      var(--x-d) calc(var(--upper-d) + var(--width-d) * var(--surface-scale)) /
+      var(--x-c) calc(var(--upper-c) + var(--width-c) * var(--surface-scale)),
+    curve to 0% calc(50% + var(--end-width) * var(--surface-scale)) with
+      var(--x-b) calc(var(--upper-b) + var(--width-b) * var(--surface-scale)) /
+      var(--x-a) calc(var(--upper-a) + var(--width-a) * var(--surface-scale)),
+    close
+  );
+}
+.lf-optical-surface::after {
+  content: '';
+  --surface-scale: 0.14;
+  background: linear-gradient(
+    180deg,
+    #d4f1ff26,
+    #80ccef2b 45%,
+    #e3f6ff40 75%,
+    transparent
+  );
+}
+.lf-optical-lane:nth-child(2) .lf-optical-surface {
+  background: linear-gradient(
+    180deg,
+    #eaf8ff00,
+    #8cd3e91a 24%,
+    #3296c71f 52%,
+    #94d2f023 72%,
+    #e7f6ff0d
+  );
+}
+
+.lf-optical-lane[data-playing='true'] {
+  visibility: visible;
+}
+.lf-optical-lane[data-playing='true'] .lf-optical-track {
+  animation-play-state: running;
+  will-change: transform;
+}
+.dark .lf-optical-lane {
+  opacity: 0.34;
+}
+@keyframes lf-optical-flow {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-1 * var(--light-period)), 0, 0);
+  }
+}
+@media (max-width: 800px) {
+  .lf-optical-lane {
+    height: 170px;
+    opacity: 0.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-home .lf-optical-light {
+    display: none;
+  }
+  .lf-home .lf-optical-track {
+    animation: none;
+  }
+}
+@supports not (clip-path: shape(from 0% 50%, line to 100% 50%, close)) {
+  .lf-home .lf-optical-light {
+    display: none;
+  }
+}

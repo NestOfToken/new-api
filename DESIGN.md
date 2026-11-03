@@ -1,6 +1,6 @@
 ---
 name: Linfei Technology homepage
-description: Chrome-inspired product clarity with Google Sans and locally scoped homepage colors
+description: Enterprise model access with Google Sans, Linfei blue, and an approved glass-ribbon material
 colors:
   blue: "#1a73e8"
   blue-text: "#1967d2"
@@ -9,45 +9,54 @@ colors:
   ink: "#202124"
   muted: "#5f6368"
   soft: "#e8f0fe"
-  green: "#e6f4ea"
   line: "#dadce0"
   surface: "#f8fafd"
+  card-dark: "#10315a"
+  card-light: "#eef5ff"
+  card-muted: "#c9ddf5"
   paper-dark: "#101418"
   ink-dark: "#e8eaed"
   muted-dark: "#b7bec7"
   blue-dark: "#8ab4f8"
   blue-text-dark: "#a8c7fa"
   soft-dark: "#1c2c48"
-  green-dark: "#19372c"
   line-dark: "#3c454f"
   surface-dark: "#18212b"
+  card-dark-dark: "#0b2444"
+  card-light-dark: "#182b45"
 typography:
   display:
     fontFamily: "var(--font-google-sans)"
-    fontSize: "clamp(3rem, 5.6vw, 4.5rem)"
+    fontSize: "clamp(44px, 4.6vw, 68px)"
     fontWeight: 700
-    lineHeight: 1.16
-    letterSpacing: "-0.035em"
+    lineHeight: 1.2
+    letterSpacing: "-0.03em"
   headline:
     fontFamily: "var(--font-google-sans)"
-    fontSize: "clamp(2.4rem, 4.7vw, 3.75rem)"
+    fontSize: "clamp(32px, 3.5vw, 46px)"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.025em"
+  api-headline:
+    fontFamily: "var(--font-google-sans)"
+    fontSize: "clamp(32px, 3.3vw, 44px)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-0.025em"
   title:
     fontFamily: "var(--font-google-sans)"
-    fontSize: "clamp(1.8rem, 2.8vw, 2.5rem)"
+    fontSize: "clamp(25px, 2.4vw, 30px)"
     fontWeight: 700
-    lineHeight: 1.2
+    lineHeight: 1.28
     letterSpacing: "-0.02em"
   body:
     fontFamily: "var(--font-google-sans)"
     fontSize: "16px"
-    lineHeight: 1.5
+    lineHeight: 1.7
   lead:
     fontFamily: "var(--font-google-sans)"
     fontSize: "18px"
-    lineHeight: 1.6
+    lineHeight: 1.7
   label:
     fontFamily: "var(--font-google-sans)"
     fontSize: "14px"
@@ -57,30 +66,30 @@ typography:
     fontSize: "13px"
     lineHeight: 1.65
 rounded:
+  action: "12px"
+  panel: "16px"
+  console: "12px"
   pill: "999px"
-  console: "14px"
-  window: "24px"
-  panel: "28px"
 spacing:
-  compact: "14px"
-  small: "18px"
+  small: "16px"
+  mobile-gap: "18px"
   medium: "24px"
-  panel-gap: "28px"
-  panel-inset: "36px"
+  panel-mobile: "26px"
+  panel-inset: "32px"
   section-mobile: "48px"
-  section: "72px"
+  section: "76px"
 components:
   button-primary:
     backgroundColor: "{colors.blue}"
     textColor: "{colors.paper}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.action}"
     padding: "14px 26px"
   button-primary-hover:
     backgroundColor: "{colors.blue-hover}"
   button-light:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.blue-hover}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.action}"
     padding: "14px 26px"
   button-link:
     textColor: "{colors.blue-text}"
@@ -91,15 +100,25 @@ components:
   api-window:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.window}"
+    rounded: "{rounded.panel}"
+  access-card:
+    backgroundColor: "{colors.card-dark}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.panel}"
+    padding: "{spacing.panel-inset}"
   model-panel:
-    backgroundColor: "{colors.soft}"
+    backgroundColor: "{colors.card-light}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.panel}"
+    padding: "{spacing.panel-inset}"
+  balance-card:
+    backgroundColor: "{colors.card-light}"
     textColor: "{colors.ink}"
     rounded: "{rounded.panel}"
     padding: "{spacing.panel-inset}"
   management-panel:
-    backgroundColor: "{colors.green}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.card-dark}"
+    textColor: "{colors.paper}"
     rounded: "{rounded.panel}"
     padding: "{spacing.panel-inset}"
   console-preview:
@@ -112,133 +131,136 @@ components:
 
 ## Overview
 
-**Creative North Star: "Chrome-inspired product clarity"**
+**Creative North Star: "Enterprise clarity in Linfei blue"**
 
-The user selected the official Google Chrome website as the visual reference: a white canvas, near-black Google Sans headings, blue pill actions, and generous pale blue and green product panels. Linfei Technology retains its own name, product mark, gateway content, and single optical-ribbon image. This refresh records the implemented direction; it supersedes the former serif and deep-blue homepage language.
+Linfei Technology pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.
 
-Homepage colors and composition apply only to the default public homepage in `web/src/features/home/components/landing-page.tsx` and `web/src/styles/lftech-home.css`. Google Sans is also the global default UI font through `--font-ui-sans` and `--font-body`; explicit user font preferences remain available. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.
+This records the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and its two local stylesheets. Its enterprise story connects model access, model choice, balance, and usage to registration. Google Sans also remains the shared default UI font, with explicit application font preferences preserved. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.
 
 **Key Characteristics:**
 
-- Centered product storytelling, large balanced headings, and blue phrase emphasis.
-- One subdued ribbon background behind the hero at every breakpoint.
-- A wide protocol window followed by task exploration and an illustrative usage console.
-- Shared components, translated copy, keyboard access, dark surfaces, and reduced motion.
+- Left-aligned, full-width hero with a right-biased glass ribbon and soft page-ground fades.
+- Alternating dark and light product cards with native model selectors and an illustrative console.
+- A working request/response demo, practical onboarding, and a compact dark closing band.
+- Two subtle heading-centered CSS curves, translated copy, keyboard access, dark surfaces, and reduced motion.
 
 ## Colors
 
-White and near-black keep the page clear; action blue and pale product surfaces distinguish the interactive story. Frontmatter values are canonical and correspond to the homepage stylesheet.
+Linfei blue anchors actions and emphasis; dark navy and pale blue organize the homepage's product story. Frontmatter values are canonical and reflect the production stylesheet's effective declarations.
 
 ### Primary
 
-- **Action Blue** (`blue`): primary buttons, active protocol-tab underline, and request-path dots.
-- **Readable Blue** (`blue-text`): emphasized headings, text actions, focus outlines, and the closing panel.
-- **Pressed Blue** (`blue-hover`): primary hover fill and text on the inverse action.
-- **Pale Blue** (`soft`): phrase highlights, the model panel, and onboarding step markers.
-
-### Secondary
-
-- **Pale Green** (`green`): the management panel and the second highlighted phrase. Green is a supporting product field, not a second primary action color.
+- **Action Blue** (`blue`): primary actions, protocol-tab underline, and request-path dots.
+- **Readable Blue** (`blue-text`): upright hero emphasis, API-heading emphasis, text actions, and visible focus.
+- **Pressed Blue** (`blue-hover`): primary hover fill and inverse-action text.
+- **Pale Blue** (`soft`): onboarding markers and supporting control states.
+- **Deep Product Blue** (`card-dark`): API-access and usage cards, plus the closing band.
+- **Light Product Blue** (`card-light`): model and balance cards, plus the hero ground.
+- **Soft Blue Copy** (`card-muted`): supporting text on dark product surfaces.
 
 ### Neutral
 
-- **White Canvas** (`paper`): page, header, protocol window, and illustrative console.
+- **White Canvas** (`paper`): page, header, API window, and compact console.
 - **Near-black Ink** (`ink`): primary text.
-- **Quiet Gray** (`muted`): supporting copy, navigation, and compact operational labels.
-- **Fine Gray** (`line`): window, code-column, and table separators.
+- **Quiet Gray** (`muted`): supporting copy, navigation, and operational labels.
+- **Fine Gray** (`line`): API-window, code-column, and console separators.
 - **Cool Surface** (`surface`): window chrome and response-code background.
 
-The nine `*-dark` entries record the actual local dark-mode overrides. Dark mode changes the hero wash and artwork opacity along with the page fields; the hero does not stay light. Primary actions use Readable Blue's dark value with dark text, and the closing panel has a dedicated dark blue fill. Protocol syntax colors stay owned by the existing demo.
+The `*-dark` entries record the corresponding local dark-theme fields. The dark theme changes the hero wash, artwork opacity, product surfaces, text, and controls together. Its primary action uses `blue-text-dark` with dark text. The approved product cards use blue fields in both themes; the preceding green management-panel treatment is superseded. Protocol syntax colors stay owned by the existing demo.
 
 **The Local Palette Rule.** Keep homepage colors inside `.lf-home`; the console's shared theme remains its own source of truth.
 
 ## Typography
 
-**Display and Body Font:** `--font-google-sans`, defined as `'Google Sans', Arial, sans-serif`. The self-hosted variable font is loaded by `web/public/fonts/google-sans/font-face.css` with weights 400–700 and `font-display: swap`, and preloaded from `web/index.html`. Its license is retained beside the asset. The file has no CJK glyphs: Chinese, Japanese, and other missing glyphs depend on the Arial/system sans fallback, not invented Google Sans coverage.
+**Display and Body Font:** `--font-google-sans`, defined as `'Google Sans', Arial, sans-serif`. The unchanged self-hosted variable font loads weights 400–700 with `font-display: swap` and an existing preload. Its license remains beside the asset. The bundled file has no CJK glyphs; Chinese, Japanese, and other missing glyphs use Arial/system sans fallback.
 
-**Code Font:** the existing `--font-mono` remains responsible for request and response examples.
+**Code Font:** the existing `--font-mono` owns request and response examples.
 
-Google Sans provides the shared default UI face without removing the existing explicit theme-font choices. The homepage directly uses the Google Sans token for its reference-led treatment; the wider application continues to resolve its body face through the configurable font axis.
+Google Sans remains the global default through `--font-ui-sans` and `--font-body`; explicit user font preferences remain available. The homepage uses its direct Google Sans token.
 
 ### Hierarchy
 
-- **Display:** the fluid display role peaks at 72px; its second line is upright blue. The supporting paragraph is capped at 660px. At 800px and below, the heading uses `clamp(38px, 6.2vw, 52px)`; below 500px it is 38px, and at 380px and below it becomes 34px.
-- **Headline:** the fluid section role peaks at 60px. Below 800px it uses `clamp(32px, 5.5vw, 44px)`. Phrase highlights have rounded tonal backgrounds and remain real text.
-- **Title:** product-panel headings peak at 40px and become 32px below 800px. The console's recent-request heading is a subordinate 12px `h4`.
-- **Body and lead:** panel descriptions use 16px at line-height 1.6; hero lead text uses the frontmatter lead role, reducing to 16px on smaller screens.
-- **Label:** navigation is 15px; protocol tabs and actions use the label role. The compact illustrative console uses smaller 10–14px operational text, with tabular figures at 17–24px.
-- **Code:** split protocol examples use the code role, reducing to 11.5px below 500px. Preserve syntax highlighting and existing wrapping/scroll behavior.
+- **Display:** use the frontmatter display role for the left-aligned hero, with an upright blue second line. At 800px and below it becomes `clamp(36px, 6.2vw, 48px)`; at 500px and below it is 36px. Supporting text is capped at 700px and reduces to 16px on mobile.
+- **Headline:** the product-intro role and the slightly smaller API role remain separate. At 800px and below section-heading line-height becomes 1.22. The product intro is centered; the API heading is left aligned on desktop and centered on mobile.
+- **Title:** the frontmatter title role applies consistently across the four product cards.
+- **Body and lead:** descriptions use the body role; the hero uses the lead role. API and card text retain comfortable reading widths rather than filling each panel.
+- **Label:** navigation is 15px on desktop; protocol labels use the label role. The compact console uses 10–14px operational text and 21px tabular figures, reducing to 20px below 800px.
+- **Code:** split examples use the code role, reducing to 11.5px below 500px. Preserve syntax highlighting and existing wrapping/scroll behavior.
 
-**The Font Preference Rule.** Keep Google Sans as the shared default while preserving explicit user font choices and the monospace code face.
+**The Font Preference Rule.** Keep Google Sans as the shared default while preserving explicit user font choices, CJK fallback, and the monospace code face.
 
 ## Layout
 
-Content uses a centered `min(88%, 1160px)` container. The fixed header is 72px high on desktop and 64px at 800px and below; scrolling changes only its shadow. Anchors reserve 96px. The hero has a 720px desktop minimum and a 620px mobile minimum; its height can grow with content. The ribbon stays absolutely positioned behind the copy at every breakpoint, with a contrast-preserving light or dark wash.
+The homepage content container is centered at `min(92%, 1280px)`. The shared fixed header retains its native layout at 72px high on desktop and 64px at 800px and below; scrolling adds only a shadow. Anchor targets reserve 96px. At 500px and below, the toolbar registration/dashboard action moves into the shared mobile menu; hero and closing actions remain available.
 
-The default homepage progresses through the centered hero and actions, API example and onboarding, paired model/management panels, and a compact closing action panel. Keep the compact content sequence; do not append the previously removed tail chapters. This composition belongs to the homepage rather than the global application shell.
+The approved homepage sequence is a full-width hero, centered product introduction and alternating 2×2 API/model/balance/usage cards, API demonstration with onboarding, dark closing band, and attributed footer. This sequence describes this homepage, not a mandatory layout for other surfaces. The hero minimum height is 760px on desktop and 690px below 800px, growing with content. Its artwork remains behind left-aligned copy. A top page-ground overlay stays solid through 84px and fades over 240px on desktop; below 800px those values become 76px and 220px. The image mask and ground wash soften the bottom edge into the page.
 
-The product-panel grid uses `1fr 1.08fr` with a 28px gap, stacking below 900px. At 1100px, panel padding drops from 36px to 28px; below 500px it becomes 26px by 22px. At 800px the protocol request/response columns stack. Narrow-phone actions and onboarding steps form vertical groups. Model tabs wrap as complete controls, with translated labels allowed to wrap inside each control. The first model-heading clause stays together when space permits.
+Cards use two equal columns with a 24px gap, 32px padding, and a 350px minimum for the API-access/model cards. At 800px and below they stack with an 18px gap, 26px padding, and 320px minimum height. Model selectors wrap as complete controls, with translated labels allowed to wrap inside each control.
 
-Desktop API spacing is 48px above and 78px below; the capabilities and closing panel finish with 72px spacing, reducing to 48px on smaller screens. The hero mark is 64px square on desktop and 48px on smaller screens. At 500px and below the redundant header-toolbar CTA is hidden so the brand and shared menu fit; an equivalent shared Button action appears inside the mobile menu, while hero and closing actions remain available.
+The desktop API section places its heading and vertical onboarding at left and the demonstration at right in a `0.85fr / 1.5fr` grid, with a 48px column gap. It becomes one column at 1050px; request and response columns stack below 800px. The API section has 32px top and 80px bottom padding on desktop, reducing to 12px and 48px on mobile. The capabilities section uses the frontmatter section spacing, reducing to its mobile value. The closing band spans the viewport, aligns copy and actions horizontally on desktop, and stacks at 1050px.
 
 ## Elevation & Depth
 
-The page is mostly flat, using tonal product fields, fine separators, and generous corners. A light shadow signals the scrolled header and primary-button hover. The API window gains depth through native scroll-linked perspective, settling to an upright readable surface as it enters view. The ribbon moves at a separate depth during hero exit.
+Depth comes primarily from tonal fields, glass artwork, masks, and fine separators. Product cards stay flat without shadows. The API window is upright and static in the approved production composition; the preceding perspective-settle and hero-exit transforms are superseded.
 
 ### Shadow Vocabulary
 
-- **Scrolled header:** `0 3px 12px #20212412`.
-- **Primary hover:** `0 3px 8px #174ea622`.
+- **Scrolled header:** `0 3px 12px #20212412`, keeping the header geometry stable.
+- **Primary hover:** `0 3px 8px #174ea622`, providing restrained action feedback.
 
-The API window starts at an 8-degree X tilt, -2-degree roll, 0.9 scale, and 28px downward offset, reaching its resting state over `entry 0% cover 45%`. At 800px and below, tilt and roll are zero and starting scale is 0.96. Keyboard focus within the window removes its transform. The hero artwork travels up to 80px and scales to 1.06 over hero exit. These animations run only where native timeline support and motion preferences permit; unsupported browsers retain static readable content. Task-tab content enters over 0.24s with a 6px offset. The protocol demo remains manually selected (`autoPlay={false}`).
+The hero copy enters once over 0.6s with a 14px upward settle. Manually selected model content enters over 0.24s with a 6px settle. The protocol demonstration remains manually selected (`autoPlay={false}`).
+
+Two full-viewport CSS optical curves sit behind the model-intro and API headings, each anchored to its heading's vertical center. Fixed CSS shapes translate through a repeating tile over 50s and 56s respectively. Observers track layout and visibility; document visibility and motion preference gate playback. Offscreen or background lanes stop and hide; reduced motion and unsupported CSS shape rendering omit the decoration. JavaScript does not draw frames, run a frame loop, or use canvas. No quantified resource-performance claim follows from this implementation.
 
 **The Motion Access Rule.** Reduced motion disables homepage animations and smooth scrolling, and makes header/button transitions effectively immediate; content and controls stay usable without movement.
 
 ## Shapes
 
-Primary actions, model tabs, and phrase highlights use pill silhouettes. Product panels and the closing action panel use the panel radius; the API window uses the window radius, and the console uses the smaller console radius. Below 500px product panels use the window radius. Fine straight separators structure the window and console without turning every item into a card. The fixed header stays a straight full-width bar in both scroll states.
+Main actions use softly squared action corners; product cards and the API window share the panel radius, with a smaller compact console radius. Model selectors retain pill corners; this does not make pill-shaped primary actions part of the current system. Circular onboarding markers and small request-path dots remain functional details. The header and full-width closing band retain straight outer edges.
 
 ## Components
 
 ### Buttons
 
-Reuse the shared `Button`. Primary and inverse actions use the frontmatter's pill shape and padding with a 52px minimum height, reducing to 48px below 800px. Header actions use a 40px minimum, reducing to 36px. Text actions underline on hover. Preserve the shared pressed, disabled, and focus behavior plus the homepage's 2px visible outline with 4px offset. A missing sales destination remains visibly unavailable with honest copy; never invent a contact route.
+Reuse the shared `Button` and routing links. Primary and inverse actions use the frontmatter action radius and padding with a 52px minimum height, reducing to 48px with 12px by 23px padding below 800px. Header actions use a 40px minimum, reducing to 36px. Text actions underline on hover. Preserve shared pressed and disabled states, plus the homepage's 2px focus outline with a 4px offset. `VITE_LFTECH_SALES_URL` accepts the configured HTTP(S) or mail destination; an absent or invalid destination leaves sales visibly unavailable with honest copy.
 
 ### Navigation
 
-Reuse `PublicLayout` and `PublicHeader` for the product brand, language/theme controls, authentication state, and mobile menu. The homepage supplies its section links and primary action through existing composition slots. Keep the header geometry stable while its scroll shadow appears. At 500px and below, move the toolbar registration/dashboard action into the shared mobile menu through the existing navigation composition slot. Customer-facing branding is 麟飞科技 (Linfei Technology); preserve New API / QuantumNous / One API attribution and legal notices in the existing footer and attribution surfaces.
-
-### Protocol Window
-
-The broad window contains modest browser chrome, the application/platform/model path, and the reused `HeroTerminalDemo` with shared `Tabs`. Selected protocol tabs have a blue bottom stroke. Keep real request/response content, manual selection, and an explicit illustrative-status note. Do not substitute a static raster or build a second demo implementation.
-
-### Model Tabs
-
-`LandingModelExplorer` composes the shared `Tabs` and link button. Pale blue surrounds the task selector; the selected pill has a white fill on the light theme. Each category changes useful descriptive content and links to the real model/pricing catalog. Availability follows the current catalog rather than fixed homepage claims. Controls wrap without clipping on phones or in longer translations.
+Reuse `PublicLayout` and `PublicHeader` for brand, language/theme controls, authentication state, and mobile menu. Homepage section links and registration/dashboard actions enter through existing composition slots. Preserve the native mobile-menu behavior and stable header geometry. Use 麟飞科技 (Linfei Technology) as the customer-facing brand and retain New API / QuantumNous / One API copyright, license, and author attribution.
 
 ### Cards / Containers
 
-The model and management panels use pale blue and pale green respectively. The management panel contains `LandingConsolePreview`: three account/usage figures and a small request-history table on a white surface. Keep the illustrative-preview label and the explicit statement that records are examples. Reuse shared number/currency formatters and normalize language through `toIntlLocale`. The preview does not restyle the actual customer console.
+The four cards alternate dark API access, light model selection, light balance, and dark usage. `LandingAccessCard` and `LandingBalanceCard` compose shared link buttons; `LandingRequestPath` supplies the same application/platform/model presentation in the access card and API window. The balance-card mark and currency symbol are decorative rather than a price claim.
 
-### Imagery
+`LandingModelExplorer` uses the shared `Tabs` and links to the real model/pricing catalog. A white selected pill distinguishes the active category on the light theme; dark-theme selectors use their existing tonal overrides. Categories change useful descriptive content. Model availability follows the current catalog.
 
-Keep the single generated ribbon raster at `web/public/images/lftech/api-ribbon.webp`, with its existing provenance. It remains decorative (`alt=''`), has intrinsic dimensions, and receives high fetch priority. The separate product mark uses the configured logo. Page copy, controls, and console records remain semantic HTML.
+The dark usage card contains `LandingConsolePreview` on a compact page-colored surface. Its three account/usage figures and explicit example-data note remain visible; request-history rows are hidden in this compact homepage placement. Use shared number/currency formatters and normalize language through `toIntlLocale`. This illustration does not restyle the actual customer console.
+
+### Protocol Window
+
+The panel-radius frame contains modest window chrome, the reused request path, and the existing `HeroTerminalDemo` with shared `Tabs`. Selected protocol tabs have a blue bottom stroke. Preserve real example text, manual selection, responsive request/response columns, and the illustrative-status note. Do not substitute a raster for the working demonstration.
+
+### Imagery and Optical Curves
+
+Keep the single approved generated ribbon at `web/public/images/lftech/api-ribbon.webp`, including its provenance. It remains decorative (`alt=''`) with intrinsic dimensions and high fetch priority. The separate configured product mark remains available; the balance illustration uses the existing brand mark. Page text, controls, and console data remain semantic HTML.
+
+`LandingOpticalRibbon` provides exactly two decorative heading-relative curves on this homepage. The existing shared `AnimateInView` covers entrance/reveal, while this component supplies the required heading anchor, repeating CSS movement, playback gates, and cleanup. Keep observers and event listeners paired with cleanup; do not replace this behavior with JavaScript frame animation.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** follow the user's pinned Chrome reference and Google Sans preference for the default public homepage.
-- **Do** keep homepage colors local while retaining explicit application font preferences.
-- **Do** reuse the shared header, footer, buttons, tabs, and original interactive protocol demo.
-- **Do** retain keyboard access, translated copy, visible focus, dark surfaces, and reduced-motion behavior.
+- **Do** preserve the approved SiliconFlow-led homepage composition, Linfei blue identity, and Google Sans preference.
+- **Do** keep homepage colors local while retaining explicit application font preferences and CJK fallback.
+- **Do** reuse the shared header, footer, buttons, tabs, request path, and original interactive protocol demo.
+- **Do** retain seven-language copy, keyboard access, visible focus, dark surfaces, and reduced-motion behavior.
 - **Do** display the Linfei Technology brand and preserve New API / QuantumNous / One API attribution and legal notices.
-- **Do** keep the single ribbon raster behind hero copy on every breakpoint, with its provenance intact.
+- **Do** retain the approved hero raster and fades, plus the two heading-centered CSS curves with playback gates and cleanup.
 
 ### Don't:
 
 - **Don't** add generated imagery beyond the approved ribbon asset or rasterize interactive content.
-- **Don't** restore the superseded serif/deep-blue homepage direction or removed tail chapters.
-- **Don't** present illustrative records, protocol metrics, or catalog availability as measured customer evidence.
+- **Don't** present illustrative records, protocol metrics, catalog availability, or decorative currency as measured customer evidence.
+- **Don't** invent a sales destination or enable an unconfigured sales action.
 - **Don't** apply this homepage palette or composition to console themes, custom homepage branches, or authentication layouts.
-- **Don't** claim that the bundled Google Sans file covers CJK glyphs or remove system fallback behavior.
+- **Don't** claim CJK coverage from the bundled Google Sans file or quantified runtime savings without measurement.

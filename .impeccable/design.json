@@ -1,17 +1,21 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-01T10:17:57.628665+00:00",
+  "generatedAt": "2026-11-03T02:42:44.142Z",
   "title": "Design System: Linfei Technology homepage",
   "extensions": {
     "scope": {
-      "surface": "Default public homepage palette and composition; Google Sans is the shared default UI font",
+      "surface": "Approved default public homepage palette and composition; Google Sans remains the shared default UI font",
       "sources": [
         "web/src/styles/lftech-home.css",
+        "web/src/styles/lftech-home-ribbons.css",
         "web/src/styles/theme.css",
         "web/src/styles/index.css",
         "web/index.html",
         "web/public/fonts/google-sans/font-face.css",
         "web/src/features/home/components/landing-page.tsx",
+        "web/src/features/home/components/landing-product-cards.tsx",
+        "web/src/features/home/components/landing-request-path.tsx",
+        "web/src/features/home/components/landing-optical-ribbon.tsx",
         "web/src/features/home/components/landing-model-explorer.tsx",
         "web/src/features/home/components/landing-console-preview.tsx",
         "web/src/features/home/components/hero-terminal-demo.tsx"
@@ -21,12 +25,16 @@
         "Authentication layout redesign",
         "Custom homepage HTML, Markdown, and URL branches"
       ],
-      "authority": "User-pinned official Google Chrome website and Google Sans; code-led implementation, no approved composition mockup; seed:05acc2a60743c5af",
+      "authority": "User-approved production port of the pinned SiliconFlow composition in Linfei blue. Chrome remains the earlier Google Sans typography reference. Effective production CSS and approved captures are authority; no generated comp or seed applies to this refinement.",
+      "review": ".impeccable/review/production-home/review.md: disposition ship; all five sections reviewed; no material fixes",
+      "qa": ".impeccable/review/production-home/qa.json",
       "fontCoverage": "Self-hosted Google Sans has no CJK glyphs; Arial and system sans fallback remain essential. Explicit application font preferences are preserved.",
       "cssVariableNote": "Homepage variables are scoped to .lf-home, so snippets provide literal production-value fallbacks for standalone shadow-DOM rendering.",
-      "snippetNote": "Static styling previews only. Production reuses shared React components for interactions, routing, accessibility and i18n. The homepage introduces no text-input component or chip primitive; model selectors are shared Tabs.",
+      "snippetNote": "Static self-contained styling previews. Production interactions use shared React components, routing, accessibility and seven-language i18n. No homepage text-input or chip primitive exists; model selectors are shared Tabs. Optical preview shows geometry without reproducing observer-gated playback. The balance preview omits the existing decorative brand mark because panel snippets do not load external images.",
       "tonalRampNote": "Synthesized OKLCH strips are preview metadata, not production palette additions. DESIGN.md frontmatter owns canonical colors.",
-      "responsiveNavigation": "At 500px and below, hide the redundant header-toolbar CTA and show its equivalent shared Button registration/dashboard action in the mobile menu via navContent. Hero and closing actions remain available. At 380px and below, the hero heading is 34px."
+      "responsiveNavigation": "Header is 72px desktop and 64px at 800px. At 500px and below, the toolbar action moves into the shared mobile menu. Hero remains left aligned with a 36px heading at 500px and below.",
+      "motionGap": "Shared AnimateInView covers entrance/reveal; LandingOpticalRibbon is required for heading anchoring, repeating CSS movement, offscreen/background/reduced-motion gating and cleanup.",
+      "noPerformanceClaim": "CSS owns curve shapes and translation; JavaScript follows layout and visibility. No quantified resource-performance claim is made."
     },
     "colorMeta": {
       "blue": {
@@ -127,20 +135,6 @@
           "oklch(0.95 0.0090 260)"
         ]
       },
-      "green": {
-        "role": "secondary",
-        "displayName": "Pale Green",
-        "tonalRamp": [
-          "oklch(0.15 0.0112 150)",
-          "oklch(0.26 0.0248 150)",
-          "oklch(0.38 0.0360 150)",
-          "oklch(0.50 0.0450 150)",
-          "oklch(0.62 0.0450 150)",
-          "oklch(0.74 0.0382 150)",
-          "oklch(0.86 0.0225 150)",
-          "oklch(0.95 0.0081 150)"
-        ]
-      },
       "line": {
         "role": "neutral",
         "displayName": "Fine Gray",
@@ -167,6 +161,48 @@
           "oklch(0.74 0.0153 260)",
           "oklch(0.86 0.0090 260)",
           "oklch(0.95 0.0032 260)"
+        ]
+      },
+      "card-dark": {
+        "role": "primary",
+        "displayName": "Deep Product Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0200 255)",
+          "oklch(0.26 0.0440 255)",
+          "oklch(0.38 0.0640 255)",
+          "oklch(0.50 0.0800 255)",
+          "oklch(0.62 0.0800 255)",
+          "oklch(0.74 0.0680 255)",
+          "oklch(0.86 0.0400 255)",
+          "oklch(0.95 0.0144 255)"
+        ]
+      },
+      "card-light": {
+        "role": "primary",
+        "displayName": "Light Product Blue",
+        "tonalRamp": [
+          "oklch(0.15 0.0125 255)",
+          "oklch(0.26 0.0275 255)",
+          "oklch(0.38 0.0400 255)",
+          "oklch(0.50 0.0500 255)",
+          "oklch(0.62 0.0500 255)",
+          "oklch(0.74 0.0425 255)",
+          "oklch(0.86 0.0250 255)",
+          "oklch(0.95 0.0090 255)"
+        ]
+      },
+      "card-muted": {
+        "role": "primary",
+        "displayName": "Soft Blue Copy",
+        "tonalRamp": [
+          "oklch(0.15 0.0163 255)",
+          "oklch(0.26 0.0358 255)",
+          "oklch(0.38 0.0520 255)",
+          "oklch(0.50 0.0650 255)",
+          "oklch(0.62 0.0650 255)",
+          "oklch(0.74 0.0553 255)",
+          "oklch(0.86 0.0325 255)",
+          "oklch(0.95 0.0117 255)"
         ]
       },
       "paper-dark": {
@@ -253,20 +289,6 @@
           "oklch(0.95 0.0108 260)"
         ]
       },
-      "green-dark": {
-        "role": "secondary",
-        "displayName": "Dark Green Field",
-        "tonalRamp": [
-          "oklch(0.15 0.0112 155)",
-          "oklch(0.26 0.0248 155)",
-          "oklch(0.38 0.0360 155)",
-          "oklch(0.50 0.0450 155)",
-          "oklch(0.62 0.0450 155)",
-          "oklch(0.74 0.0382 155)",
-          "oklch(0.86 0.0225 155)",
-          "oklch(0.95 0.0081 155)"
-        ]
-      },
       "line-dark": {
         "role": "neutral",
         "displayName": "Dark Separator",
@@ -294,24 +316,56 @@
           "oklch(0.86 0.0150 250)",
           "oklch(0.95 0.0054 250)"
         ]
+      },
+      "card-dark-dark": {
+        "role": "primary",
+        "displayName": "Deep Product Blue on Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0200 255)",
+          "oklch(0.26 0.0440 255)",
+          "oklch(0.38 0.0640 255)",
+          "oklch(0.50 0.0800 255)",
+          "oklch(0.62 0.0800 255)",
+          "oklch(0.74 0.0680 255)",
+          "oklch(0.86 0.0400 255)",
+          "oklch(0.95 0.0144 255)"
+        ]
+      },
+      "card-light-dark": {
+        "role": "primary",
+        "displayName": "Light Product Blue on Dark",
+        "tonalRamp": [
+          "oklch(0.15 0.0125 255)",
+          "oklch(0.26 0.0275 255)",
+          "oklch(0.38 0.0400 255)",
+          "oklch(0.50 0.0500 255)",
+          "oklch(0.62 0.0500 255)",
+          "oklch(0.74 0.0425 255)",
+          "oklch(0.86 0.0250 255)",
+          "oklch(0.95 0.0090 255)"
+        ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Centered hero heading; upright blue second line."
+        "purpose": "Left-aligned hero heading with upright blue second line."
       },
       "headline": {
-        "displayName": "Headline",
-        "purpose": "Large section headings and tonal phrase highlights."
+        "displayName": "Product introduction",
+        "purpose": "Centered introduction above the alternating product matrix."
+      },
+      "api-headline": {
+        "displayName": "API headline",
+        "purpose": "Desktop left-aligned API heading; centered on mobile."
       },
       "title": {
-        "displayName": "Title",
-        "purpose": "Product-panel headings."
+        "displayName": "Card title",
+        "purpose": "Consistent headings across the four product cards."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Homepage descriptions; Google Sans is also the shared UI default."
+        "purpose": "Card and API descriptions; Google Sans also remains the shared UI default."
       },
       "lead": {
         "displayName": "Lead",
@@ -342,27 +396,42 @@
       {
         "name": "button-state",
         "value": "0.18s",
-        "purpose": "Background, color, shadow, and transform transitions."
+        "purpose": "Background, color, shadow and transform state transitions."
       },
       {
         "name": "header-shadow",
         "value": "0.25s",
-        "purpose": "Stable header surface response on scroll."
+        "purpose": "Header scroll shadow without a geometry change."
+      },
+      {
+        "name": "hero-copy-entry",
+        "value": "0.6s cubic-bezier(0.16,1,0.3,1); translateY(14px) to none; opacity .4 to 1",
+        "purpose": "One-time arrival of hero copy."
       },
       {
         "name": "task-content",
         "value": "0.24s ease-out; translateY(6px) to none; opacity .65 to 1",
-        "purpose": "Manual model-tab content entry."
+        "purpose": "Manually selected model-content entry."
       },
       {
-        "name": "api-window-settle",
-        "value": "linear; animation-timeline: view(block); animation-range: entry 0% cover 45%",
-        "purpose": "Native scroll-linked 8deg X tilt, -2deg roll, .9 scale, and 28px offset settle to rest; mobile uses zero tilt/roll and .96 scale. Focus within disables transform."
+        "name": "model-heading-curve",
+        "value": "50s linear infinite; -18s delay; one tile max(1080px,110vw)",
+        "purpose": "CSS translation behind the product-intro heading; observer-gated playback."
       },
       {
-        "name": "hero-depth",
-        "value": "linear; animation-timeline: --lf-hero; animation-range: exit 0% exit 100%",
-        "purpose": "Artwork moves from translateY(0) scale(1) to translateY(80px) scale(1.06)."
+        "name": "api-heading-curve",
+        "value": "56s linear infinite; -34s delay; one tile max(1080px,110vw)",
+        "purpose": "CSS translation behind the API heading; observer-gated playback."
+      },
+      {
+        "name": "curve-visibility",
+        "value": "IntersectionObserver + ResizeObserver + document visibility + reduced-motion preference",
+        "purpose": "Anchor each lane to its heading center; hide/pause inactive lanes and clean up observers/listeners. Reduced motion or unsupported CSS shape omits the decoration."
+      },
+      {
+        "name": "static-api-and-artwork",
+        "value": "animation: none; transform: none",
+        "purpose": "Approved composition keeps the API window upright and hero artwork static."
       },
       {
         "name": "reduced-motion",
@@ -372,24 +441,20 @@
     ],
     "breakpoints": [
       {
-        "name": "compact-header-and-panels",
+        "name": "compact-header",
         "value": "1100px"
       },
       {
-        "name": "stack-product-panels",
-        "value": "900px"
+        "name": "stack-api-and-closing",
+        "value": "1050px"
       },
       {
-        "name": "mobile-shell-and-code",
+        "name": "stack-cards-mobile-shell-and-code",
         "value": "800px"
       },
       {
         "name": "phone",
         "value": "500px"
-      },
-      {
-        "name": "narrow-phone",
-        "value": "380px"
       }
     ]
   },
@@ -400,15 +465,15 @@
       "refersTo": "button-primary",
       "description": "Registration or dashboard action, rendered by the shared Button in production.",
       "html": "<button class=\"ds-primary\">Register and get started<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
-      "css": ".ds-primary{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:999px;background:var(--lf-blue,#1a73e8);color:#fff;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,box-shadow .18s,transform .18s}.ds-primary:hover{background:#185abc;box-shadow:0 3px 8px #174ea622}.ds-primary:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.65;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+      "css": ".ds-primary{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:12px;background:var(--lf-blue,#1a73e8);color:#fff;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,box-shadow .18s,transform .18s}.ds-primary:hover{background:#185abc;box-shadow:0 3px 8px #174ea622}.ds-primary:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.65;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}@media(max-width:800px){.ds-primary{min-height:48px;padding:12px 23px;font-size:15px}}"
     },
     {
       "name": "Inverse action",
       "kind": "button",
       "refersTo": "button-light",
-      "description": "Light action inside the blue closing panel.",
+      "description": "Inverse registration/dashboard action in the full-width dark blue closing band.",
       "html": "<div class=\"ds-inverse-field\"><button class=\"ds-inverse\">Register and get started<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></div>",
-      "css": ".ds-inverse-field{padding:24px;border-radius:28px;background:var(--lf-blue-text,#1967d2)}.ds-inverse{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:999px;background:#fff;color:#185abc;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,transform .18s}.ds-inverse:hover{background:#e8f0fe}.ds-inverse:focus-visible{outline:2px solid #fff;outline-offset:4px}.ds-inverse:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-inverse{transition:none}}"
+      "css": ".ds-inverse-field{padding:24px;border-radius:0;background:var(--lf-card-dark,#10315a)}.ds-inverse{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:14px 26px;border:0;border-radius:12px;background:#fff;color:#185abc;font-size:16px;font-weight:500;cursor:pointer;transition:background-color .18s,transform .18s}.ds-inverse:hover{background:#e8f0fe}.ds-inverse:focus-visible{outline:2px solid #fff;outline-offset:4px}.ds-inverse:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-inverse{transition:none}}@media(max-width:800px){.ds-inverse{min-height:48px;padding:12px 23px;font-size:15px}}"
     },
     {
       "name": "Text action",
@@ -422,43 +487,66 @@
       "name": "Homepage navigation",
       "kind": "nav",
       "refersTo": "navigation-link",
-      "description": "Shared PublicHeader composition with stable height and a scroll shadow; at 500px and below its toolbar action moves into the mobile menu.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage preview\"><strong>Linfei Technology</strong><a href=\"#integration\">Integration guide</a><a href=\"#models\">Models and pricing</a></nav>",
+      "description": "Shared PublicHeader with stable native geometry; the toolbar action enters the shared mobile menu at 500px.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage preview\"><strong>Linfei Technology</strong><a href=\"#integration\">Read the integration guide</a><a href=\"#models\">View models and pricing</a><a href=\"#usage\">Usage</a></nav>",
       "css": ".ds-nav{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;align-items:center;flex-wrap:wrap;min-height:72px;padding:0 28px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124);box-shadow:0 3px 12px #20212412}.ds-nav strong{margin-right:30px;font-size:19px;font-weight:700;letter-spacing:-.01em}.ds-nav a{padding:24px 16px;color:var(--lf-muted,#5f6368);font-size:15px;font-weight:500;text-decoration:none}.ds-nav a:hover{color:var(--lf-blue-text,#1967d2)}.ds-nav a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-nav a:active{color:#185abc}@media(max-width:800px){.ds-nav{min-height:64px;padding-inline:18px}.ds-nav strong{font-size:17px}.ds-nav a{padding:12px 9px;font-size:14px}}"
+    },
+    {
+      "name": "API access card",
+      "kind": "card",
+      "refersTo": "access-card",
+      "description": "Dark blue API-entry card; request-path presentation is reused by the interactive API window.",
+      "html": "<article class=\"ds-access\"><h3>API Access</h3><p>From your application, through our platform, to the model. Explore the API examples to see each request and response.</p><div class=\"ds-access-path\">Your application<i></i><strong>Linfei platform</strong><i></i>Model</div><a href=\"#integration\">View details<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a></article>",
+      "css": ".ds-access{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;flex-direction:column;min-width:0;min-height:350px;padding:32px;border-radius:16px;background:var(--lf-card-dark,#10315a);color:#fff}.ds-access h3{margin:0;font-size:clamp(25px,2.4vw,30px);font-weight:700;line-height:1.28;letter-spacing:-.02em}.ds-access>p{margin:16px 0 0;max-width:55ch;color:var(--lf-card-muted,#c9ddf5);font-size:16px;line-height:1.7}.ds-access-path{display:flex;align-items:center;justify-content:center;gap:14px;margin:auto 0 20px;padding:44px 0 18px;font-size:14px}.ds-access-path strong{font-weight:500;color:#9ed2ff}.ds-access-path i{position:relative;width:72px;height:1px;background:var(--lf-line,#dadce0)}.ds-access-path i:after{content:'';position:absolute;inset:-2px auto auto 50%;width:5px;height:5px;border-radius:50%;background:var(--lf-blue,#1a73e8)}.ds-access>a{display:inline-flex;align-items:center;align-self:flex-start;gap:12px;margin-top:auto;padding-block:10px;color:inherit;font-size:15px;font-weight:600;text-decoration:none}.ds-access>a svg{width:18px;height:18px}.ds-access>a:hover{text-decoration:underline;text-underline-offset:5px}.ds-access>a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px}.ds-access>a:active{transform:translateY(1px)}@media(max-width:800px){.ds-access{min-height:320px;padding:26px}}@media(max-width:500px){.ds-access-path{gap:7px;font-size:14px}.ds-access-path i{width:25px}}"
+    },
+    {
+      "name": "Model task card",
+      "kind": "custom",
+      "refersTo": "model-panel",
+      "description": "Light-blue card with shared wrapping Tabs and a link to the current model/pricing catalog; this preview does not implement tab switching.",
+      "html": "<article class=\"ds-model\"><h3>Choose models.<br>Connect your business.</h3><p>Explore models and prices for your application. Availability follows the current model catalog.</p><div class=\"ds-model-tabs\"><button class=\"ds-model-selected\">Content and answers</button><button>Understanding and analysis</button><button>Choose as you need</button></div><p class=\"ds-model-task\">Choose models for content generation, information processing, and question answering.</p><a class=\"ds-model-link\" href=\"#catalog\">View models and pricing<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a></article>",
+      "css": ".ds-model{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;flex-direction:column;min-width:0;min-height:350px;padding:32px;border-radius:16px;background:var(--lf-card-light,#eef5ff);color:var(--lf-ink,#202124)}.ds-model h3{margin:0;font-size:clamp(25px,2.4vw,30px);font-weight:700;line-height:1.28;letter-spacing:-.02em}.ds-model>p{margin:20px 0 0;color:#43516a;font-size:16px;line-height:1.7}.ds-model-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;padding:2px}.ds-model-tabs button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);max-width:100%;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:#405679;font-size:13px;font-weight:500;text-align:start;white-space:normal;cursor:pointer}.ds-model-tabs .ds-model-selected{background:#fff;color:#174ea6}.ds-model-tabs button:hover{color:#405679}.ds-model-tabs button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-model .ds-model-task{min-height:100px;padding-block:18px;font-size:18px;line-height:1.6;color:#263c5e}@media(max-width:800px){.ds-model{min-height:320px;padding:26px}}@media(max-width:500px){.ds-model-tabs{gap:4px}.ds-model-tabs button{font-size:12px}}.ds-model-link{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:auto;padding-top:24px;color:var(--lf-blue-text,#1967d2);font-size:16px;font-weight:500;text-decoration:none}.ds-model-link:hover{text-decoration:underline;text-underline-offset:5px}.ds-model-link:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px}.ds-model-link:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Balance card",
+      "kind": "card",
+      "refersTo": "balance-card",
+      "description": "Light blue top-up card; the oversized currency is decoration, not a numeric price or customer claim.",
+      "html": "<article class=\"ds-balance\"><h3>Top up as needed</h3><p>Track consumption and top up as needed, so you can plan what comes next.</p><div class=\"ds-balance-decoration\" aria-hidden=\"true\"><span>Available Balance</span><b>¥</b></div><a href=\"#usage\">View details<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a></article>",
+      "css": ".ds-balance{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;flex-direction:column;min-width:0;min-height:350px;padding:32px;border-radius:16px;background:var(--lf-card-light,#eef5ff);color:var(--lf-ink,#202124)}.ds-balance h3{margin:0;font-size:clamp(25px,2.4vw,30px);font-weight:700;line-height:1.28;letter-spacing:-.02em}.ds-balance>p{margin:16px 0 0;max-width:55ch;color:#36516f;font-size:16px;line-height:1.7}.ds-balance-decoration{display:flex;align-items:center;gap:18px;min-height:170px;margin-block:auto 12px;overflow:hidden;color:#1967d2}.ds-balance-decoration span{font-size:20px;font-weight:500}.ds-balance-decoration b{font-size:80px;font-weight:500;line-height:1;opacity:.2}.ds-balance>a{display:inline-flex;align-items:center;align-self:flex-start;gap:12px;margin-top:auto;padding-block:10px;color:inherit;font-size:15px;font-weight:600;text-decoration:none}.ds-balance>a svg{width:18px;height:18px}.ds-balance>a:hover{text-decoration:underline;text-underline-offset:5px}.ds-balance>a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px}.ds-balance>a:active{transform:translateY(1px)}@media(max-width:800px){.ds-balance{min-height:320px;padding:26px}}@media(max-width:500px){.ds-balance-decoration{min-height:150px}.ds-balance-decoration span{font-size:18px}.ds-balance-decoration b{font-size:68px}}"
+    },
+    {
+      "name": "Usage card and compact console",
+      "kind": "custom",
+      "refersTo": "management-panel",
+      "description": "Dark blue usage card with three illustrative figures and example-data label; request-history rows remain hidden in this homepage placement.",
+      "html": "<article class=\"ds-management\"><h3>Keep building.<br>Keep usage in sight.</h3><p class=\"ds-management-description\">From the first request to everyday use, find call history, model usage, and your balance in the customer console.</p><div class=\"ds-console\"><header><strong>Customer console</strong><span>Illustrative preview</span></header><dl><div><dt>Available Balance</dt><dd>¥1,000.00</dd><span>Top up as needed</span></div><div><dt>Monthly requests</dt><dd>12,480</dd><span>Requests</span></div><div><dt>Monthly usage</dt><dd>2.4M</dd><span>tokens</span></div></dl><section><h4>Recent requests</h4><table><thead><tr><th>Model</th><th>Usage</th><th>Status</th></tr></thead><tbody><tr><td>your-model</td><td>27 tokens</td><td>Completed</td></tr></tbody></table></section><p>Example data only. These are not real customer records.</p></div><p class=\"ds-management-note\">Track consumption and top up as needed, so you can plan what comes next.</p></article>",
+      "css": ".ds-management{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;flex-direction:column;min-width:0;padding:32px;border-radius:16px;background:var(--lf-card-dark,#10315a);color:#fff}.ds-management>h3{margin:0;font-size:clamp(25px,2.4vw,30px);font-weight:700;line-height:1.28;letter-spacing:-.02em}.ds-console{margin-top:24px;border-radius:12px;overflow:hidden;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124)}.ds-console header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--lf-line,#dadce0)}.ds-console header strong{font-size:14px;font-weight:500}.ds-console header span{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0;padding:20px 18px}.ds-console dt{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dd{margin:8px 0 3px;font-size:21px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.025em}.ds-console section{padding:0 18px 10px}.ds-console h4{margin:0 0 12px;font-size:12px;font-weight:500}.ds-console table{width:100%;border-collapse:collapse;text-align:start;font-size:11px}.ds-console th{padding-bottom:8px;color:var(--lf-muted,#5f6368);font-weight:400}.ds-console td{padding:8px 0;border-top:1px solid var(--lf-line,#dadce0);font-variant-numeric:tabular-nums}.ds-console td:last-child{color:#137333}.ds-console>p{margin:0;padding:0 18px 12px;font-size:10px;color:var(--lf-muted,#5f6368)}@media(max-width:800px){.ds-management{min-height:320px;padding:26px}.ds-console dd{font-size:20px}}@media(max-width:500px){.ds-console dl{padding-inline:14px}.ds-console header{padding-inline:14px}}.ds-console section{display:none}.ds-console dl span{font-size:10px;color:var(--lf-muted,#5f6368)}.ds-management-description{margin:20px 0 0;max-width:55ch;color:var(--lf-card-muted,#c9ddf5);font-size:16px;line-height:1.7}.ds-management-note{margin:18px 0 0;color:var(--lf-card-muted,#c9ddf5);font-size:13px;line-height:1.6}"
     },
     {
       "name": "API window",
       "kind": "card",
       "refersTo": "api-window",
-      "description": "Browser-like frame for the existing live protocol demo; static panel preview only.",
+      "description": "Static styling preview of the upright production frame; the actual homepage uses HeroTerminalDemo and working shared Tabs.",
       "html": "<section class=\"ds-window\" aria-label=\"API window preview\"><div class=\"ds-window-bar\"><i></i><i></i><i></i><span>API</span></div><div class=\"ds-path\">Your application <b>→</b> Linfei platform <b>→</b> Model</div><div class=\"ds-protocols\"><button class=\"ds-protocol-selected\">OpenAI</button><button>Claude</button><button>Gemini</button></div><div class=\"ds-code\"><pre>POST /v1/chat/completions\n{ \"model\": \"your-model\" }</pre><pre>{ \"choices\": [ ... ] }</pre></div><p class=\"ds-window-note\">Illustrative requests and responses. No live API calls or performance claims.</p></section>",
-      "css": ".ds-window{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);overflow:hidden;border:1px solid var(--lf-line,#dadce0);border-radius:24px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124)}.ds-window-bar{display:flex;align-items:center;gap:7px;height:36px;padding-inline:20px;background:var(--lf-surface,#f8fafd);border-bottom:1px solid var(--lf-line,#dadce0)}.ds-window-bar i{width:7px;height:7px;border-radius:50%;background:#bdc1c6}.ds-window-bar span{margin-inline:auto;padding-right:35px;color:var(--lf-muted,#5f6368);font-size:11px}.ds-path{padding:18px 24px;text-align:center;font-size:13px;color:var(--lf-muted,#5f6368)}.ds-path b{padding-inline:14px;color:var(--lf-blue-text,#1967d2)}.ds-protocols{display:flex;padding-inline:20px;gap:8px;border-block:1px solid var(--lf-line,#dadce0)}.ds-protocols button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:10px 18px;height:46px;border:0;background:transparent;color:var(--lf-muted,#5f6368);font-size:14px;cursor:pointer}.ds-protocols .ds-protocol-selected{color:var(--lf-blue-text,#1967d2);box-shadow:inset 0 -3px var(--lf-blue,#1a73e8)}.ds-protocols button:hover{color:var(--lf-blue-text,#1967d2)}.ds-protocols button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-protocols button:active{background:var(--lf-soft,#e8f0fe)}.ds-code{display:grid;grid-template-columns:1.12fr 1fr}.ds-code pre{margin:0;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:monospace;font-size:13px;line-height:1.65}.ds-code pre+pre{border-left:1px solid var(--lf-line,#dadce0);background:var(--lf-surface,#f8fafd)}.ds-window-note{margin:0;padding:11px 24px;border-top:1px solid var(--lf-line,#dadce0);font-size:11px;color:var(--lf-muted,#5f6368)}@media(max-width:800px){.ds-code{grid-template-columns:1fr}.ds-code pre+pre{border-left:0;border-top:1px solid var(--lf-line,#dadce0)}}"
+      "css": ".ds-window{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);overflow:hidden;border:1px solid var(--lf-line,#dadce0);border-radius:16px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124)}.ds-window-bar{display:flex;align-items:center;gap:7px;height:36px;padding-inline:20px;background:var(--lf-surface,#f8fafd);border-bottom:1px solid var(--lf-line,#dadce0)}.ds-window-bar i{width:7px;height:7px;border-radius:50%;background:#bdc1c6}.ds-window-bar span{margin-inline:auto;padding-right:35px;color:var(--lf-muted,#5f6368);font-size:11px}.ds-path{padding:18px 24px;text-align:center;font-size:13px;color:var(--lf-muted,#5f6368)}.ds-path b{padding-inline:14px;color:var(--lf-blue-text,#1967d2)}.ds-protocols{display:flex;padding-inline:20px;gap:8px;border-block:1px solid var(--lf-line,#dadce0)}.ds-protocols button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:10px 18px;height:46px;border:0;background:transparent;color:var(--lf-muted,#5f6368);font-size:14px;cursor:pointer}.ds-protocols .ds-protocol-selected{color:var(--lf-blue-text,#1967d2);box-shadow:inset 0 -3px var(--lf-blue,#1a73e8)}.ds-protocols button:hover{color:var(--lf-blue-text,#1967d2)}.ds-protocols button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-protocols button:active{background:var(--lf-soft,#e8f0fe)}.ds-code{display:grid;grid-template-columns:1.12fr 1fr}.ds-code pre{margin:0;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:monospace;font-size:13px;line-height:1.65}.ds-code pre+pre{border-left:1px solid var(--lf-line,#dadce0);background:var(--lf-surface,#f8fafd)}.ds-window-note{margin:0;padding:11px 24px;border-top:1px solid var(--lf-line,#dadce0);font-size:11px;color:var(--lf-muted,#5f6368)}@media(max-width:800px){.ds-code{grid-template-columns:1fr}.ds-code pre+pre{border-left:0;border-top:1px solid var(--lf-line,#dadce0)}}"
     },
     {
-      "name": "Model task panel",
+      "name": "Heading-relative optical curve",
       "kind": "custom",
-      "refersTo": "model-panel",
-      "description": "Pale-blue panel with shared wrapping Tabs; panel preview does not implement tab switching.",
-      "html": "<article class=\"ds-model\"><h3>Choose models.<br>Connect your business.</h3><p>Explore models and prices for your application. Availability follows the current model catalog.</p><div class=\"ds-model-tabs\"><button class=\"ds-model-selected\">Content and answers</button><button>Understanding and analysis</button><button>Choose as you need</button></div><p class=\"ds-model-task\">Choose models for content generation, information processing, and question answering.</p></article>",
-      "css": ".ds-model{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:36px;border-radius:28px;background:var(--lf-soft,#e8f0fe);color:var(--lf-ink,#202124)}.ds-model h3{margin:0;font-size:clamp(1.8rem,2.8vw,2.5rem);font-weight:700;line-height:1.2;letter-spacing:-.02em}.ds-model>p{margin:20px 0 0;color:#43516a;font-size:16px;line-height:1.6}.ds-model-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;padding:2px}.ds-model-tabs button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);max-width:100%;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:#405679;font-size:13px;font-weight:500;text-align:start;white-space:normal;cursor:pointer}.ds-model-tabs .ds-model-selected{background:#fff;color:#174ea6}.ds-model-tabs button:hover{color:#174ea6;background:#ffffff80}.ds-model-tabs button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-model-tabs button:active{background:#fff}.ds-model .ds-model-task{padding-top:24px;font-size:22px;line-height:1.4;color:#263c5e}@media(max-width:500px){.ds-model{padding:26px 22px;border-radius:24px}}"
-    },
-    {
-      "name": "Customer console illustration",
-      "kind": "custom",
-      "refersTo": "console-preview",
-      "description": "Illustrative balance, usage, and request history inside the green management panel.",
-      "html": "<article class=\"ds-management\"><h3>Keep building.<br>Keep usage in sight.</h3><div class=\"ds-console\"><header><strong>Customer console</strong><span>Illustrative preview</span></header><dl><div><dt>Available Balance</dt><dd>¥1,000.00</dd></div><div><dt>Monthly requests</dt><dd>12,480</dd></div><div><dt>Monthly usage</dt><dd>2.4M</dd></div></dl><section><h4>Recent requests</h4><table><thead><tr><th>Model</th><th>Usage</th><th>Status</th></tr></thead><tbody><tr><td>your-model</td><td>27 tokens</td><td>Completed</td></tr></tbody></table></section><p>Example data only. These are not real customer records.</p></div></article>",
-      "css": ".ds-management{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:36px;border-radius:28px;background:var(--lf-green,#e6f4ea);color:var(--lf-ink,#202124)}.ds-management>h3{margin:0;font-size:clamp(1.8rem,2.8vw,2.5rem);font-weight:700;line-height:1.2;letter-spacing:-.02em}.ds-console{margin-top:26px;border-radius:14px;overflow:hidden;background:var(--lf-paper,#fff)}.ds-console header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--lf-line,#dadce0)}.ds-console header strong{font-size:14px;font-weight:500}.ds-console header span{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0;padding:20px 18px}.ds-console dt{font-size:11px;color:var(--lf-muted,#5f6368)}.ds-console dd{margin:8px 0 3px;font-size:clamp(17px,2vw,24px);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.025em}.ds-console section{padding:0 18px 10px}.ds-console h4{margin:0 0 12px;font-size:12px;font-weight:500}.ds-console table{width:100%;border-collapse:collapse;text-align:start;font-size:11px}.ds-console th{padding-bottom:8px;color:var(--lf-muted,#5f6368);font-weight:400}.ds-console td{padding:8px 0;border-top:1px solid var(--lf-line,#dadce0);font-variant-numeric:tabular-nums}.ds-console td:last-child{color:#137333}.ds-console>p{margin:0;padding:0 18px 12px;font-size:10px;color:var(--lf-muted,#5f6368)}@media(max-width:500px){.ds-management{padding:26px 22px;border-radius:24px}.ds-console dl{gap:10px;padding-inline:14px}.ds-console dd{font-size:18px}}"
+      "description": "Static geometry preview. Production has exactly two full-viewport lanes with heading anchoring, visibility gates, and cleanup.",
+      "html": "<div class=\"ds-optical\" aria-hidden=\"true\"><span></span></div>",
+      "css": ".ds-optical{position:relative;overflow:hidden;height:clamp(160px,20vw,220px);opacity:.62;mask-image:linear-gradient(180deg,transparent,#000 10%,#000 90%,transparent)}.ds-optical span,.ds-optical span:after{--surface-scale:1;position:absolute;inset:0;background:linear-gradient(180deg,#eaf8ff00,#4db5e815 28%,#2775df1a 48%,#9ad9f22a 66%,#d9f4ff16);clip-path:shape(from 0% 50%,curve to 50% 50% with 15% 27% / 36% 20%,curve to 100% 50% with 64% 80% / 85% 73%,line to 100% calc(50% + 23% * var(--surface-scale)),curve to 50% calc(50% + 14% * var(--surface-scale)) with 85% calc(73% + 12% * var(--surface-scale)) / 64% calc(80% + 7% * var(--surface-scale)),curve to 0% calc(50% + 23% * var(--surface-scale)) with 36% calc(20% + 21% * var(--surface-scale)) / 15% calc(27% + 34% * var(--surface-scale)),close)}.ds-optical span:after{content:'';--surface-scale:.14;background:linear-gradient(180deg,#d4f1ff26,#80ccef2b 45%,#e3f6ff40 75%,transparent)}@media(prefers-reduced-motion:reduce){.ds-optical{display:none}}@supports not (clip-path:shape(from 0% 50%,line to 100% 50%,close)){.ds-optical{display:none}}"
     }
   ],
   "narrative": {
-    "northStar": "Chrome-inspired product clarity",
-    "overview": "The user selected the official Google Chrome website as the visual reference: a white canvas, near-black Google Sans headings, blue pill actions, and generous pale blue and green product panels. Linfei Technology retains its own name, product mark, gateway content, and single optical-ribbon image. This refresh records the implemented direction; it supersedes the former serif and deep-blue homepage language.\n\nHomepage colors and composition apply only to the default public homepage in `web/src/features/home/components/landing-page.tsx` and `web/src/styles/lftech-home.css`. Google Sans is also the global default UI font through `--font-ui-sans` and `--font-body`; explicit user font preferences remain available. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.",
+    "northStar": "Enterprise clarity in Linfei blue",
+    "overview": "Linfei Technology pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.\n\nThis records the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and its two local stylesheets. Its enterprise story connects model access, model choice, balance, and usage to registration. Google Sans also remains the shared default UI font, with explicit application font preferences preserved. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.",
     "keyCharacteristics": [
-      "Centered product storytelling, large balanced headings, and blue phrase emphasis.",
-      "One subdued ribbon background behind the hero at every breakpoint.",
-      "A wide protocol window followed by task exploration and an illustrative usage console.",
-      "Shared components, translated copy, keyboard access, dark surfaces, and reduced motion."
+      "Left-aligned, full-width hero with a right-biased glass ribbon and soft page-ground fades.",
+      "Alternating dark and light product cards with native model selectors and an illustrative console.",
+      "A working request/response demo, practical onboarding, and a compact dark closing band.",
+      "Two subtle heading-centered CSS curves, translated copy, keyboard access, dark surfaces, and reduced motion."
     ],
     "rules": [
       {
@@ -468,7 +556,7 @@
       },
       {
         "name": "The Font Preference Rule",
-        "body": "Keep Google Sans as the shared default while preserving explicit user font choices and the monospace code face.",
+        "body": "Keep Google Sans as the shared default while preserving explicit user font choices, CJK fallback, and the monospace code face.",
         "section": "typography"
       },
       {
@@ -478,19 +566,19 @@
       }
     ],
     "dos": [
-      "**Do** follow the user's pinned Chrome reference and Google Sans preference for the default public homepage.",
-      "**Do** keep homepage colors local while retaining explicit application font preferences.",
-      "**Do** reuse the shared header, footer, buttons, tabs, and original interactive protocol demo.",
-      "**Do** retain keyboard access, translated copy, visible focus, dark surfaces, and reduced-motion behavior.",
+      "**Do** preserve the approved SiliconFlow-led homepage composition, Linfei blue identity, and Google Sans preference.",
+      "**Do** keep homepage colors local while retaining explicit application font preferences and CJK fallback.",
+      "**Do** reuse the shared header, footer, buttons, tabs, request path, and original interactive protocol demo.",
+      "**Do** retain seven-language copy, keyboard access, visible focus, dark surfaces, and reduced-motion behavior.",
       "**Do** display the Linfei Technology brand and preserve New API / QuantumNous / One API attribution and legal notices.",
-      "**Do** keep the single ribbon raster behind hero copy on every breakpoint, with its provenance intact."
+      "**Do** retain the approved hero raster and fades, plus the two heading-centered CSS curves with playback gates and cleanup."
     ],
     "donts": [
       "**Don't** add generated imagery beyond the approved ribbon asset or rasterize interactive content.",
-      "**Don't** restore the superseded serif/deep-blue homepage direction or removed tail chapters.",
-      "**Don't** present illustrative records, protocol metrics, or catalog availability as measured customer evidence.",
+      "**Don't** present illustrative records, protocol metrics, catalog availability, or decorative currency as measured customer evidence.",
+      "**Don't** invent a sales destination or enable an unconfigured sales action.",
       "**Don't** apply this homepage palette or composition to console themes, custom homepage branches, or authentication layouts.",
-      "**Don't** claim that the bundled Google Sans file covers CJK glyphs or remove system fallback behavior."
+      "**Don't** claim CJK coverage from the bundled Google Sans file or quantified runtime savings without measurement."
     ]
   }
 }
