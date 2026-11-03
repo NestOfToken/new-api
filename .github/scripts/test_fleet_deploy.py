@@ -1,5 +1,6 @@
 import os
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import fleet_deploy
@@ -53,7 +54,7 @@ class FleetDeploymentTests(unittest.TestCase):
         with patch.object(fleet_deploy, "target_health", return_value={
             ("ins-a", 18080): (True, 10), ("ins-b", 18080): (False, 10),
         }), patch.object(fleet_deploy, "remote_deploy") as remote:
-            with self.assertRaisesRegex(RuntimeError, "Both targets"):
+            with self.assertRaisesRegex(RuntimeError, "All targets"):
                 fleet_deploy.rollout(None, {}, targets)
             remote.assert_not_called()
 
@@ -68,6 +69,27 @@ class FleetDeploymentTests(unittest.TestCase):
             fleet_deploy.rollout(None, {}, targets)
             self.assertEqual(remote.call_count, 4)
             self.assertEqual([call.args[3] for call in weight.call_args_list], [10, 10])
+
+
+    def test_capacity_rpc_uses_the_scf_result_contract(self):
+        client = SimpleNamespace(Invoke=lambda request: SimpleNamespace(Result=SimpleNamespace(ErrMsg="", RetMsg='{"ok":true,"targets":[]}')))
+        self.assertEqual(fleet_deploy.capacity_operation(client, "controller", {"action": "begin_release", "run_id": "1-1"}), {"ok": True, "targets": []})
+        failing = SimpleNamespace(Invoke=lambda request: SimpleNamespace(Result=SimpleNamespace(ErrMsg="sensitive diagnostics", RetMsg="")))
+        with self.assertRaisesRegex(RuntimeError, "Capacity controller invocation failed"):
+            fleet_deploy.capacity_operation(failing, "controller", {})
+
+    def test_elastic_peer_is_included_in_same_image_release(self):
+        targets = [{"id": "ins-a", "name": "master", "port": 18080, "weight": 20},
+                   {"id": "ins-b", "name": "slave", "port": 18080, "weight": 10},
+                   {"id": "ins-elastic", "name": "elastic", "port": 18080, "weight": 20}]
+        states = {(t["id"], t["port"]): (True, t["weight"]) for t in targets}
+        with patch.dict(os.environ, {"LFTECH_IMAGE_REF": "same"}), \
+             patch.object(fleet_deploy, "target_health", return_value=states), \
+             patch.object(fleet_deploy, "remote_deploy", return_value={"image": "same", "health": "healthy"}) as remote, \
+             patch.object(fleet_deploy, "change_weight") as weight:
+            fleet_deploy.rollout(None, {}, targets)
+            self.assertEqual(remote.call_count, 6)
+            self.assertEqual([call.args[3] for call in weight.call_args_list], [20, 10, 20])
 
 
 if __name__ == "__main__":
