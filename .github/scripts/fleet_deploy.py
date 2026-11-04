@@ -55,6 +55,17 @@ def change_weight(client, settings, target, weight):
 
 
 def rollout(client, settings, targets):
+    states = target_health(client, settings)
+    for target in targets:
+        if states.get((target["id"], target["port"])) != (True, target["weight"]):
+            raise RuntimeError("All targets must be healthy at their configured weights before deployment")
+    # Prepare the entire frozen fleet before changing any target's traffic.
+    # A failed or unresolved TAT preparation must never reach the drain phase.
+    for target in targets:
+        os.environ["TENCENTCLOUD_INSTANCE_ID"] = target["id"]
+        print("Preparing image:", target["name"], flush=True)
+        remote_deploy(prepare_only=True)
+
     # Configure the master first. A schema upgrade must remain compatible with
     # the previous application for the duration of the rolling deployment.
     for target in targets:
@@ -76,7 +87,7 @@ def rollout(client, settings, targets):
                 time.sleep(min(30, max(0, deadline - time.monotonic())))
                 print("Waiting for in-flight requests:", target["name"], flush=True)
         # On failure do not restore weight: preserve the healthy peer and stop.
-        remote_deploy()
+        remote_deploy(prepared=True)
         deadline = time.monotonic() + 180
         while time.monotonic() < deadline:
             state = target_health(client, settings).get((target["id"], target["port"]))
