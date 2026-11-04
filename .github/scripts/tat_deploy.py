@@ -106,7 +106,8 @@ def deploy(status_only=False, prepare_only=False, prepared=False):
                 summary = os.environ.get("GITHUB_STEP_SUMMARY")
                 if summary:
                     with open(summary, "a", encoding="utf-8") as stream:
-                        stream.write(f"\nDeployment succeeded. TAT invocation: `{invocation_id}`\n")
+                        phase = "Image preparation" if prepare_only else "Deployment"
+                        stream.write(f"\n{phase} succeeded. TAT invocation: `{invocation_id}`\n")
                         stream.write(f"\nImage: `{image}`\n\nSource: `{source_sha}`\n")
                 return
         time.sleep(8)
