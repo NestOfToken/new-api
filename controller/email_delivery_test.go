@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"net/http"
@@ -11,7 +12,9 @@ import (
 	"testing"
 
 	"github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/i18n"
 	"github.com/QuantumNous/new-api/model"
+	"github.com/QuantumNous/new-api/service"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
 	"github.com/stretchr/testify/assert"
@@ -25,13 +28,18 @@ func (transport emailHTTPTransport) RoundTrip(request *http.Request) (*http.Resp
 	return transport(request)
 }
 
-func configureEmailDelivery(t *testing.T, options map[string]string) {
+func configureEmailDelivery(t *testing.T, options map[string]string) *bytes.Buffer {
 	t.Helper()
 	common.OptionMapRWMutex.Lock()
 	original := common.OptionMap
 	common.OptionMap = options
 	common.OptionMapRWMutex.Unlock()
 	originalTransport := http.DefaultTransport
+	var logs bytes.Buffer
+	common.LogWriterMu.Lock()
+	originalErrorWriter := gin.DefaultErrorWriter
+	gin.DefaultErrorWriter = &logs
+	common.LogWriterMu.Unlock()
 	originalFrom, originalAccount, originalServer := common.SMTPFrom, common.SMTPAccount, common.SMTPServer
 	common.SMTPFrom, common.SMTPAccount, common.SMTPServer = "", "", ""
 	t.Cleanup(func() {
@@ -39,12 +47,21 @@ func configureEmailDelivery(t *testing.T, options map[string]string) {
 		common.OptionMap = original
 		common.OptionMapRWMutex.Unlock()
 		http.DefaultTransport = originalTransport
+		common.LogWriterMu.Lock()
+		gin.DefaultErrorWriter = originalErrorWriter
+		common.LogWriterMu.Unlock()
 		common.SMTPFrom, common.SMTPAccount, common.SMTPServer = originalFrom, originalAccount, originalServer
 	})
+	return &logs
 }
 
 func TestResendDeliversThroughSelectedProvider(t *testing.T) {
 	configureEmailDelivery(t, map[string]string{"EmailProvider": "resend", "ResendApiKey": "test-key", "ResendFrom": "New API <sender@example.com>"})
+	require.NoError(t, i18n.Init())
+	content, err := service.RenderSecurityEmail("zh-CN", service.SecurityEmail{
+		Title: "验证你的邮箱", Intro: "请输入验证码完成验证。", Code: "123456", Validity: "10 分钟内有效",
+	})
+	require.NoError(t, err)
 	calls := 0
 	http.DefaultTransport = emailHTTPTransport(func(request *http.Request) (*http.Response, error) {
 		calls++
@@ -67,17 +84,17 @@ func TestResendDeliversThroughSelectedProvider(t *testing.T) {
 		assert.Equal(t, "sender@example.com", sender.Address)
 		assert.Equal(t, []string{"one@example.com", "two@example.com"}, body.To)
 		assert.Equal(t, "验证码", body.Subject)
-		assert.Equal(t, "<p>123456</p>", body.HTML)
+		assert.Equal(t, content, body.HTML)
 		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(`{"id":"email-test-id"}`)), Header: make(http.Header)}, nil
 	})
-	require.NoError(t, common.SendEmail("验证码", "one@example.com; two@example.com", "<p>123456</p>"))
+	require.NoError(t, common.SendEmail("验证码", "one@example.com; two@example.com", content))
 	assert.Equal(t, 1, calls, "no SMTP configuration is needed and no duplicate request is made")
 }
 
 func TestResendFailuresDoNotRetryFallbackOrExposeSensitiveContent(t *testing.T) {
 	for _, status := range []int{302, 400, 401, 403, 429, 500} {
 		t.Run(strconv.Itoa(status), func(t *testing.T) {
-			configureEmailDelivery(t, map[string]string{"EmailProvider": "resend", "ResendApiKey": "test-key", "ResendFrom": "sender@example.com"})
+			logs := configureEmailDelivery(t, map[string]string{"EmailProvider": "resend", "ResendApiKey": "test-key", "ResendFrom": "sender@example.com"})
 			calls := 0
 			http.DefaultTransport = emailHTTPTransport(func(request *http.Request) (*http.Response, error) {
 				calls++
@@ -86,6 +103,9 @@ func TestResendFailuresDoNotRetryFallbackOrExposeSensitiveContent(t *testing.T) 
 			err := common.SendEmail("verification", "one@example.com", "123456 reset-token")
 			require.EqualError(t, err, "Resend email delivery failed (HTTP "+strconv.Itoa(status)+")")
 			assert.Equal(t, 1, calls, "do not retry or follow redirects")
+			assert.NotContains(t, logs.String(), "test-key")
+			assert.NotContains(t, logs.String(), "123456")
+			assert.NotContains(t, logs.String(), "reset-token")
 		})
 	}
 }
@@ -125,9 +145,12 @@ func TestResendRejectsMalformedSuccessAndSanitizesTransportErrors(t *testing.T) 
 			require.EqualError(t, common.SendEmail("verification", "one@example.com", "123456"), "Invalid Resend delivery response")
 		})
 	}
-	configureEmailDelivery(t, map[string]string{"EmailProvider": "resend", "ResendApiKey": "test-key", "ResendFrom": "sender@example.com"})
+	logs := configureEmailDelivery(t, map[string]string{"EmailProvider": "resend", "ResendApiKey": "test-key", "ResendFrom": "sender@example.com"})
 	http.DefaultTransport = emailHTTPTransport(func(*http.Request) (*http.Response, error) { return nil, errors.New("test-key 123456 reset-token") })
 	require.EqualError(t, common.SendEmail("verification", "one@example.com", "123456"), "Resend request failed")
+	assert.NotContains(t, logs.String(), "test-key")
+	assert.NotContains(t, logs.String(), "123456")
+	assert.NotContains(t, logs.String(), "reset-token")
 }
 
 func TestSMTPAndLegacyConfigurationNeverUseResend(t *testing.T) {
