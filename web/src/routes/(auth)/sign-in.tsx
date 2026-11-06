@@ -26,6 +26,8 @@ import { useAuthStore } from '@/stores/auth-store'
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
+  mode: z.enum(['login', 'register']).catch('login').optional(),
+  aff: z.string().optional(),
 })
 
 export const Route = createFileRoute('/(auth)/sign-in')({

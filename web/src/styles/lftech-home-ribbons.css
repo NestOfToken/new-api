@@ -21,6 +21,15 @@ For commercial licensing, please contact support@quantumnous.com
   --light-period: max(1080px, 110vw);
   --flow-duration: 50s;
   --flow-delay: -18s;
+  --ribbon-opacity: 0.62;
+  --ribbon-color-a: #eaf8ff00;
+  --ribbon-color-b: #4db5e815;
+  --ribbon-color-c: #2775df1a;
+  --ribbon-color-d: #9ad9f22a;
+  --ribbon-color-e: #d9f4ff16;
+  --ribbon-edge-a: #d4f1ff26;
+  --ribbon-edge-b: #80ccef2b;
+  --ribbon-edge-c: #e3f6ff40;
   --x-a: 15%;
   --x-b: 36%;
   --x-c: 64%;
@@ -66,7 +75,7 @@ For commercial licensing, please contact support@quantumnous.com
   transform: translateY(-50%);
   overflow: hidden;
   visibility: hidden;
-  opacity: 0.62;
+  opacity: var(--ribbon-opacity);
   mask-image: linear-gradient(
     180deg,
     transparent,
@@ -97,11 +106,11 @@ For commercial licensing, please contact support@quantumnous.com
   inset: 0;
   background: linear-gradient(
     180deg,
-    #eaf8ff00,
-    #4db5e815 28%,
-    #2775df1a 48%,
-    #9ad9f22a 66%,
-    #d9f4ff16
+    var(--ribbon-color-a),
+    var(--ribbon-color-b) 28%,
+    var(--ribbon-color-c) 48%,
+    var(--ribbon-color-d) 66%,
+    var(--ribbon-color-e)
   );
   clip-path: shape(
     from 0% 50%,
@@ -122,9 +131,9 @@ For commercial licensing, please contact support@quantumnous.com
   --surface-scale: 0.14;
   background: linear-gradient(
     180deg,
-    #d4f1ff26,
-    #80ccef2b 45%,
-    #e3f6ff40 75%,
+    var(--ribbon-edge-a),
+    var(--ribbon-edge-b) 45%,
+    var(--ribbon-edge-c) 75%,
     transparent
   );
 }
@@ -146,8 +155,14 @@ For commercial licensing, please contact support@quantumnous.com
   animation-play-state: running;
   will-change: transform;
 }
-.dark .lf-optical-lane {
-  opacity: 0.34;
+.lf-optical-lane[data-ribbon-morphing='true'] {
+  visibility: hidden;
+}
+.lf-optical-lane[data-ribbon-morphing='true'] .lf-optical-track {
+  animation-play-state: paused;
+}
+.dark .lf-optical-light {
+  --ribbon-opacity: 0.34;
 }
 @keyframes lf-optical-flow {
   from {
@@ -158,9 +173,11 @@ For commercial licensing, please contact support@quantumnous.com
   }
 }
 @media (max-width: 800px) {
+  .lf-optical-light {
+    --ribbon-opacity: 0.5;
+  }
   .lf-optical-lane {
     height: 170px;
-    opacity: 0.5;
   }
 }
 @media (prefers-reduced-motion: reduce) {

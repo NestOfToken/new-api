@@ -16,12 +16,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 import '@/styles/lftech-home-ribbons.css'
 
 interface LandingOpticalRibbonProps {
   headingId: string
+  transitionSource?: boolean
 }
 
 // CSS owns drawing and continuous movement. JS only follows layout and visibility.
@@ -30,7 +31,7 @@ export function LandingOpticalRibbon(props: LandingOpticalRibbonProps) {
   const laneRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = fieldRef.current?.closest('section')
     const lane = laneRef.current
     const heading = document.getElementById(props.headingId)
@@ -78,7 +79,12 @@ export function LandingOpticalRibbon(props: LandingOpticalRibbonProps) {
 
   return (
     <div ref={fieldRef} className='lf-optical-light' aria-hidden='true'>
-      <div ref={laneRef} className='lf-optical-lane' data-playing={active}>
+      <div
+        ref={laneRef}
+        className='lf-optical-lane'
+        data-playing={active}
+        data-lf-ribbon-anchor={props.transitionSource ? 'home' : undefined}
+      >
         <div className='lf-optical-track'>
           {[0, 1].map((tile) => (
             <div className='lf-optical-tile' key={tile}>

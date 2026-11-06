@@ -54,16 +54,17 @@ export function LandingPage(props: LandingPageProps) {
     (isHttpUrl(configuredSalesUrl) || configuredSalesUrl.startsWith('mailto:'))
       ? configuredSalesUrl
       : undefined
-  const destination = props.isAuthenticated ? '/dashboard' : '/sign-up'
+  const destination = props.isAuthenticated ? '/dashboard' : '/sign-in'
   const action = props.isAuthenticated
     ? t('Go to Dashboard')
-    : t('Register and get started')
+    : t('Sign in / Register')
 
   return (
     <div className='lf-home' data-lf-public-surface='home'>
       <PublicLayout
         showMainContainer={false}
         showNotifications={false}
+        showAuthButtons={props.isAuthenticated}
         navContent={
           <>
             <Link className='lf-header-link' to='/' hash='integration'>
@@ -75,12 +76,6 @@ export function LandingPage(props: LandingPageProps) {
             <Link className='lf-header-link' to='/' hash='usage'>
               {t('Usage')}
             </Link>
-            <Button
-              className='lf-primary lf-mobile-registration'
-              render={<Link to={destination} />}
-            >
-              {action}
-            </Button>
           </>
         }
         headerProps={{
@@ -96,11 +91,7 @@ export function LandingPage(props: LandingPageProps) {
         }}
       >
         <main id='home-content'>
-          <section
-            className='lf-hero'
-            aria-labelledby='lf-hero-title'
-            data-lf-ribbon-anchor
-          >
+          <section className='lf-hero' aria-labelledby='lf-hero-title'>
             <img
               className='lf-hero-art'
               src='/images/lftech/api-ribbon.webp'
@@ -123,9 +114,9 @@ export function LandingPage(props: LandingPageProps) {
                 <Button
                   size='lg'
                   className='lf-primary'
-                  render={<Link to={destination} />}
+                  render={<Link to='/pricing' />}
                 >
-                  {action}
+                  {t('View models and pricing')}
                   <ArrowRight aria-hidden='true' />
                 </Button>
                 <Button
@@ -150,7 +141,10 @@ export function LandingPage(props: LandingPageProps) {
             id='models'
             aria-labelledby='lf-models-title'
           >
-            <LandingOpticalRibbon headingId='lf-models-title' />
+            <LandingOpticalRibbon
+              headingId='lf-models-title'
+              transitionSource
+            />
             <div className='lf-section-heading'>
               <h2 id='lf-models-title'>
                 <span className='lf-heading-phrase'>
@@ -272,9 +266,9 @@ export function LandingPage(props: LandingPageProps) {
               <Button
                 size='lg'
                 className='lf-light-button'
-                render={<Link to={destination} />}
+                render={<a href={docsUrl} />}
               >
-                {action}
+                {t('Read the integration guide')}
                 <ArrowRight aria-hidden='true' />
               </Button>
               <Button

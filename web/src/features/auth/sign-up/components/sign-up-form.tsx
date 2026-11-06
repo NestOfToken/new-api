@@ -57,8 +57,13 @@ import { cn } from '@/lib/utils'
 
 export function SignUpForm({
   className,
+  redirectTo,
+  affiliateCode,
   ...props
-}: React.HTMLAttributes<HTMLFormElement>) {
+}: React.HTMLAttributes<HTMLFormElement> & {
+  redirectTo?: string
+  affiliateCode?: string
+}) {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [verificationCode, setVerificationCode] = useState('')
@@ -133,11 +138,11 @@ export function SignUpForm({
   }, [requiresLegalConsent])
 
   useEffect(() => {
-    const aff = new URLSearchParams(window.location.search).get('aff')?.trim()
+    const aff = affiliateCode?.trim()
     if (aff) {
       saveAffiliateCode(aff)
     }
-  }, [])
+  }, [affiliateCode])
 
   async function onSubmit(data: z.infer<typeof registerFormSchema>) {
     if (requiresLegalConsent && !agreedToLegal) {
@@ -172,7 +177,7 @@ export function SignUpForm({
 
       if (res?.success) {
         toast.success(t('Account created! Please sign in'))
-        redirectToLogin()
+        redirectToLogin(redirectTo)
       } else {
         handleServerError(createServerError(res, t('Failed to create account')))
       }
@@ -220,7 +225,7 @@ export function SignUpForm({
       const res = await wechatLoginByCode(wechatCode)
       if (res?.success) {
         handleWeChatDialogChange(false)
-        if (await handleLoginResult(res.data)) {
+        if (await handleLoginResult(res.data, redirectTo)) {
           toast.success(t('Signed in via WeChat'))
         }
       } else {
@@ -259,7 +264,11 @@ export function SignUpForm({
             <FormItem>
               <FormLabel>{t('Username')}</FormLabel>
               <FormControl>
-                <Input placeholder={t('Enter your username')} {...field} />
+                <Input
+                  autoComplete='username'
+                  placeholder={t('Enter your username')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -275,6 +284,7 @@ export function SignUpForm({
               <FormLabel>{t('Password')}</FormLabel>
               <FormControl>
                 <PasswordInput
+                  autoComplete='new-password'
                   placeholder={t('Enter password (8–128 characters)')}
                   {...field}
                 />
@@ -292,7 +302,11 @@ export function SignUpForm({
             <FormItem>
               <FormLabel>{t('Confirm password')}</FormLabel>
               <FormControl>
-                <PasswordInput placeholder={t('Confirm password')} {...field} />
+                <PasswordInput
+                  autoComplete='new-password'
+                  placeholder={t('Confirm password')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -315,6 +329,7 @@ export function SignUpForm({
                     <Input
                       placeholder={t('name@example.com')}
                       type='email'
+                      autoComplete='email'
                       {...field}
                     />
                   </FormControl>
@@ -327,6 +342,8 @@ export function SignUpForm({
             <div className='flex items-end gap-2'>
               <div className='flex-1'>
                 <Input
+                  aria-label={t('Verification code')}
+                  autoComplete='one-time-code'
                   placeholder={t('Verification code')}
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
@@ -384,6 +401,7 @@ export function SignUpForm({
 
         {oauthRegisterEnabled && (
           <OAuthProviders
+            redirectTo={redirectTo}
             status={status}
             disabled={isLoading || (requiresLegalConsent && !agreedToLegal)}
             onWeChatLogin={hasWeChatLogin ? handleOpenWeChatDialog : undefined}

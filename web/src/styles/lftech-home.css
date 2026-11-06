@@ -169,14 +169,20 @@ html:has(.lf-home) {
 .lf-home-header nav > div:nth-child(2) > .lf-header-link:nth-child(3) {
   margin-right: auto;
 }
-.lf-home-header nav > div:nth-child(2) > [data-slot='button']:last-child {
+.lf-home-header
+  nav
+  > div:nth-child(2)
+  > [data-slot='button']:last-child:not(.lf-header-cta) {
   height: 40px;
   border-radius: 999px;
   background: transparent;
   color: var(--lf-blue-text);
   font-size: 14px;
 }
-.lf-home-header nav > div:nth-child(2) > [data-slot='button']:last-child:hover {
+.lf-home-header
+  nav
+  > div:nth-child(2)
+  > [data-slot='button']:last-child:not(.lf-header-cta):hover {
   background: var(--lf-soft);
 }
 .lf-header-link {
@@ -193,9 +199,6 @@ html:has(.lf-home) {
   min-height: 40px;
   padding: 10px 20px;
   font-size: 14px;
-}
-.lf-home .lf-mobile-registration {
-  display: none;
 }
 
 .lf-hero {
@@ -787,12 +790,11 @@ html:has(.lf-home) {
 }
 @media (max-width: 500px) {
   .lf-home-header .lf-header-cta {
-    display: none;
-  }
-  .lf-home .lf-mobile-registration {
-    display: inline-flex;
-    align-self: flex-start;
-    margin-top: 20px;
+    max-width: 104px;
+    padding: 8px 10px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
   }
   .lf-home-header .brand-wordmark {
     max-width: 90px;

@@ -27,6 +27,7 @@ import {
 } from '@tanstack/react-router'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { toast } from 'sonner'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 import { api } from '@/lib/api'
@@ -57,7 +58,10 @@ afterEach(() => {
   localStorage.clear()
 })
 
-async function renderSignIn(status: Record<string, unknown> = {}) {
+async function renderSignIn(
+  status: Record<string, unknown> = {},
+  entry = '/sign-in?redirect=%2Fpricing'
+) {
   client.setQueryData(['status'], status)
   const root = createRootRoute({
     component: () => (
@@ -78,6 +82,8 @@ async function renderSignIn(status: Record<string, unknown> = {}) {
     validateSearch: (search: Record<string, unknown>) => ({
       redirect:
         typeof search.redirect === 'string' ? search.redirect : undefined,
+      mode: search.mode === 'register' ? ('register' as const) : undefined,
+      aff: typeof search.aff === 'string' ? search.aff : undefined,
     }),
   })
   const home = createRoute({
@@ -88,7 +94,7 @@ async function renderSignIn(status: Record<string, unknown> = {}) {
   const router = createRouter({
     routeTree: root.addChildren([auth.addChildren([login]), home]),
     history: createMemoryHistory({
-      initialEntries: ['/sign-in?redirect=%2Fpricing'],
+      initialEntries: [entry],
     }),
     defaultViewTransition: publicAuthViewTransition,
   })
@@ -98,7 +104,14 @@ async function renderSignIn(status: Record<string, unknown> = {}) {
       <RouterProvider router={router} />
     </QueryClientProvider>
   )
-  await screen.findByRole('heading', { name: 'Welcome back!' })
+  await screen.findByRole('heading', {
+    name:
+      entry.includes('mode=register') &&
+      status.register_enabled !== false &&
+      !status.self_use_mode_enabled
+        ? 'Create an account'
+        : 'Welcome back!',
+  })
   return router
 }
 
@@ -179,9 +192,7 @@ it('preserves configured alternative login methods when password login and regis
     discord_oauth: true,
   })
   expect(screen.queryByLabelText('Username or Email')).not.toBeInTheDocument()
-  expect(
-    screen.queryByRole('link', { name: 'Sign up' })
-  ).not.toBeInTheDocument()
+  expect(screen.queryByRole('tab', { name: 'Sign up' })).not.toBeInTheDocument()
   expect(
     screen.getByRole('button', { name: 'Sign in with Passkey' })
   ).toBeVisible()
@@ -191,6 +202,148 @@ it('preserves configured alternative login methods when password login and regis
   expect(
     screen.getByRole('button', { name: /Continue with Discord/ })
   ).toBeVisible()
+})
+
+it('switches forms in place with the keyboard, retaining artwork and redirect without retaining entered passwords', async () => {
+  const router = await renderSignIn({ register_enabled: true })
+  const art = document.querySelector('.lf-sign-in-art')
+  const user = userEvent.setup()
+  await user.type(
+    screen.getByLabelText('Password', { exact: true }),
+    'local-login-password'
+  )
+  screen.getByRole('tab', { name: 'Sign in' }).focus()
+  await user.keyboard('{ArrowRight}{Enter}')
+  expect(
+    await screen.findByRole('heading', { name: 'Create an account' })
+  ).toBeVisible()
+  expect(screen.getByRole('tab', { name: 'Sign up' })).toHaveAttribute(
+    'aria-selected',
+    'true'
+  )
+  expect(screen.queryByLabelText('Username or Email')).not.toBeInTheDocument()
+  expect(screen.getByLabelText('Password', { exact: true })).toHaveAttribute(
+    'autocomplete',
+    'new-password'
+  )
+  expect(document.querySelector('.lf-sign-in-art')).toBe(art)
+  expect(router.state.location.pathname).toBe('/sign-in')
+  expect(router.state.location.search.redirect).toBe('/pricing')
+  await user.click(screen.getByRole('tab', { name: 'Sign in' }))
+  expect(await screen.findByLabelText('Username or Email')).toBeVisible()
+  expect(screen.getByLabelText('Password', { exact: true })).toHaveValue('')
+  expect(screen.queryByLabelText('Confirm password')).not.toBeInTheDocument()
+  expect(document.querySelector('.lf-sign-in-art')).toBe(art)
+})
+
+it('registers through the existing endpoint after consent and returns to login while preserving the destination', async () => {
+  const post = vi
+    .spyOn(api, 'post')
+    .mockResolvedValue({ data: { success: true } })
+  const router = await renderSignIn(
+    { register_enabled: true, user_agreement_enabled: true },
+    '/sign-in?mode=register&redirect=%2Fpricing&aff=invite-test'
+  )
+  const user = userEvent.setup()
+  await user.type(
+    screen.getByLabelText('Username', { exact: true }),
+    'registration-user'
+  )
+  await user.type(
+    screen.getByLabelText('Password', { exact: true }),
+    'registration-password'
+  )
+  await user.type(
+    screen.getByLabelText('Confirm password'),
+    'registration-password'
+  )
+  expect(screen.getByRole('button', { name: 'Create account' })).toBeDisabled()
+  expect(post).not.toHaveBeenCalled()
+  await user.click(screen.getByRole('checkbox'))
+  await user.click(screen.getByRole('button', { name: 'Create account' }))
+  expect(
+    await screen.findByRole('heading', { name: 'Welcome back!' })
+  ).toBeVisible()
+  expect(post).toHaveBeenCalledExactlyOnceWith(
+    '/api/user/register',
+    expect.objectContaining({
+      username: 'registration-user',
+      password: 'registration-password',
+      aff_code: 'invite-test',
+    }),
+    { params: { turnstile: '' } }
+  )
+  expect(router.state.location.search.redirect).toBe('/pricing')
+  expect(screen.queryByLabelText('Confirm password')).not.toBeInTheDocument()
+  expect(useAuthStore.getState().auth.user).toBeNull()
+})
+
+it.each([{ register_enabled: false }, { self_use_mode_enabled: true }])(
+  'keeps a directly linked registration mode unavailable when registration is disabled: %j',
+  async (status) => {
+    await renderSignIn(status, '/sign-in?mode=register')
+    expect(
+      screen.queryByRole('tab', { name: 'Sign up' })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Create account' })
+    ).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Username or Email')).toBeVisible()
+  }
+)
+
+it('keeps email verification required in the combined registration panel', async () => {
+  const post = vi.spyOn(api, 'post')
+  const error = vi.spyOn(toast, 'error')
+  await renderSignIn(
+    { register_enabled: true, email_verification: true },
+    '/sign-in?mode=register'
+  )
+  const user = userEvent.setup()
+  await user.type(
+    screen.getByLabelText('Username', { exact: true }),
+    'email-user'
+  )
+  await user.type(
+    screen.getByLabelText('Password', { exact: true }),
+    'registration-password'
+  )
+  await user.type(
+    screen.getByLabelText('Confirm password'),
+    'registration-password'
+  )
+  await user.type(
+    screen.getByLabelText('Email (required for verification)'),
+    'test@example.invalid'
+  )
+  expect(screen.getByLabelText('Verification code')).toHaveAttribute(
+    'autocomplete',
+    'one-time-code'
+  )
+  await user.click(screen.getByRole('button', { name: 'Create account' }))
+  await waitFor(() =>
+    expect(error).toHaveBeenCalledWith('Please enter the verification code')
+  )
+  expect(post).not.toHaveBeenCalled()
+  expect(
+    screen.getByRole('heading', { name: 'Create an account' })
+  ).toBeVisible()
+})
+
+it('keeps registration blocked while an enabled human check has no token', async () => {
+  const post = vi.spyOn(api, 'post')
+  await renderSignIn(
+    {
+      register_enabled: true,
+      turnstile_check: true,
+      turnstile_site_key: 'test-site-key',
+    },
+    '/sign-in?mode=register'
+  )
+  const create = screen.getByRole('button', { name: 'Create account' })
+  expect(create).toBeDisabled()
+  await userEvent.setup().click(create)
+  expect(post).not.toHaveBeenCalled()
 })
 
 it('keeps direct navigation functional with reduced motion and repeated browser history changes', async () => {

@@ -16,42 +16,78 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Link, useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useStatus } from '@/hooks/use-status'
 
 import { TermsFooter } from '../components/terms-footer'
+import { SignUpForm } from '../sign-up/components/sign-up-form'
 import { SignInLayout } from './components/sign-in-layout'
 import { UserAuthForm } from './components/user-auth-form'
 
 export function SignIn() {
   const { t } = useTranslation()
-  const { redirect } = useSearch({ from: '/(auth)/sign-in' })
+  const search = useSearch({ from: '/(auth)/sign-in' })
+  const navigate = useNavigate({ from: '/sign-in' })
   const { status } = useStatus()
+  const registrationEnabled =
+    !status?.self_use_mode_enabled && status?.register_enabled !== false
+  const mode =
+    registrationEnabled && search.mode === 'register' ? 'register' : 'login'
 
   return (
-    <SignInLayout>
-      {!status?.self_use_mode_enabled && status?.register_enabled !== false && (
-        <p className='lf-sign-in-intro'>
-          {t("Don't have an account?")}{' '}
-          <Link
-            to='/sign-up'
-            className='hover:text-primary font-medium underline underline-offset-4'
+    <SignInLayout
+      heading={
+        mode === 'register' ? t('Create an account') : t('Welcome back!')
+      }
+    >
+      <Tabs
+        value={mode}
+        onValueChange={(value) => {
+          void navigate({
+            search: {
+              ...search,
+              mode: value === 'register' ? 'register' : undefined,
+            },
+            replace: true,
+            resetScroll: false,
+          })
+        }}
+      >
+        {registrationEnabled && (
+          <TabsList
+            variant='line'
+            className='lf-auth-tabs'
+            aria-label={t('Sign in / Register')}
           >
-            {t('Sign up')}
-          </Link>
-          .
-        </p>
-      )}
-
-      <UserAuthForm redirectTo={redirect} />
-
-      <TermsFooter
-        variant='sign-in'
-        status={status}
-        className='lf-sign-in-terms'
-      />
+            <TabsTrigger value='login'>{t('Sign in')}</TabsTrigger>
+            <TabsTrigger value='register'>{t('Sign up')}</TabsTrigger>
+          </TabsList>
+        )}
+        <TabsContent value='login'>
+          <UserAuthForm redirectTo={search.redirect} />
+          <TermsFooter
+            variant='sign-in'
+            status={status}
+            className='lf-sign-in-terms'
+          />
+        </TabsContent>
+        {registrationEnabled && (
+          <TabsContent value='register'>
+            <SignUpForm
+              redirectTo={search.redirect}
+              affiliateCode={search.aff}
+            />
+            <TermsFooter
+              variant='sign-up'
+              status={status}
+              className='lf-sign-in-terms'
+            />
+          </TabsContent>
+        )}
+      </Tabs>
     </SignInLayout>
   )
 }

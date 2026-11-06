@@ -29,162 +29,288 @@ interface RibbonFrame {
   fromProgress: number
   toProgress: number
   progress: number
-  travel: number
   time: number
-  dark: boolean
+  viewportWidth: number
 }
 
 type Point = [number, number, number]
 const circle = Math.PI * 2
+const surfaceStops = [0, 0.28, 0.48, 0.66, 1]
+const edgeStops = [0, 0.45, 0.75, 1]
 const mix = (a: number, b: number, fraction: number) => a + (b - a) * fraction
 
-function ribbonPoint(
+function ringPoint(
   u: number,
   edge: number,
   time: number,
-  progress: number
-): Point {
+  point: Point,
+  duration: number
+) {
   const angle = u * circle
-  const phase = time * 0.16
+  const phase = (time / duration) * circle
   const twist = angle + phase
-  const width = mix(0.22, 0.29, progress) * (1 + 0.12 * Math.sin(angle * 2))
+  const width = 0.29 * (1 + 0.12 * Math.sin(angle * 2))
   const x =
-    mix((u - 0.5) * 5.9, Math.cos(angle) * 1.02, progress) +
-    Math.cos(twist) * Math.cos(angle) * edge * width
+    Math.cos(angle) * 1.02 + Math.cos(twist) * Math.cos(angle) * edge * width
   const y =
-    mix(
-      Math.sin(angle + phase) * 0.42 + 0.25,
-      Math.sin(angle) * 1.4,
-      progress
-    ) +
-    Math.cos(twist) * Math.sin(angle) * edge * width
-  const z =
-    mix(
-      Math.cos(angle + phase) * 0.45,
-      Math.sin(angle * 2 + phase) * 0.43,
-      progress
-    ) +
-    Math.sin(twist) * edge * width
-  const rotationY = mix(-0.2, Math.sin(time * 0.12) * 0.17, progress)
-  const rotationZ = mix(-0.12, -0.25, progress)
+    Math.sin(angle) * 1.4 + Math.cos(twist) * Math.sin(angle) * edge * width
+  const z = Math.sin(angle * 2 + phase) * 0.43 + Math.sin(twist) * edge * width
+  const rotationY = Math.sin(phase) * 0.17
+  const rotationZ = -0.25
   const rotatedX = x * Math.cos(rotationY) + z * Math.sin(rotationY)
-  return [
-    rotatedX * Math.cos(rotationZ) - y * Math.sin(rotationZ),
-    rotatedX * Math.sin(rotationZ) + y * Math.cos(rotationZ),
-    -x * Math.sin(rotationY) + z * Math.cos(rotationY),
-  ]
+  point[0] = rotatedX * Math.cos(rotationZ) - y * Math.sin(rotationZ)
+  point[1] = rotatedX * Math.sin(rotationZ) + y * Math.cos(rotationZ)
+  point[2] = -x * Math.sin(rotationY) + z * Math.cos(rotationY)
 }
 
-function ribbonCamera(bounds: RibbonBounds, progress: number) {
+function ringCamera(bounds: RibbonBounds) {
   const compact = bounds.height <= 360
   return {
-    x: bounds.left + bounds.width * mix(0.72, compact ? 0.69 : 0.5, progress),
-    y: bounds.top + bounds.height * mix(0.48, compact ? 0.49 : 0.4, progress),
-    size: mix(
-      bounds.width * 0.13,
-      Math.min(bounds.width * (compact ? 0.17 : 0.2), bounds.height * 0.23),
-      progress
-    ),
+    x: bounds.left + bounds.width * (compact ? 0.69 : 0.5),
+    y: bounds.top + bounds.height * (compact ? 0.49 : 0.4),
+    size: Math.min(bounds.width * (compact ? 0.17 : 0.2), bounds.height * 0.23),
   }
 }
 
-// Only decorative geometry is drawn. Credentials and form pixels never enter this canvas.
-export function drawRibbon(
+// Same Bezier surface and translucent material as LandingOpticalRibbon. Sampling
+// lets that open wave fold into the approved login ring without swapping artwork.
+export function createRibbonRenderer(
   context: CanvasRenderingContext2D,
-  frame: RibbonFrame
+  style: CSSStyleDeclaration
 ) {
-  const origin = ribbonCamera(frame.from, frame.fromProgress)
-  const target = ribbonCamera(frame.to, frame.toProgress)
-  const x = mix(origin.x, target.x, frame.travel)
-  const y = mix(origin.y, target.y, frame.travel)
-  const size = mix(origin.size, target.size, frame.travel)
-  const project = (point: Point): Point => {
-    const perspective = 4.8 / (4.8 - point[2])
-    return [
-      x + point[0] * size * perspective,
-      y + point[1] * size * perspective,
-      point[2],
-    ]
-  }
-  const shadow = context.createRadialGradient(
-    x,
-    y + size * 1.38,
+  const value = (name: string) =>
+    Number.parseFloat(style.getPropertyValue(name)) / 100
+  const x = [
     0,
-    x,
-    y + size * 1.38,
-    size * 1.3
+    value('--x-a'),
+    value('--x-b'),
+    0.5,
+    value('--x-c'),
+    value('--x-d'),
+    1,
+  ]
+  const upper = [
+    0.5,
+    value('--upper-a'),
+    value('--upper-b'),
+    0.5,
+    value('--upper-c'),
+    value('--upper-d'),
+    0.5,
+  ]
+  const lower = [
+    0.5 + value('--end-width'),
+    upper[1] + value('--width-a'),
+    upper[2] + value('--width-b'),
+    0.5 + value('--mid-width'),
+    upper[4] + value('--width-c'),
+    upper[5] + value('--width-d'),
+    0.5 + value('--end-width'),
+  ]
+  const duration = Number.parseFloat(style.getPropertyValue('--flow-duration'))
+  const delay = Number.parseFloat(style.getPropertyValue('--flow-delay'))
+  const colors = ['a', 'b', 'c', 'd', 'e'].map((key) =>
+    style.getPropertyValue(`--ribbon-color-${key}`).trim()
   )
-  shadow.addColorStop(0, frame.dark ? '#00132922' : '#235aaf18')
-  shadow.addColorStop(1, '#235aaf00')
-  context.fillStyle = shadow
-  context.beginPath()
-  context.ellipse(x, y + size * 1.38, size * 1.3, size * 0.16, 0, 0, circle)
-  context.fill()
+  const edges = ['a', 'b', 'c'].map((key) =>
+    style.getPropertyValue(`--ribbon-edge-${key}`).trim()
+  )
+  edges.push('#e3f6ff00')
+  const profile = new Float64Array(1026)
+  for (let index = 0; index <= 512; index++) {
+    const position = index / 512
+    const start = position < 0.5 ? 0 : 3
+    let low = 0,
+      high = 1
+    for (let step = 0; step < 14; step++) {
+      const t = (low + high) / 2
+      if (
+        cubic(x[start], x[start + 1], x[start + 2], x[start + 3], t) < position
+      ) {
+        low = t
+      } else high = t
+    }
+    const t = (low + high) / 2
+    profile[index * 2] = cubic(
+      upper[start],
+      upper[start + 1],
+      upper[start + 2],
+      upper[start + 3],
+      t
+    )
+    profile[index * 2 + 1] = cubic(
+      lower[start],
+      lower[start + 1],
+      lower[start + 2],
+      lower[start + 3],
+      t
+    )
+  }
+  const points = Array.from({ length: 442 }, (): Point => [0, 0, 0])
+  const projected = Array.from({ length: 442 }, (): Point => [0, 0, 0])
+  const strips = Array.from({ length: 220 }, (_, index) => ({
+    index,
+    depth: 0,
+  }))
+  return (frame: RibbonFrame) => {
+    const home = frame.toProgress === 0 ? frame.to : frame.from
+    const login = frame.toProgress === 1 ? frame.to : frame.from
+    const camera = ringCamera(login)
+    const period = Math.max(1080, frame.viewportWidth * 1.1)
+    const bandHeight =
+      frame.viewportWidth <= 800
+        ? 170
+        : Math.min(220, Math.max(160, frame.viewportWidth * 0.2))
+    const centerY = home.top + home.height / 2
+    const phase = (frame.time - delay) / duration
+    for (let index = 0; index <= 220; index++) {
+      const u = index / 220
+      const waveX = home.left + home.width * u
+      const sample = ((waveX / period + phase) % 1) * 512
+      const offset = Math.floor(sample)
+      const fraction = sample - offset
+      for (let edge = 0; edge < 2; edge++) {
+        const slot = index * 2 + edge
+        const y = mix(
+          profile[offset * 2 + edge],
+          profile[(offset + 1) * 2 + edge],
+          fraction
+        )
+        const waveY = centerY + (y - 0.5) * bandHeight
+        const point = points[slot]
+        if (frame.progress > 0) {
+          ringPoint(u, edge * 2 - 1, frame.time, point, duration)
+        }
+        const perspective = 4.8 / (4.8 - point[2])
+        projected[slot][0] = mix(
+          waveX,
+          camera.x + point[0] * camera.size * perspective,
+          frame.progress
+        )
+        projected[slot][1] = mix(
+          waveY,
+          camera.y + point[1] * camera.size * perspective,
+          frame.progress
+        )
+      }
+    }
+    const materialY = mix(centerY, camera.y, frame.progress)
+    const materialHeight = mix(bandHeight, camera.size * 3.2, frame.progress)
+    const gain = mix(1, 4, frame.progress)
+    const gradient = ribbonGradient(
+      context,
+      materialY,
+      materialHeight,
+      colors,
+      surfaceStops,
+      gain
+    )
+    const highlight = ribbonGradient(
+      context,
+      materialY,
+      materialHeight,
+      edges,
+      edgeStops,
+      gain
+    )
+    if (frame.progress === 0) {
+      context.fillStyle = gradient
+      traceBand(context, projected, 1)
+      context.fill()
+      context.fillStyle = highlight
+      traceBand(context, projected, 0.14)
+      context.fill()
+      return
+    }
+    for (const strip of strips) {
+      const slot = strip.index * 2
+      strip.depth =
+        (points[slot][2] +
+          points[slot + 1][2] +
+          points[slot + 2][2] +
+          points[slot + 3][2]) /
+        4
+    }
+    strips.sort((a, b) => a.depth - b.depth)
+    for (const strip of strips) {
+      const slot = strip.index * 2
+      const a = projected[slot],
+        b = projected[slot + 1],
+        c = projected[slot + 3],
+        d = projected[slot + 2]
+      context.fillStyle = gradient
+      context.beginPath()
+      context.moveTo(a[0], a[1])
+      context.lineTo(b[0], b[1])
+      context.lineTo(c[0], c[1])
+      context.lineTo(d[0], d[1])
+      context.closePath()
+      context.fill()
+      context.fillStyle = highlight
+      context.beginPath()
+      context.moveTo(a[0], a[1])
+      context.lineTo(mix(a[0], b[0], 0.14), mix(a[1], b[1], 0.14))
+      context.lineTo(mix(d[0], c[0], 0.14), mix(d[1], c[1], 0.14))
+      context.lineTo(d[0], d[1])
+      context.closePath()
+      context.fill()
+    }
+  }
+}
 
-  const strips = []
-  for (let index = 0; index < 220; index++) {
-    const u = index / 220
-    const next = (index + 1) / 220
-    const points = [
-      ribbonPoint(u, -1, frame.time, frame.progress),
-      ribbonPoint(u, 1, frame.time, frame.progress),
-      ribbonPoint(next, 1, frame.time, frame.progress),
-      ribbonPoint(next, -1, frame.time, frame.progress),
-    ]
-    const [a, b, , d] = points
-    const ab = b.map((value, axis) => value - a[axis])
-    const ad = d.map((value, axis) => value - a[axis])
-    const normal = [
-      ab[1] * ad[2] - ab[2] * ad[1],
-      ab[2] * ad[0] - ab[0] * ad[2],
-      ab[0] * ad[1] - ab[1] * ad[0],
-    ]
-    const length = Math.hypot(...normal) || 1
-    const light = Math.abs(
-      (normal[0] * 0.4 - normal[1] * 0.5 + normal[2] * 0.75) / length
+function ribbonGradient(
+  context: CanvasRenderingContext2D,
+  centerY: number,
+  height: number,
+  colors: string[],
+  stops: number[],
+  gain: number
+) {
+  const gradient = context.createLinearGradient(
+    0,
+    centerY - height / 2,
+    0,
+    centerY + height / 2
+  )
+  for (let index = 0; index < colors.length; index++) {
+    const color = colors[index]
+    const alpha = Math.min(
+      255,
+      Math.round(Number.parseInt(color.slice(7), 16) * gain)
     )
-    strips.push({
-      points: points.map(project),
-      depth: points.reduce((sum, point) => sum + point[2], 0) / 4,
-      light,
-      u,
-    })
+    gradient.addColorStop(
+      stops[index],
+      `${color.slice(0, 7)}${alpha.toString(16).padStart(2, '0')}`
+    )
   }
-  strips.sort((a, b) => a.depth - b.depth)
-  for (const strip of strips) {
-    const [a, b, c, d] = strip.points
-    const hue = 216 + 10 * Math.sin(strip.u * circle + frame.time * 0.1)
-    const lightness =
-      41 +
-      strip.light * 32 +
-      Math.pow(strip.light, 7) * 13 +
-      (frame.dark ? 4 : 0)
-    const gradient = context.createLinearGradient(a[0], a[1], b[0], b[1])
-    gradient.addColorStop(0, `hsl(${hue} 78% ${Math.min(96, lightness + 17)}%)`)
-    gradient.addColorStop(
-      0.08,
-      `hsl(${hue} 72% ${Math.max(24, lightness - 16)}%)`
-    )
-    gradient.addColorStop(0.34, `hsl(${hue} 64% ${lightness}%)`)
-    gradient.addColorStop(
-      0.66,
-      `hsl(${hue + 6} 64% ${Math.min(97, lightness + 15)}%)`
-    )
-    gradient.addColorStop(
-      0.94,
-      `hsl(${hue} 80% ${Math.max(25, lightness - 13)}%)`
-    )
-    gradient.addColorStop(1, `hsl(${hue} 70% 94%)`)
-    context.fillStyle = gradient
-    context.strokeStyle = gradient
-    context.lineWidth = 1.15
-    context.beginPath()
-    context.moveTo(a[0], a[1])
-    context.lineTo(b[0], b[1])
-    context.lineTo(c[0], c[1])
-    context.lineTo(d[0], d[1])
-    context.closePath()
-    context.fill()
-    context.stroke()
+  return gradient
+}
+
+function cubic(a: number, b: number, c: number, d: number, t: number) {
+  const reverse = 1 - t
+  return (
+    reverse * reverse * reverse * a +
+    3 * reverse * reverse * t * b +
+    3 * reverse * t * t * c +
+    t * t * t * d
+  )
+}
+
+function traceBand(
+  context: CanvasRenderingContext2D,
+  points: Point[],
+  width: number
+) {
+  context.beginPath()
+  for (let index = 0; index <= 220; index++) {
+    const top = points[index * 2]
+    if (index === 0) context.moveTo(top[0], top[1])
+    else context.lineTo(top[0], top[1])
   }
+  for (let index = 220; index >= 0; index--) {
+    const top = points[index * 2],
+      bottom = points[index * 2 + 1]
+    context.lineTo(bottom[0], mix(top[1], bottom[1], width))
+  }
+  context.closePath()
 }

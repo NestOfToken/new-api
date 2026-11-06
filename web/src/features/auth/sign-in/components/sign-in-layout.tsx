@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/button'
 
 import { RibbonPlaybackButton } from '../../components/public-ribbon-provider'
 
-export function SignInLayout(props: { children: ReactNode }) {
+export function SignInLayout(props: { children: ReactNode; heading?: string }) {
   const { t } = useTranslation()
   const headingRef = useRef<HTMLHeadingElement>(null)
 
@@ -87,7 +87,7 @@ export function SignInLayout(props: { children: ReactNode }) {
       >
         <div className='lf-sign-in-form'>
           <h1 id='lf-sign-in-heading' ref={headingRef} tabIndex={-1}>
-            {t('Welcome back!')}
+            {props.heading ?? t('Welcome back!')}
           </h1>
           {props.children}
         </div>

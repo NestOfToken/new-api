@@ -32,19 +32,15 @@ const STORAGE_KEY = 'home_page_content'
  * Supports both Markdown/HTML content and iframe URLs
  */
 export function useHomePageContent(): HomePageContentResult {
-  const [content, setContent] = useState<string>('')
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [page, setPage] = useState(() => {
+    const cached = localStorage.getItem(STORAGE_KEY)
+    return { content: cached ?? '', isLoaded: cached !== null }
+  })
 
   useEffect(() => {
     let mounted = true
 
     const loadContent = async () => {
-      // Load from localStorage first for immediate display
-      const cached = localStorage.getItem(STORAGE_KEY)
-      if (cached && mounted) {
-        setContent(cached)
-      }
-
       try {
         const response = await getHomePageContent()
         const { success, data } = response
@@ -52,19 +48,21 @@ export function useHomePageContent(): HomePageContentResult {
         if (!mounted) return
 
         if (success && data) {
-          setContent(data)
+          setPage({ content: data, isLoaded: true })
           localStorage.setItem(STORAGE_KEY, data)
         } else {
-          // Clear content if API returns empty
-          setContent('')
-          localStorage.removeItem(STORAGE_KEY)
+          // An empty value is a known default homepage, distinct from no cache.
+          setPage({ content: '', isLoaded: true })
+          localStorage.setItem(STORAGE_KEY, '')
         }
       } catch (error) {
         if (!mounted) return
         handleServerError(error, i18next.t('Failed to load home page content'))
       } finally {
         if (mounted) {
-          setIsLoaded(true)
+          setPage((current) =>
+            current.isLoaded ? current : { ...current, isLoaded: true }
+          )
         }
       }
     }
@@ -76,7 +74,7 @@ export function useHomePageContent(): HomePageContentResult {
     }
   }, [])
 
-  const isUrl = isHttpUrl(content)
+  const isUrl = isHttpUrl(page.content)
 
-  return { content, isLoaded, isUrl }
+  return { content: page.content, isLoaded: page.isLoaded, isUrl }
 }

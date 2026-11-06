@@ -93,6 +93,27 @@ async function renderHome() {
 }
 
 describe('enterprise homepage', () => {
+  it('shows the cached default homepage immediately while the return refresh is pending', async () => {
+    localStorage.setItem('home_page_content', '')
+    let release = () => {}
+    const refresh = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    vi.mocked(api.get).mockImplementation(async (url) => {
+      if (url === '/api/home_page_content') await refresh
+      return { data: { success: true, data: '' } }
+    })
+    try {
+      await renderHome()
+      expect(
+        screen.getByRole('heading', { name: /Bring AI model capabilities/ })
+      ).toBeVisible()
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument()
+    } finally {
+      release()
+    }
+  })
+
   it('presents model access, model selection, balance and usage before the API examples', async () => {
     await renderHome()
     const sections = [...document.querySelectorAll('#home-content > section')]
@@ -116,7 +137,7 @@ describe('enterprise homepage', () => {
     expect(document.querySelectorAll('.lf-optical-light')).toHaveLength(2)
   })
 
-  it('routes visitors to registration, pricing, and the configured integration docs', async () => {
+  it('provides a unified authentication entry and routes other actions to models and integration docs', async () => {
     await renderHome()
     expect(
       within(screen.getByRole('banner')).getByRole('link', { name: /麟飞科技/ })
@@ -127,17 +148,29 @@ describe('enterprise homepage', () => {
       'https://github.com/QuantumNous'
     )
     const registration = await screen.findAllByRole('button', {
-      name: 'Register and get started',
+      name: 'Sign in / Register',
     })
     for (const link of registration) {
-      expect(link).toHaveAttribute('href', '/sign-up')
+      expect(link).toHaveAttribute('href', '/sign-in')
     }
     expect(
-      screen.getByRole('button', { name: 'Read the integration guide' })
-    ).toHaveAttribute('href', 'https://docs.example.com/start')
+      document.querySelectorAll(
+        '#home-content a[href="/sign-in"], a[href="/sign-up"]'
+      )
+    ).toHaveLength(0)
     expect(
-      screen.getByRole('button', { name: 'View models and pricing' })
-    ).toHaveAttribute('href', '/pricing')
+      screen.queryByRole('button', { name: 'Sign in' })
+    ).not.toBeInTheDocument()
+    for (const link of screen.getAllByRole('button', {
+      name: 'Read the integration guide',
+    })) {
+      expect(link).toHaveAttribute('href', 'https://docs.example.com/start')
+    }
+    for (const link of screen.getAllByRole('button', {
+      name: 'View models and pricing',
+    })) {
+      expect(link).toHaveAttribute('href', '/pricing')
+    }
     for (const link of screen.getAllByTitle('Sales contact coming soon')) {
       expect(link).toHaveAttribute('aria-disabled', 'true')
       expect(link).toHaveTextContent('Sales contact coming soon')
@@ -175,7 +208,7 @@ describe('enterprise homepage', () => {
     })
     for (const link of links) expect(link).toHaveAttribute('href', '/dashboard')
     expect(
-      screen.queryByRole('button', { name: 'Register and get started' })
+      screen.queryByRole('button', { name: 'Sign in / Register' })
     ).not.toBeInTheDocument()
   })
 
@@ -244,12 +277,14 @@ describe('enterprise homepage', () => {
     expect(
       screen.getByText('Find model availability and pricing in the catalog.')
     ).toBeVisible()
-    expect(
-      screen.getByRole('button', { name: 'View models and pricing' })
-    ).toHaveAttribute('href', '/pricing')
+    for (const link of screen.getAllByRole('button', {
+      name: 'View models and pricing',
+    })) {
+      expect(link).toHaveAttribute('href', '/pricing')
+    }
   })
 
-  it('keeps registration available inside the mobile navigation', async () => {
+  it('keeps the unified entry in the header without adding another inside the mobile menu', async () => {
     const user = userEvent.setup()
     await renderHome()
     await user.click(
@@ -261,10 +296,14 @@ describe('enterprise homepage', () => {
     expect(navigation).not.toBeNull()
     if (!navigation) throw new Error('Mobile navigation is missing')
     expect(
-      within(navigation).getByRole('button', {
-        name: 'Register and get started',
-      })
-    ).toHaveAttribute('href', '/sign-up')
+      within(navigation).queryByRole('button', { name: 'Sign in / Register' })
+    ).not.toBeInTheDocument()
+    for (const link of within(screen.getByRole('banner')).getAllByRole(
+      'button',
+      { name: 'Sign in / Register' }
+    )) {
+      expect(link).toHaveAttribute('href', '/sign-in')
+    }
   })
 
   it('preserves the configured custom homepage URL and its sandbox', async () => {

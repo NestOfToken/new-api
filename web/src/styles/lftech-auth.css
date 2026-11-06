@@ -17,6 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 /* The approved ribbon login extends the public blue palette; homepage light levels stay unchanged. */
+.lf-home {
+  isolation: isolate;
+}
 .lf-public-ribbon-canvas {
   position: fixed;
   inset: 0;
@@ -27,6 +30,34 @@ For commercial licensing, please contact support@quantumnous.com
 }
 .lf-public-ribbon-canvas[hidden] {
   display: none;
+}
+.lf-public-outgoing {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+}
+.lf-public-outgoing:empty {
+  display: none;
+}
+.lf-public-outgoing,
+.lf-public-outgoing * {
+  view-transition-name: none !important;
+}
+.lf-public-outgoing .lf-optical-lane {
+  visibility: hidden !important;
+}
+.lf-public-outgoing .lf-hero-copy {
+  animation: none !important;
+}
+.lf-public-outgoing[data-lf-ribbon-ready='true'] .lf-sign-in-fallback {
+  visibility: hidden;
+}
+.lf-sign-in[data-lf-scene-arrived='true'] .lf-sign-in-panel {
+  animation: none;
 }
 .lf-sign-in {
   --lf-auth-paper: #fff;
@@ -170,11 +201,23 @@ For commercial licensing, please contact support@quantumnous.com
 .lf-sign-in-form h1:focus {
   outline: none;
 }
-.lf-sign-in-form .lf-sign-in-intro {
-  margin: 0 0 32px;
+.lf-sign-in-form .lf-auth-tabs {
+  width: 100%;
+  height: auto;
+  margin: 8px 0 24px;
+  border-bottom: 1px solid var(--lf-auth-line);
+  padding: 0 0 8px;
+}
+.lf-auth-tabs [data-slot='tabs-trigger'] {
+  min-height: 44px;
   color: var(--lf-auth-muted);
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 15px;
+}
+.lf-auth-tabs [data-slot='tabs-trigger'][data-active] {
+  color: var(--lf-auth-readable);
+}
+.lf-auth-tabs [data-slot='tabs-trigger']::after {
+  background: var(--lf-auth-blue);
 }
 .lf-sign-in-form a {
   color: var(--lf-auth-readable);
@@ -229,6 +272,9 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 /* Capture only public branding and the marketing headline, never a credential form. */
+.lf-home[data-lf-auth-return='true'] .lf-hero-copy {
+  animation: none;
+}
 html:has([data-lf-public-surface]) {
   view-transition-name: none;
 }
