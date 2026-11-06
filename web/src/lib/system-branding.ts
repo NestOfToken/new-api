@@ -21,7 +21,11 @@ import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 /** Resolve inherited defaults without overriding an operator's custom brand. */
 export function resolveSystemName(value: unknown): string {
   const name = typeof value === 'string' ? value.trim() : ''
-  return !name || /^new[\s-]*api$/i.test(name) ? DEFAULT_SYSTEM_NAME : name
+  if (!name || /^new[\s-]*api$/i.test(name)) return DEFAULT_SYSTEM_NAME
+  return name
+    .replaceAll('麟飞科技', '睿元云')
+    .replaceAll('麟飛科技', '睿元雲')
+    .replaceAll('Linfei Technology', 'nerioncloud')
 }
 
 export function resolveSystemLogo(value: unknown): string {

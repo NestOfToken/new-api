@@ -63,7 +63,7 @@ func TestResendDeliversThroughSelectedProvider(t *testing.T) {
 		require.NoError(t, common.DecodeJson(request.Body, &body))
 		sender, err := mail.ParseAddress(body.From)
 		require.NoError(t, err)
-		assert.Equal(t, "麟飞科技", sender.Name)
+		assert.Equal(t, "睿元云", sender.Name)
 		assert.Equal(t, "sender@example.com", sender.Address)
 		assert.Equal(t, []string{"one@example.com", "two@example.com"}, body.To)
 		assert.Equal(t, "验证码", body.Subject)

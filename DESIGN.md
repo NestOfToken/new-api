@@ -1,6 +1,6 @@
 ---
-name: Linfei Technology homepage
-description: Enterprise model access with Google Sans, Linfei blue, and an approved glass-ribbon material
+name: nerioncloud homepage
+description: Enterprise model access with Google Sans, nerioncloud blue, and an approved glass-ribbon material
 colors:
   blue: "#1a73e8"
   blue-text: "#1967d2"
@@ -127,13 +127,13 @@ components:
     rounded: "{rounded.console}"
 ---
 
-# Design System: Linfei Technology homepage
+# Design System: nerioncloud homepage
 
 ## Overview
 
-**Creative North Star: "Enterprise clarity in Linfei blue"**
+**Creative North Star: "Enterprise clarity in nerioncloud blue"**
 
-Linfei Technology pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.
+nerioncloud pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.
 
 This records the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and its two local stylesheets. Its enterprise story connects model access, model choice, balance, and usage to registration. Google Sans also remains the shared default UI font, with explicit application font preferences preserved. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.
 
@@ -146,7 +146,7 @@ This records the default public homepage implemented in `web/src/features/home/c
 
 ## Colors
 
-Linfei blue anchors actions and emphasis; dark navy and pale blue organize the homepage's product story. Frontmatter values are canonical and reflect the production stylesheet's effective declarations.
+nerioncloud blue anchors actions and emphasis; dark navy and pale blue organize the homepage's product story. Frontmatter values are canonical and reflect the production stylesheet's effective declarations.
 
 ### Primary
 
@@ -226,7 +226,7 @@ Reuse the shared `Button` and routing links. Primary and inverse actions use the
 
 ### Navigation
 
-Reuse `PublicLayout` and `PublicHeader` for brand, language/theme controls, authentication state, and mobile menu. Homepage section links and registration/dashboard actions enter through existing composition slots. Preserve the native mobile-menu behavior and stable header geometry. Use 麟飞科技 (Linfei Technology) as the customer-facing brand and retain New API / QuantumNous / One API copyright, license, and author attribution.
+Reuse `PublicLayout` and `PublicHeader` for brand, language/theme controls, authentication state, and mobile menu. Homepage section links and registration/dashboard actions enter through existing composition slots. Preserve the native mobile-menu behavior and stable header geometry. Use 睿元云 (nerioncloud) as the customer-facing brand and retain New API / QuantumNous / One API copyright, license, and author attribution.
 
 ### Cards / Containers
 
@@ -250,11 +250,11 @@ Keep the single approved generated ribbon at `web/public/images/lftech/api-ribbo
 
 ### Do:
 
-- **Do** preserve the approved SiliconFlow-led homepage composition, Linfei blue identity, and Google Sans preference.
+- **Do** preserve the approved SiliconFlow-led homepage composition, nerioncloud blue identity, and Google Sans preference.
 - **Do** keep homepage colors local while retaining explicit application font preferences and CJK fallback.
 - **Do** reuse the shared header, footer, buttons, tabs, request path, and original interactive protocol demo.
 - **Do** retain seven-language copy, keyboard access, visible focus, dark surfaces, and reduced-motion behavior.
-- **Do** display the Linfei Technology brand and preserve New API / QuantumNous / One API attribution and legal notices.
+- **Do** display the nerioncloud brand and preserve New API / QuantumNous / One API attribution and legal notices.
 - **Do** retain the approved hero raster and fades, plus the two heading-centered CSS curves with playback gates and cleanup.
 
 ### Don't:

@@ -317,7 +317,7 @@ export function EmailSettingsSection({
                         {...field}
                         autoComplete='off'
                         disabled={isSaving}
-                        placeholder={t('Linfei Technology')}
+                        placeholder={t('nerioncloud')}
                       />
                     </FormControl>
                     <FormDescription>
@@ -547,7 +547,7 @@ export function EmailSettingsSection({
                       <Input
                         autoComplete='off'
                         placeholder={t(
-                          'Linfei Technology <noreply@example.com>'
+                          'nerioncloud <noreply@example.com>'
                         )}
                         {...field}
                         onChange={(event) => field.onChange(event.target.value)}

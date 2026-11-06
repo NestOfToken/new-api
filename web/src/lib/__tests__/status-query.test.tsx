@@ -267,15 +267,15 @@ describe('module guard status freshness', () => {
 })
 
 describe('customer-facing system branding', () => {
-  test.each(['New API', 'new-api', 'NewAPI', ''])(
-    'maps the inherited %j brand to Linfei without changing currency settings',
+  test.each(['New API', 'new-api', 'NewAPI', '', '麟飞科技'])(
+    'maps the inherited %j brand to nerioncloud without changing currency settings',
     (name) => {
       const config = mapStatusDataToConfig({
         system_name: name,
         logo: '/logo.png',
         quota_per_unit: 700000,
       })
-      expect(config.systemName).toBe('麟飞科技')
+      expect(config.systemName).toBe('睿元云')
       expect(config.logo).toBe('/images/lftech/brand-mark.svg')
       expect(config.currency?.quotaPerUnit).toBe(700000)
     }
@@ -283,22 +283,22 @@ describe('customer-facing system branding', () => {
 
   test('keeps an explicitly configured company name and custom logo', () => {
     const config = mapStatusDataToConfig({
-      system_name: '麟飞科技 · 企业服务',
+      system_name: '睿元云 · 企业服务',
       logo: 'https://example.com/company.svg',
     })
-    expect(config.systemName).toBe('麟飞科技 · 企业服务')
+    expect(config.systemName).toBe('睿元云 · 企业服务')
     expect(config.logo).toBe('https://example.com/company.svg')
   })
 })
 
-test('a cached upstream brand resolves before a status request finishes', () => {
+test('a cached previous brand resolves before a status request finishes', () => {
   useSystemConfigStore
     .getState()
-    .setConfig({ systemName: 'New API', logo: '/logo.png' })
+    .setConfig({ systemName: '麟飞科技', logo: '/logo.png' })
   const queryClient = createQueryClient()
   const { result } = renderHook(() => useSystemConfig(), {
     wrapper: wrapper(queryClient),
   })
-  expect(result.current.systemName).toBe('麟飞科技')
+  expect(result.current.systemName).toBe('睿元云')
   expect(result.current.logo).toBe('/images/lftech/brand-mark.svg')
 })

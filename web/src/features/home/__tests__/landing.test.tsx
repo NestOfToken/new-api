@@ -140,7 +140,7 @@ describe('enterprise homepage', () => {
   it('provides a unified authentication entry and routes other actions to models and integration docs', async () => {
     await renderHome()
     expect(
-      within(screen.getByRole('banner')).getByRole('link', { name: /麟飞科技/ })
+      within(screen.getByRole('banner')).getByRole('link', { name: /睿元云/ })
     ).toHaveAttribute('href', '/')
     expect(screen.getAllByRole('link', { name: 'New API' })).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'QuantumNous' })).toHaveAttribute(

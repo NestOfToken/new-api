@@ -13,7 +13,7 @@ Mode: Persuade. Scope: default public homepage and shared default font only. The
 
 THESIS: Treat the API service as a clear, approachable product, using the user-selected Chrome website as visual authority instead of decorating the previous left-aligned landing page.
 
-OWN-WORLD: White canvas, near-black typography, Google blue controls, pale blue/green/yellow product surfaces, generous rounded product panels, Google Sans with Chrome's Arial/sans-serif fallback. Linfei's name and icon remain the product identity.
+OWN-WORLD: White canvas, near-black typography, Google blue controls, pale blue/green/yellow product surfaces, generous rounded product panels, Google Sans with Chrome's Arial/sans-serif fallback. nerioncloud's name and icon remain the product identity.
 
 STORY: Understand the offer, act, explore a real protocol example, compare application needs, and see usage/balance management. Existing honest illustrative labels remain.
 

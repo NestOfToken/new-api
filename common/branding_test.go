@@ -11,11 +11,16 @@ func TestResolveSystemName(t *testing.T) {
 		name string
 		want string
 	}{
-		{"", "麟飞科技"},
-		{"New API", "麟飞科技"},
-		{" new-api ", "麟飞科技"},
-		{"NewAPI", "麟飞科技"},
-		{"麟飞科技 · 企业服务", "麟飞科技 · 企业服务"},
+		{"", "睿元云"},
+		{"New API", "睿元云"},
+		{" new-api ", "睿元云"},
+		{"NewAPI", "睿元云"},
+		{"麟飞科技", "睿元云"},
+		{"麟飛科技", "睿元雲"},
+		{"Linfei Technology", "nerioncloud"},
+		{"麟飞科技 · 企业服务", "睿元云 · 企业服务"},
+		{"睿元云 · 企业服务", "睿元云 · 企业服务"},
+		{"Example Company", "Example Company"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			assert.Equal(t, tc.want, ResolveSystemName(tc.name))

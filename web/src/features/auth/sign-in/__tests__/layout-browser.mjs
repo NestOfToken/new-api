@@ -30,7 +30,7 @@ const dist = path.join(root, 'web/dist')
 const review = path.join(root, '.impeccable/review/auth')
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const fixtures = {
-  system_name: '麟飞科技',
+  system_name: '睿元云',
   register_enabled: true,
   password_login_enabled: true,
   user_agreement_enabled: true,

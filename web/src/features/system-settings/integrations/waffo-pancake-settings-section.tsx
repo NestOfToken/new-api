@@ -62,8 +62,8 @@ interface Props {
 }
 
 const PANCAKE_DASHBOARD_URL = 'https://pancake.waffo.ai/merchant/dashboard'
-const DEFAULT_NEW_STORE_NAME = 'linfei-technology'
-const DEFAULT_NEW_PRODUCT_NAME = 'linfei-api-credit'
+const DEFAULT_NEW_STORE_NAME = 'nerioncloud'
+const DEFAULT_NEW_PRODUCT_NAME = 'nerioncloud-api-credit'
 const DEFAULT_NEW_PAIR_NAME = `${DEFAULT_NEW_STORE_NAME} + ${DEFAULT_NEW_PRODUCT_NAME}`
 
 export function WaffoPancakeSettingsSection({
@@ -484,12 +484,12 @@ export function WaffoPancakeSettingsSection({
             <ul className='list-inside list-disc space-y-1'>
               <li>
                 {t(
-                  'The bound Store is the parent container for every Pancake product Linfei Technology creates from this admin — both the wallet top-up product and any subscription-plan products. One store is enough; pin a different one only if you genuinely run separate Pancake catalogs.'
+                  'The bound Store is the parent container for every Pancake product nerioncloud creates from this admin — both the wallet top-up product and any subscription-plan products. One store is enough; pin a different one only if you genuinely run separate Pancake catalogs.'
                 )}
               </li>
               <li>
                 {t(
-                  'The bound Product powers wallet top-ups: when a user enters any amount, Linfei Technology runs the checkout against this single Pancake product and overrides the price per session — no need to pre-create $1 / $5 / $10 SKUs.'
+                  'The bound Product powers wallet top-ups: when a user enters any amount, nerioncloud runs the checkout against this single Pancake product and overrides the price per session — no need to pre-create $1 / $5 / $10 SKUs.'
                 )}
               </li>
               <li>

@@ -1,7 +1,7 @@
 {
   "name": "new-api-electron",
   "version": "1.0.0",
-  "description": "麟飞科技 - 企业大模型 API 服务桌面客户端",
+  "description": "睿元云 - 企业大模型 API 服务桌面客户端",
   "main": "main.js",
   "scripts": {
     "start-app": "electron .",
@@ -30,7 +30,7 @@
   },
   "build": {
     "appId": "com.newapi.desktop",
-    "productName": "麟飞科技",
+    "productName": "睿元云",
     "publish": null,
     "directories": {
       "output": "dist"

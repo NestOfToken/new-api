@@ -11,7 +11,7 @@ Visitor mode: Operate. The existing authentication task and controls lead; the a
 
 THESIS: Adopt the user's approved “丝带归位” draft with the latest owner amendment: the existing CSS ribbon crossing “One entry point. More possibilities.” is the sole homepage source for the fold into the login artwork. No additional ribbon is placed over the homepage hero. Public branding and the homepage headline reorganize while the complete old layout retracts and the new layout opens; both directions have continuous page-wide motion.
 
-OWN-WORLD: Inherit Linfei blue, pale blue and white, the existing Google Sans default and dark equivalents. Homepage raster opacity, optical-lane opacity, typography and product content remain unchanged. No new raster assets.
+OWN-WORLD: Inherit nerioncloud blue, pale blue and white, the existing Google Sans default and dark equivalents. Homepage raster opacity, optical-lane opacity, typography and product content remain unchanged. No new raster assets.
 
 STORY: Customers enter the same guarded sign-in route and switch between login and registration in its right panel, retaining existing password, Passkey, OAuth, legal-consent, email verification, CAPTCHA and MFA paths. A familiar homepage visual becomes the left-hand companion to the working form. The homepage has one visible login/registration header entry per viewport.
 

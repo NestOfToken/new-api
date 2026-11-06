@@ -257,8 +257,8 @@ func ResolveWaffoPancakeSubscriptionTradeNo(event *WaffoPancakeWebhookEvent) (st
 // Deterministic default names for "+ Create": stable bodies mean stable
 // X-Idempotency-Key, which lets Pancake dedupe retries server-side.
 const (
-	defaultWaffoPancakeStoreName   = "linfei-technology"
-	defaultWaffoPancakeProductName = "linfei-api-credit"
+	defaultWaffoPancakeStoreName   = "nerioncloud"
+	defaultWaffoPancakeProductName = "nerioncloud-api-credit"
 )
 
 // CreateWaffoPancakePrimaryStore creates a Pancake Store using in-flight

@@ -163,7 +163,7 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
                   <FormItem>
                     <FormLabel>{t('System Name')}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t('Linfei Technology')} {...field} />
+                      <Input placeholder={t('nerioncloud')} {...field} />
                     </FormControl>
                     <FormDescription>
                       {t('The name displayed across the application')}
@@ -311,7 +311,7 @@ export function SystemInfoSection({ defaultValues }: SystemInfoSectionProps) {
                       <FormLabel>{t('Home Page Content')}</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder={t('Welcome to Linfei Technology...')}
+                          placeholder={t('Welcome to nerioncloud...')}
                           rows={6}
                           {...field}
                         />

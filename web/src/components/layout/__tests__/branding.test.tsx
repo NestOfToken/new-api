@@ -67,9 +67,9 @@ it('shows the customer brand in auth and console layouts when cached config and 
       <RouterProvider router={router} />
     </QueryClientProvider>
   )
-  expect(await screen.findByRole('heading', { name: '麟飞科技' })).toBeVisible()
+  expect(await screen.findByRole('heading', { name: '睿元云' })).toBeVisible()
   expect(screen.getByRole('link', { name: 'Go to home' })).toHaveTextContent(
-    '麟飞科技'
+    '睿元云'
   )
   for (const image of screen.getAllByRole('img')) {
     expect(image).toHaveAttribute('src', '/images/lftech/brand-mark.svg')

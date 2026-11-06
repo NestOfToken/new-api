@@ -8,7 +8,7 @@ web
 
 ## Users
 
-Enterprise customers are the primary audience. Downstream customers consume Linfei Technology's LLM token API and use the customer console to manage usage and top-ups.
+Enterprise customers are the primary audience. Downstream customers consume nerioncloud's LLM token API and use the customer console to manage usage and top-ups.
 
 ## Product Purpose
 
@@ -28,13 +28,13 @@ Operators configure providers and models, manage users and credentials, and moni
 - The web console supports English, Simplified Chinese, Traditional Chinese, French, Japanese, Russian, and Vietnamese.
 - Primary database behavior must remain compatible with SQLite, MySQL, and PostgreSQL.
 - Upstream access must be authorized; project use must respect applicable provider terms and laws.
-- Customer-facing branding uses 麟飞科技 while preserving upstream copyright, licenses, and author attribution.
+- Customer-facing branding uses 睿元云 while preserving upstream copyright, licenses, and author attribution.
 
 ## Brand Commitments
 
-The customer-facing company is Linfei Technology (麟飞科技). No company logo or brand guide was supplied. The approved homepage retains the blue visual system and single generated glass-ribbon image. Its current composition follows the user-pinned SiliconFlow reference, adapted to Linfei Technology's actual enterprise model-access, usage, and balance capabilities. Google Sans remains the global default UI font from the earlier Chrome reference, with explicit font preferences and CJK fallback preserved.
+The customer-facing company is nerioncloud (睿元云). No company logo or brand guide was supplied. The approved homepage retains the blue visual system and single generated glass-ribbon image. Its current composition follows the user-pinned SiliconFlow reference, adapted to nerioncloud's actual enterprise model-access, usage, and balance capabilities. Google Sans remains the global default UI font from the earlier Chrome reference, with explicit font preferences and CJK fallback preserved.
 
-Use 麟飞科技 as the customer-facing product brand. Preserve New API / QuantumNous / One API attribution and legal notices. The project owner explicitly authorized this branding change.
+Use 睿元云 as the customer-facing product brand. Preserve New API / QuantumNous / One API attribution and legal notices. The project owner explicitly authorized this branding change.
 
 ## Evidence on Hand
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-11-03T02:42:44.142Z",
-  "title": "Design System: Linfei Technology homepage",
+  "title": "Design System: nerioncloud homepage",
   "extensions": {
     "scope": {
       "surface": "Approved default public homepage palette and composition; Google Sans remains the shared default UI font",
@@ -25,7 +25,7 @@
         "Authentication layout redesign",
         "Custom homepage HTML, Markdown, and URL branches"
       ],
-      "authority": "User-approved production port of the pinned SiliconFlow composition in Linfei blue. Chrome remains the earlier Google Sans typography reference. Effective production CSS and approved captures are authority; no generated comp or seed applies to this refinement.",
+      "authority": "User-approved production port of the pinned SiliconFlow composition in nerioncloud blue. Chrome remains the earlier Google Sans typography reference. Effective production CSS and approved captures are authority; no generated comp or seed applies to this refinement.",
       "review": ".impeccable/review/production-home/review.md: disposition ship; all five sections reviewed; no material fixes",
       "qa": ".impeccable/review/production-home/qa.json",
       "fontCoverage": "Self-hosted Google Sans has no CJK glyphs; Arial and system sans fallback remain essential. Explicit application font preferences are preserved.",
@@ -488,7 +488,7 @@
       "kind": "nav",
       "refersTo": "navigation-link",
       "description": "Shared PublicHeader with stable native geometry; the toolbar action enters the shared mobile menu at 500px.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage preview\"><strong>Linfei Technology</strong><a href=\"#integration\">Read the integration guide</a><a href=\"#models\">View models and pricing</a><a href=\"#usage\">Usage</a></nav>",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Homepage preview\"><strong>nerioncloud</strong><a href=\"#integration\">Read the integration guide</a><a href=\"#models\">View models and pricing</a><a href=\"#usage\">Usage</a></nav>",
       "css": ".ds-nav{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;align-items:center;flex-wrap:wrap;min-height:72px;padding:0 28px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124);box-shadow:0 3px 12px #20212412}.ds-nav strong{margin-right:30px;font-size:19px;font-weight:700;letter-spacing:-.01em}.ds-nav a{padding:24px 16px;color:var(--lf-muted,#5f6368);font-size:15px;font-weight:500;text-decoration:none}.ds-nav a:hover{color:var(--lf-blue-text,#1967d2)}.ds-nav a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-nav a:active{color:#185abc}@media(max-width:800px){.ds-nav{min-height:64px;padding-inline:18px}.ds-nav strong{font-size:17px}.ds-nav a{padding:12px 9px;font-size:14px}}"
     },
     {
@@ -496,7 +496,7 @@
       "kind": "card",
       "refersTo": "access-card",
       "description": "Dark blue API-entry card; request-path presentation is reused by the interactive API window.",
-      "html": "<article class=\"ds-access\"><h3>API Access</h3><p>From your application, through our platform, to the model. Explore the API examples to see each request and response.</p><div class=\"ds-access-path\">Your application<i></i><strong>Linfei platform</strong><i></i>Model</div><a href=\"#integration\">View details<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a></article>",
+      "html": "<article class=\"ds-access\"><h3>API Access</h3><p>From your application, through our platform, to the model. Explore the API examples to see each request and response.</p><div class=\"ds-access-path\">Your application<i></i><strong>nerioncloud platform</strong><i></i>Model</div><a href=\"#integration\">View details<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a></article>",
       "css": ".ds-access{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);display:flex;flex-direction:column;min-width:0;min-height:350px;padding:32px;border-radius:16px;background:var(--lf-card-dark,#10315a);color:#fff}.ds-access h3{margin:0;font-size:clamp(25px,2.4vw,30px);font-weight:700;line-height:1.28;letter-spacing:-.02em}.ds-access>p{margin:16px 0 0;max-width:55ch;color:var(--lf-card-muted,#c9ddf5);font-size:16px;line-height:1.7}.ds-access-path{display:flex;align-items:center;justify-content:center;gap:14px;margin:auto 0 20px;padding:44px 0 18px;font-size:14px}.ds-access-path strong{font-weight:500;color:#9ed2ff}.ds-access-path i{position:relative;width:72px;height:1px;background:var(--lf-line,#dadce0)}.ds-access-path i:after{content:'';position:absolute;inset:-2px auto auto 50%;width:5px;height:5px;border-radius:50%;background:var(--lf-blue,#1a73e8)}.ds-access>a{display:inline-flex;align-items:center;align-self:flex-start;gap:12px;margin-top:auto;padding-block:10px;color:inherit;font-size:15px;font-weight:600;text-decoration:none}.ds-access>a svg{width:18px;height:18px}.ds-access>a:hover{text-decoration:underline;text-underline-offset:5px}.ds-access>a:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px}.ds-access>a:active{transform:translateY(1px)}@media(max-width:800px){.ds-access{min-height:320px;padding:26px}}@media(max-width:500px){.ds-access-path{gap:7px;font-size:14px}.ds-access-path i{width:25px}}"
     },
     {
@@ -528,7 +528,7 @@
       "kind": "card",
       "refersTo": "api-window",
       "description": "Static styling preview of the upright production frame; the actual homepage uses HeroTerminalDemo and working shared Tabs.",
-      "html": "<section class=\"ds-window\" aria-label=\"API window preview\"><div class=\"ds-window-bar\"><i></i><i></i><i></i><span>API</span></div><div class=\"ds-path\">Your application <b>→</b> Linfei platform <b>→</b> Model</div><div class=\"ds-protocols\"><button class=\"ds-protocol-selected\">OpenAI</button><button>Claude</button><button>Gemini</button></div><div class=\"ds-code\"><pre>POST /v1/chat/completions\n{ \"model\": \"your-model\" }</pre><pre>{ \"choices\": [ ... ] }</pre></div><p class=\"ds-window-note\">Illustrative requests and responses. No live API calls or performance claims.</p></section>",
+      "html": "<section class=\"ds-window\" aria-label=\"API window preview\"><div class=\"ds-window-bar\"><i></i><i></i><i></i><span>API</span></div><div class=\"ds-path\">Your application <b>→</b> nerioncloud platform <b>→</b> Model</div><div class=\"ds-protocols\"><button class=\"ds-protocol-selected\">OpenAI</button><button>Claude</button><button>Gemini</button></div><div class=\"ds-code\"><pre>POST /v1/chat/completions\n{ \"model\": \"your-model\" }</pre><pre>{ \"choices\": [ ... ] }</pre></div><p class=\"ds-window-note\">Illustrative requests and responses. No live API calls or performance claims.</p></section>",
       "css": ".ds-window{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);overflow:hidden;border:1px solid var(--lf-line,#dadce0);border-radius:16px;background:var(--lf-paper,#fff);color:var(--lf-ink,#202124)}.ds-window-bar{display:flex;align-items:center;gap:7px;height:36px;padding-inline:20px;background:var(--lf-surface,#f8fafd);border-bottom:1px solid var(--lf-line,#dadce0)}.ds-window-bar i{width:7px;height:7px;border-radius:50%;background:#bdc1c6}.ds-window-bar span{margin-inline:auto;padding-right:35px;color:var(--lf-muted,#5f6368);font-size:11px}.ds-path{padding:18px 24px;text-align:center;font-size:13px;color:var(--lf-muted,#5f6368)}.ds-path b{padding-inline:14px;color:var(--lf-blue-text,#1967d2)}.ds-protocols{display:flex;padding-inline:20px;gap:8px;border-block:1px solid var(--lf-line,#dadce0)}.ds-protocols button{font-family:var(--font-google-sans,'Google Sans',Arial,sans-serif);padding:10px 18px;height:46px;border:0;background:transparent;color:var(--lf-muted,#5f6368);font-size:14px;cursor:pointer}.ds-protocols .ds-protocol-selected{color:var(--lf-blue-text,#1967d2);box-shadow:inset 0 -3px var(--lf-blue,#1a73e8)}.ds-protocols button:hover{color:var(--lf-blue-text,#1967d2)}.ds-protocols button:focus-visible{outline:2px solid var(--lf-blue-text,#1967d2);outline-offset:4px;}.ds-protocols button:active{background:var(--lf-soft,#e8f0fe)}.ds-code{display:grid;grid-template-columns:1.12fr 1fr}.ds-code pre{margin:0;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:monospace;font-size:13px;line-height:1.65}.ds-code pre+pre{border-left:1px solid var(--lf-line,#dadce0);background:var(--lf-surface,#f8fafd)}.ds-window-note{margin:0;padding:11px 24px;border-top:1px solid var(--lf-line,#dadce0);font-size:11px;color:var(--lf-muted,#5f6368)}@media(max-width:800px){.ds-code{grid-template-columns:1fr}.ds-code pre+pre{border-left:0;border-top:1px solid var(--lf-line,#dadce0)}}"
     },
     {
@@ -540,8 +540,8 @@
     }
   ],
   "narrative": {
-    "northStar": "Enterprise clarity in Linfei blue",
-    "overview": "Linfei Technology pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.\n\nThis records the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and its two local stylesheets. Its enterprise story connects model access, model choice, balance, and usage to registration. Google Sans also remains the shared default UI font, with explicit application font preferences preserved. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.",
+    "northStar": "Enterprise clarity in nerioncloud blue",
+    "overview": "nerioncloud pairs a clear Google Sans hierarchy with blue actions, alternating cool product fields, and one approved glass-ribbon image. The material gives the public homepage a recognizable focal point; semantic text and native controls carry the product explanation. The approved production composition follows the user's SiliconFlow reference. Chrome remains the earlier typography reference, rather than the current page-composition authority.\n\nThis records the default public homepage implemented in `web/src/features/home/components/landing-page.tsx` and its two local stylesheets. Its enterprise story connects model access, model choice, balance, and usage to registration. Google Sans also remains the shared default UI font, with explicit application font preferences preserved. Console and administration palettes, authentication layouts, and custom homepage HTML, Markdown, and URL branches retain their existing systems.",
     "keyCharacteristics": [
       "Left-aligned, full-width hero with a right-biased glass ribbon and soft page-ground fades.",
       "Alternating dark and light product cards with native model selectors and an illustrative console.",
@@ -566,11 +566,11 @@
       }
     ],
     "dos": [
-      "**Do** preserve the approved SiliconFlow-led homepage composition, Linfei blue identity, and Google Sans preference.",
+      "**Do** preserve the approved SiliconFlow-led homepage composition, nerioncloud blue identity, and Google Sans preference.",
       "**Do** keep homepage colors local while retaining explicit application font preferences and CJK fallback.",
       "**Do** reuse the shared header, footer, buttons, tabs, request path, and original interactive protocol demo.",
       "**Do** retain seven-language copy, keyboard access, visible focus, dark surfaces, and reduced-motion behavior.",
-      "**Do** display the Linfei Technology brand and preserve New API / QuantumNous / One API attribution and legal notices.",
+      "**Do** display the nerioncloud brand and preserve New API / QuantumNous / One API attribution and legal notices.",
       "**Do** retain the approved hero raster and fades, plus the two heading-centered CSS curves with playback gates and cleanup."
     ],
     "donts": [

@@ -24,7 +24,7 @@ export function LandingRequestPath() {
     <div className='lf-request-path' aria-label={t('API request path')}>
       <span>{t('Your application')}</span>
       <i />
-      <span className='lf-path-brand'>{t('Linfei platform')}</span>
+      <span className='lf-path-brand'>{t('nerioncloud platform')}</span>
       <i />
       <span>{t('Model')}</span>
     </div>
