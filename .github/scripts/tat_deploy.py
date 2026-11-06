@@ -14,7 +14,9 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.tat.v20201028 import models, tat_client
 
 
-def deploy(status_only=False):
+def deploy(status_only=False, prepare_only=False, prepared=False):
+    if sum((status_only, prepare_only, prepared)) > 1:
+        raise ValueError("Conflicting deployment modes")
     required = (
         "TENCENTCLOUD_SECRET_ID", "TENCENTCLOUD_SECRET_KEY", "TENCENTCLOUD_REGION",
         "TENCENTCLOUD_INSTANCE_ID", "DEPLOY_DIR", "LFTECH_IMAGE_REF",
@@ -54,13 +56,15 @@ def deploy(status_only=False):
         "sudo", "-n", "--", deploy_dir.rstrip("/") + "/scripts/deploy-new-api.sh",
         image, source_sha, version, run_id,
     ])
+    if prepare_only or prepared:
+        command += " " + ("prepare" if prepare_only else "apply")
     if status_only:
         command = shlex.join([
             "sudo", "-n", "docker", "inspect", "nest-token-new-api-1", "--format",
             '{"image":{{json .Config.Image}},"health":{{json .State.Health.Status}}}',
         ])
     request = models.RunCommandRequest()
-    timeout = 60 if status_only else 1200
+    timeout = 60 if status_only else 480 if prepare_only else 1200
     request.from_json_string(json.dumps({
         "Content": base64.b64encode(command.encode()).decode(),
         "CommandType": "SHELL", "CommandName": "lftech-new-api-deploy",
@@ -102,7 +106,8 @@ def deploy(status_only=False):
                 summary = os.environ.get("GITHUB_STEP_SUMMARY")
                 if summary:
                     with open(summary, "a", encoding="utf-8") as stream:
-                        stream.write(f"\nDeployment succeeded. TAT invocation: `{invocation_id}`\n")
+                        phase = "Image preparation" if prepare_only else "Deployment"
+                        stream.write(f"\n{phase} succeeded. TAT invocation: `{invocation_id}`\n")
                         stream.write(f"\nImage: `{image}`\n\nSource: `{source_sha}`\n")
                 return
         time.sleep(8)

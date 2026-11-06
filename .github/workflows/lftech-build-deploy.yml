@@ -183,7 +183,7 @@ jobs:
     if: github.event_name != 'workflow_dispatch' || inputs.deploy
     runs-on: ubuntu-latest
     environment: production
-    timeout-minutes: 90
+    timeout-minutes: 180
     steps:
       # Deployment tooling comes from the workflow commit, even when rebuilding
       # an earlier application revision through workflow_dispatch.
@@ -203,6 +203,7 @@ jobs:
           TENCENTCLOUD_SECRET_ID: ${{ secrets.TENCENTCLOUD_SECRET_ID }}
           TENCENTCLOUD_SECRET_KEY: ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
           TENCENTCLOUD_REGION: ${{ secrets.TENCENTCLOUD_REGION }}
+          LFTECH_CAPACITY_FUNCTION: ${{ vars.LFTECH_CAPACITY_FUNCTION }}
           LFTECH_DEPLOY_TARGETS: ${{ vars.LFTECH_DEPLOY_TARGETS }}
           LFTECH_CLB_ID: ${{ vars.LFTECH_CLB_ID }}
           LFTECH_CLB_LISTENER_ID: ${{ vars.LFTECH_CLB_LISTENER_ID }}
