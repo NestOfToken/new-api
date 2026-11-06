@@ -89,6 +89,9 @@ func GetOptions(c *gin.Context) {
 			continue
 		}
 		value := common.Interface2String(v)
+		if k == "SystemName" || (k == "passkey.rp_display_name" && strings.TrimSpace(value) != "") {
+			value = common.ResolveSystemName(value)
+		}
 		isSensitiveKey := strings.HasSuffix(k, "Token") ||
 			strings.HasSuffix(k, "Secret") ||
 			strings.HasSuffix(k, "Key") ||
