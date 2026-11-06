@@ -1,0 +1,376 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/* The approved ribbon login extends the public blue palette; homepage light levels stay unchanged. */
+.lf-public-ribbon-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.lf-public-ribbon-canvas[hidden] {
+  display: none;
+}
+.lf-sign-in {
+  --lf-auth-paper: #fff;
+  --lf-auth-ink: #202124;
+  --lf-auth-muted: #5f6368;
+  --lf-auth-blue: #1a73e8;
+  --lf-auth-readable: #1967d2;
+  --lf-auth-soft: #eef5ff;
+  --lf-auth-line: #dadce0;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  min-height: 100svh;
+  color: var(--lf-auth-ink);
+  background: var(--lf-auth-paper);
+  font-family: var(--font-ui-sans);
+}
+.lf-sign-in ::selection {
+  color: #10315a;
+  background: #c2d7ff;
+}
+.lf-sign-in-brand {
+  position: absolute;
+  z-index: 30;
+  top: 28px;
+  left: 28px;
+}
+.lf-sign-in-brand a {
+  height: 36px;
+  gap: 10px;
+  padding: 0;
+  color: var(--lf-auth-ink);
+}
+.lf-sign-in-brand a > div {
+  width: 28px;
+  height: 28px;
+}
+.lf-sign-in-brand .brand-wordmark {
+  font-size: 19px;
+  font-weight: 700;
+}
+.lf-sign-in-toolbar {
+  position: absolute;
+  z-index: 30;
+  top: 24px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lf-sign-in-toolbar .lf-sign-in-back {
+  min-height: 44px;
+  color: var(--lf-auth-readable);
+  white-space: normal;
+}
+.lf-sign-in-art {
+  position: sticky;
+  top: 0;
+  grid-area: 1 / 1;
+  align-self: start;
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--lf-auth-paper),
+    var(--lf-auth-soft)
+  );
+  border-radius: 0 18% 18% 0 / 0 50% 50% 0;
+}
+.lf-sign-in-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 66%;
+  object-fit: cover;
+  opacity: 0.35;
+}
+.lf-sign-in-art[data-ribbon-ready='true'] .lf-sign-in-fallback {
+  visibility: hidden;
+}
+.lf-sign-in-story {
+  position: absolute;
+  z-index: 25;
+  right: 12%;
+  bottom: 15%;
+  left: 10%;
+}
+.lf-sign-in-story h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.15vw, 34px);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.lf-sign-in-story em {
+  display: block;
+  color: var(--lf-auth-readable);
+  font-style: normal;
+}
+.lf-sign-in-story p {
+  max-width: 430px;
+  margin: 18px 0 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--lf-auth-muted);
+}
+.lf-sign-in-art .lf-ribbon-playback {
+  position: absolute;
+  z-index: 25;
+  bottom: 28px;
+  left: 10%;
+  min-height: 44px;
+  gap: 8px;
+  color: var(--lf-auth-muted);
+  font-size: 12px;
+  white-space: normal;
+}
+.lf-sign-in-panel {
+  grid-area: 1 / 2;
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  min-width: 0;
+  padding: 112px clamp(28px, 4vw, 72px) 64px;
+  animation: lf-auth-unfold 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.lf-sign-in-form {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}
+.lf-sign-in-form h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 2.6vw, 36px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.lf-sign-in-form h1:focus {
+  outline: none;
+}
+.lf-sign-in-form .lf-sign-in-intro {
+  margin: 0 0 32px;
+  color: var(--lf-auth-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.lf-sign-in-form a {
+  color: var(--lf-auth-readable);
+  text-underline-offset: 4px;
+}
+.lf-sign-in-form input:not([type='checkbox']):not([type='hidden']) {
+  min-height: 48px;
+  border-radius: 10px;
+  caret-color: var(--lf-auth-blue);
+}
+.lf-sign-in-form input::placeholder {
+  color: var(--lf-auth-muted);
+}
+.lf-sign-in-form [data-slot='button'] {
+  min-height: 44px;
+  height: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.lf-sign-in-form input + button {
+  width: 44px;
+  min-height: 44px;
+}
+.lf-sign-in-form button[type='submit'] {
+  min-height: 48px;
+  border-radius: 12px;
+  background: var(--lf-auth-blue);
+  color: var(--lf-auth-paper);
+}
+.lf-sign-in-form button[type='submit']:hover {
+  background: #185abc;
+}
+.lf-sign-in-terms {
+  margin-top: 28px;
+  line-height: 1.8;
+}
+.lf-sign-in :is(a, button, input):focus-visible {
+  outline: 2px solid var(--lf-auth-readable);
+  outline-offset: 4px;
+}
+.dark .lf-sign-in {
+  --lf-auth-paper: #101418;
+  --lf-auth-ink: #e8eaed;
+  --lf-auth-muted: #b7bec7;
+  --lf-auth-blue: #a8c7fa;
+  --lf-auth-readable: #a8c7fa;
+  --lf-auth-soft: #182b45;
+  --lf-auth-line: #3c454f;
+}
+.dark .lf-sign-in-form button[type='submit']:hover {
+  background: #c2d7ff;
+}
+
+/* Capture only public branding and the marketing headline, never a credential form. */
+html:has([data-lf-public-surface]) {
+  view-transition-name: none;
+}
+.lf-home-header .public-brand-link,
+.lf-sign-in-brand {
+  view-transition-name: lf-public-brand;
+}
+.lf-home #lf-hero-title,
+.lf-sign-in-story .lf-public-headline {
+  view-transition-name: lf-public-headline;
+}
+::view-transition-group(lf-public-brand),
+::view-transition-group(lf-public-headline) {
+  animation-duration: 850ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-old(lf-public-brand),
+::view-transition-new(lf-public-brand),
+::view-transition-old(lf-public-headline),
+::view-transition-new(lf-public-headline) {
+  height: 100%;
+  object-fit: contain;
+  object-position: left top;
+}
+@keyframes lf-auth-unfold {
+  from {
+    clip-path: inset(0 0 0 100%);
+    transform: translateX(32px);
+  }
+  to {
+    clip-path: inset(0);
+    transform: translateX(0);
+  }
+}
+@media (max-width: 900px) {
+  .lf-sign-in {
+    grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
+  }
+  .lf-sign-in-panel {
+    padding-inline: 28px;
+  }
+  .lf-sign-in-story {
+    left: 8%;
+    right: 12%;
+  }
+}
+@media (max-width: 640px) {
+  .lf-sign-in {
+    display: flex;
+    flex-direction: column;
+  }
+  .lf-sign-in-brand {
+    top: 20px;
+    left: 20px;
+  }
+  .lf-sign-in-brand .brand-wordmark {
+    max-width: 140px;
+    font-size: 17px;
+  }
+  .lf-sign-in-toolbar {
+    top: 16px;
+    right: 16px;
+    gap: 2px;
+  }
+  .lf-sign-in-toolbar .lf-sign-in-back {
+    padding-inline: 6px;
+    font-size: 12px;
+  }
+  .lf-sign-in-art {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    min-height: 340px;
+    border-radius: 0;
+  }
+  .lf-sign-in-story {
+    right: 48%;
+    bottom: 46px;
+    left: 24px;
+  }
+  .lf-sign-in-story h2 {
+    font-size: 18px;
+  }
+  .lf-sign-in-story p {
+    display: none;
+  }
+  .lf-sign-in-art .lf-ribbon-playback {
+    bottom: 4px;
+    left: 16px;
+  }
+  .lf-sign-in-panel {
+    min-height: auto;
+    padding: 36px 24px 48px;
+  }
+  .lf-sign-in-form input:not([type='checkbox']):not([type='hidden']) {
+    font-size: 16px;
+  }
+  .lf-sign-in-form h1 {
+    font-size: 30px;
+  }
+  @keyframes lf-auth-unfold {
+    from {
+      clip-path: inset(100% 0 0);
+      transform: translateY(24px);
+    }
+    to {
+      clip-path: inset(0);
+      transform: translateY(0);
+    }
+  }
+}
+@media (max-width: 400px) {
+  .lf-sign-in-brand .brand-wordmark {
+    max-width: 100px;
+  }
+  .lf-sign-in-toolbar .lf-sign-in-back {
+    width: 44px;
+    padding: 0;
+  }
+  .lf-sign-in-back span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-sign-in-art .lf-ribbon-playback {
+    display: none;
+  }
+  .lf-sign-in-panel {
+    animation: none;
+  }
+  .lf-sign-in * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(lf-public-brand),
+  ::view-transition-group(lf-public-headline) {
+    animation-duration: 0.01ms;
+  }
+}

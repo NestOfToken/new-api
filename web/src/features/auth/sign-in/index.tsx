@@ -21,8 +21,8 @@ import { useTranslation } from 'react-i18next'
 
 import { useStatus } from '@/hooks/use-status'
 
-import { AuthLayout } from '../auth-layout'
 import { TermsFooter } from '../components/terms-footer'
+import { SignInLayout } from './components/sign-in-layout'
 import { UserAuthForm } from './components/user-auth-form'
 
 export function SignIn() {
@@ -31,35 +31,27 @@ export function SignIn() {
   const { status } = useStatus()
 
   return (
-    <AuthLayout>
-      <div className='w-full space-y-8'>
-        <div className='space-y-2'>
-          <h2 className='text-center text-2xl font-semibold tracking-tight sm:text-left'>
-            {t('Sign in')}
-          </h2>
-          {!status?.self_use_mode_enabled &&
-            status?.register_enabled !== false && (
-              <p className='text-muted-foreground text-left text-sm sm:text-base'>
-                {t("Don't have an account?")}{' '}
-                <Link
-                  to='/sign-up'
-                  className='hover:text-primary font-medium underline underline-offset-4'
-                >
-                  {t('Sign up')}
-                </Link>
-                .
-              </p>
-            )}
-        </div>
+    <SignInLayout>
+      {!status?.self_use_mode_enabled && status?.register_enabled !== false && (
+        <p className='lf-sign-in-intro'>
+          {t("Don't have an account?")}{' '}
+          <Link
+            to='/sign-up'
+            className='hover:text-primary font-medium underline underline-offset-4'
+          >
+            {t('Sign up')}
+          </Link>
+          .
+        </p>
+      )}
 
-        <UserAuthForm redirectTo={redirect} />
+      <UserAuthForm redirectTo={redirect} />
 
-        <TermsFooter
-          variant='sign-in'
-          status={status}
-          className='text-center'
-        />
-      </div>
-    </AuthLayout>
+      <TermsFooter
+        variant='sign-in'
+        status={status}
+        className='lf-sign-in-terms'
+      />
+    </SignInLayout>
   )
 }

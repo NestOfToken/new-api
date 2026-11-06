@@ -60,7 +60,7 @@ export function LandingPage(props: LandingPageProps) {
     : t('Register and get started')
 
   return (
-    <div className='lf-home'>
+    <div className='lf-home' data-lf-public-surface='home'>
       <PublicLayout
         showMainContainer={false}
         showNotifications={false}
@@ -96,7 +96,11 @@ export function LandingPage(props: LandingPageProps) {
         }}
       >
         <main id='home-content'>
-          <section className='lf-hero' aria-labelledby='lf-hero-title'>
+          <section
+            className='lf-hero'
+            aria-labelledby='lf-hero-title'
+            data-lf-ribbon-anchor
+          >
             <img
               className='lf-hero-art'
               src='/images/lftech/api-ribbon.webp'

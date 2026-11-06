@@ -21,6 +21,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { publicAuthViewTransition } from '@/features/auth/lib/public-auth-motion'
 import { installBuildMetadata } from '@/lib/build-metadata'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import '@/lib/dayjs'
@@ -38,6 +39,7 @@ import { routeTree } from './routeTree.gen'
 
 // Styles
 import './styles/index.css'
+import './styles/lftech-auth.css'
 
 // Ensure VChart theme is initialized before any chart mounts (prevents white default theme flash)
 // VChart theme is driven by our ThemeProvider (html.light/html.dark) via per-chart `theme` prop.
@@ -54,6 +56,13 @@ const router = createRouter({
   context: { queryClient },
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 0,
+  defaultViewTransition: publicAuthViewTransition,
+  scrollRestoration: ({ location }) =>
+    location.pathname === '/' || location.pathname === '/sign-in',
+  getScrollRestorationKey: (location) =>
+    location.pathname === '/'
+      ? '/'
+      : (location.state.__TSR_key ?? location.href),
 })
 
 // Register the router instance for type safety

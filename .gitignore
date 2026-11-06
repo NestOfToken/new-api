@@ -51,4 +51,5 @@ go.work.sum
 !.impeccable/surfaces/
 .impeccable/surfaces/*
 !.impeccable/surfaces/web-src-features-home-components-landing-page-tsx.md
+!.impeccable/surfaces/web-src-features-auth-sign-in-index-tsx.md
 web/.impeccable/

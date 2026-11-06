@@ -224,7 +224,7 @@ export function PublicHeader(props: PublicHeaderProps) {
               {props.leftContent}
               <Link
                 to={homeUrl}
-                className='group flex min-w-0 items-center gap-2.5'
+                className='public-brand-link group flex min-w-0 items-center gap-2.5'
               >
                 <div className='flex size-7 shrink-0 items-center justify-center transition-all duration-300 group-hover:scale-105'>
                   {logoContent}
