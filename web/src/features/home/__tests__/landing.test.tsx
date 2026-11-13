@@ -823,10 +823,7 @@ describe('enterprise homepage', () => {
         within(integration).getByRole('button', {
           name: 'Read the integration guide',
         })
-      ).toHaveAttribute(
-        'href',
-        'https://lftech-api-reference.humanespoon2.chatgpt.site'
-      )
+      ).toHaveAttribute('href', '/docs/')
     }
   )
 

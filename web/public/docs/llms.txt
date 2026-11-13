@@ -1,0 +1,8 @@
+# 麟飞科技 API 文档
+
+中文平台接入说明与 OpenAPI 定义。
+
+- [完整接入指南](http://linfeimodel.fivemiao.com:18080/docs/guide.md)
+- [OpenAPI 3.0.3 定义](http://linfeimodel.fivemiao.com:18080/docs/openapi.json)
+
+指南覆盖 18 个已登记模型、模型发现、Chat Completions、流式调用、错误排查和未来能力占位。本次未逐模型完成带密钥的推理验收。

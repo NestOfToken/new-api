@@ -105,7 +105,7 @@ export function LandingPage(props: LandingPageProps) {
   const docsUrl =
     typeof status?.docs_link === 'string' && status.docs_link.trim()
       ? status.docs_link.trim()
-      : 'https://lftech-api-reference.humanespoon2.chatgpt.site'
+      : '/docs/'
   const destination = props.isAuthenticated ? '/dashboard' : '/sign-in'
   const action = props.isAuthenticated
     ? t('Go to Dashboard')

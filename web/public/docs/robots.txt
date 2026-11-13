@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: http://linfeimodel.fivemiao.com:18080/docs/sitemap.xml
