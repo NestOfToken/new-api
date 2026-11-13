@@ -59,8 +59,6 @@ jobs:
       GOWORK: 'off'
       TEST_MYSQL_DSN: 'root:rc51-test-only@tcp(127.0.0.1:3306)/rc51test?charset=utf8mb4&parseTime=True&loc=Local'
       TEST_POSTGRES_DSN: 'postgres://postgres:rc51-test-only@127.0.0.1:5432/rc51test?sslmode=disable'
-      MYSQL_CONTAINER: ${{ job.services.mysql.id }}
-      POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
     services:
       mysql:
         image: mysql:5.7.44
@@ -98,4 +96,7 @@ jobs:
             TEST_TASK_DB_DIALECT="$dialect" go test ./controller -run 'Test(ImmediateTaskSettlementDatabase|TaskPlugin|GenericTask)' -count=1 -v
           done
       - name: Fresh startup and upgrades from fork main and upstream RC50
+        env:
+          MYSQL_CONTAINER: ${{ job.services.mysql.id }}
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: python3 .github/scripts/validate_upstream_upgrade.py
