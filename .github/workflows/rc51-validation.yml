@@ -1,0 +1,110 @@
+name: RC51 integration validation
+
+on:
+  push:
+    branches: [codex/sync-upstream-rc51]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GOWORK: 'off'
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+            relaykit/go.sum
+            tokenkit/go.sum
+      - name: Vet and build all three modules independently
+        run: |
+          mkdir -p web/dist
+          touch web/dist/index.html
+          for module in . relaykit tokenkit; do
+            (cd "$module" && go vet ./... && go build ./...)
+          done
+      - name: Test all three modules
+        run: make test
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.4'
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun x vitest run --maxWorkers=2
+      - run: bun run build
+
+  databases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GOWORK: 'off'
+      TEST_MYSQL_DSN: 'root:rc51-test-only@tcp(127.0.0.1:3306)/rc51test?charset=utf8mb4&parseTime=True&loc=Local'
+      TEST_POSTGRES_DSN: 'postgres://postgres:rc51-test-only@127.0.0.1:5432/rc51test?sslmode=disable'
+    services:
+      mysql:
+        image: mysql:5.7.44
+        env:
+          MYSQL_ROOT_PASSWORD: rc51-test-only
+          MYSQL_DATABASE: rc51test
+          MYSQL_ROOT_HOST: '%'
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -prc51-test-only"
+          --health-interval=10s --health-timeout=5s --health-retries=20
+      postgres:
+        image: postgres:17.6-alpine
+        env:
+          POSTGRES_PASSWORD: rc51-test-only
+          POSTGRES_DB: rc51test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U postgres -d rc51test"
+          --health-interval=10s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Configure disposable MySQL database for Unicode fixtures
+        env:
+          MYSQL_CONTAINER: ${{ job.services.mysql.id }}
+        run: docker exec "$MYSQL_CONTAINER" mysql -uroot -prc51-test-only -e 'ALTER DATABASE rc51test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+      - name: Model and controller database regression matrix
+        id: db_tests
+        run: |
+          # This regression explicitly requires empty user/audit tables.
+          go test ./controller -run '^TestDeleteRedemptionBatch$' -count=1 -v
+          go test ./model -count=1 -v
+          go test ./controller -skip '^TestDeleteRedemptionBatch$' -count=1 -v
+          for dialect in mysql postgres; do
+            TEST_TASK_DB_DIALECT="$dialect" go test ./model -run '^TestScheduledChannel' -count=1 -v
+            TEST_TASK_DB_DIALECT="$dialect" go test ./controller -run 'Test(ImmediateTaskSettlementDatabase|TaskPlugin|GenericTask)' -count=1 -v
+          done
+      - name: Fresh startup and upgrades from fork main and upstream RC50
+        if: ${{ !cancelled() && steps.db_tests.outcome != 'skipped' }}
+        env:
+          MYSQL_CONTAINER: ${{ job.services.mysql.id }}
+          POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: python3 .github/scripts/validate_upstream_upgrade.py
