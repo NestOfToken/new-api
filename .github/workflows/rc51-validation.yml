@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rc51-validation-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -87,6 +87,10 @@ jobs:
         with:
           go-version-file: go.mod
           cache-dependency-path: go.sum
+      - name: Configure disposable MySQL database for Unicode fixtures
+        env:
+          MYSQL_CONTAINER: ${{ job.services.mysql.id }}
+        run: docker exec "$MYSQL_CONTAINER" mysql -uroot -prc51-test-only -e 'ALTER DATABASE rc51test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
       - name: Model and controller database regression matrix
         run: |
           go test ./model -count=1 -v
