@@ -92,14 +92,18 @@ jobs:
           MYSQL_CONTAINER: ${{ job.services.mysql.id }}
         run: docker exec "$MYSQL_CONTAINER" mysql -uroot -prc51-test-only -e 'ALTER DATABASE rc51test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
       - name: Model and controller database regression matrix
+        id: db_tests
         run: |
+          # This regression explicitly requires empty user/audit tables.
+          go test ./controller -run '^TestDeleteRedemptionBatch$' -count=1 -v
           go test ./model -count=1 -v
-          go test ./controller -count=1 -v
+          go test ./controller -skip '^TestDeleteRedemptionBatch$' -count=1 -v
           for dialect in mysql postgres; do
             TEST_TASK_DB_DIALECT="$dialect" go test ./model -run '^TestScheduledChannel' -count=1 -v
             TEST_TASK_DB_DIALECT="$dialect" go test ./controller -run 'Test(ImmediateTaskSettlementDatabase|TaskPlugin|GenericTask)' -count=1 -v
           done
       - name: Fresh startup and upgrades from fork main and upstream RC50
+        if: ${{ !cancelled() && steps.db_tests.outcome != 'skipped' }}
         env:
           MYSQL_CONTAINER: ${{ job.services.mysql.id }}
           POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
