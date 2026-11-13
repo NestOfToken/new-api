@@ -2902,6 +2902,7 @@
     "footer.columns.related.links.newApiKeyTool": "new-api-key-tool",
     "footer.columns.related.links.oneApi": "Один API",
     "footer.columns.related.title": "Связанные проекты",
+    "footer.copyrightLine": "© {{year}} {{name}}. Все права защищены.",
     "footer.defaultCopyright": "Все права защищены.",
     "footer.new\u0061pi.projectAttributionSuffix": "Все права защищены. Разработано участниками проекта.",
     "For advanced custom channels this applies only to /v1/responses routes without protocol conversion.": "Для расширенных пользовательских каналов это действует только для маршрутов /v1/responses без преобразования протокола.",

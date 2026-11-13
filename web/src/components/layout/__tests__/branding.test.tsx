@@ -30,6 +30,7 @@ import { AuthLayout } from '@/features/auth/auth-layout'
 import { resolveSystemLogo } from '@/lib/system-branding'
 import { useSystemConfigStore } from '@/stores/system-config-store'
 
+import { Footer } from '../components/footer'
 import { SystemBrand } from '../components/system-brand'
 
 const client = new QueryClient({
@@ -90,3 +91,50 @@ it('resolves inherited logos to the key while preserving explicitly configured a
     '/uploads/team-logo.svg'
   )
 })
+
+it.each(['', '<p>Customer footer</p>'])(
+  'shows the ICP registration instead of upstream attribution when footer HTML is %s',
+  async (footerHtml) => {
+    useSystemConfigStore.getState().setConfig({ footerHtml })
+    client.setQueryData(['status'], {
+      user_agreement_enabled: true,
+      privacy_policy_enabled: true,
+    })
+    const router = createRouter({
+      routeTree: createRootRoute({
+        component: () => <Footer copyright='All rights reserved' />,
+      }),
+      history: createMemoryHistory({ initialEntries: ['/'] }),
+    })
+    await router.load()
+    render(
+      <QueryClientProvider client={client}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    )
+    const registration = await screen.findByRole('link', {
+      name: '渝ICP备2026029137',
+    })
+    expect(registration).toHaveAttribute('href', 'https://beian.miit.gov.cn/')
+    expect(registration).toHaveAttribute('target', '_blank')
+    expect(registration).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(screen.queryByText('New API')).not.toBeInTheDocument()
+    expect(screen.queryByText('QuantumNous')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'User Agreement' })
+    ).toHaveAttribute('href', '/user-agreement')
+    expect(
+      screen.getByRole('link', { name: 'Privacy Policy' })
+    ).toHaveAttribute('href', '/privacy-policy')
+    if (footerHtml) {
+      expect(screen.getByText('Customer footer')).toBeVisible()
+    } else {
+      expect(
+        screen.getByText(
+          `© ${new Date().getFullYear()} 睿元云 All rights reserved`
+        )
+      ).toBeVisible()
+      expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    }
+  }
+)

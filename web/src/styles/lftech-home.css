@@ -506,7 +506,7 @@ html:has([data-lf-public-surface='home']) {
 }
 .lf-home-footer > div {
   max-width: 1320px;
-  padding-block: 40px;
+  padding-block: 16px;
 }
 .lf-home-footer :is(.text-muted-foreground, [class*='text-muted-foreground/']) {
   color: var(--lf-muted);

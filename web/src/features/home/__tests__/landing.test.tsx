@@ -731,11 +731,9 @@ describe('enterprise homepage', () => {
     expect(
       within(screen.getByRole('banner')).getByRole('link', { name: /睿元云/ })
     ).toHaveAttribute('href', '/')
-    expect(screen.getAllByRole('link', { name: 'New API' })).toHaveLength(1)
-    expect(screen.getByRole('link', { name: 'QuantumNous' })).toHaveAttribute(
-      'href',
-      'https://github.com/QuantumNous'
-    )
+    expect(
+      screen.getByRole('link', { name: '渝ICP备2026029137' })
+    ).toHaveAttribute('href', 'https://beian.miit.gov.cn/')
     const registration = await screen.findAllByRole('button', {
       name: 'Sign in / Register',
     })
