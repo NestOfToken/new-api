@@ -15,7 +15,7 @@ import (
 func TestSecurityEmailRendersLocalizedCodeAndConfiguredValidity(t *testing.T) {
 	require.NoError(t, i18n.Init())
 	previousName, previousLogo, previousAddress := common.SystemName, common.Logo, system_setting.ServerAddress
-	common.SystemName, common.Logo, system_setting.ServerAddress = "麟飞科技", "/images/lftech/brand-mark.svg", "https://api.example.com"
+	common.SystemName, common.Logo, system_setting.ServerAddress = "\u9e9f\u98de\u79d1\u6280", "/images/lftech/brand-mark.svg", "https://api.example.com"
 	t.Cleanup(func() {
 		common.SystemName, common.Logo, system_setting.ServerAddress = previousName, previousLogo, previousAddress
 	})

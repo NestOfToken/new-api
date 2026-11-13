@@ -1,4 +1,4 @@
-# 麟飞科技 API 接入指南
+# 睿元云 API 接入指南
 
 通过统一接口连接平台开放的模型。已有支持 OpenAI Chat Completions 的应用，可以将请求地址、平台 API Key 和模型 ID 改为平台提供的值。
 
@@ -23,7 +23,7 @@
 
 ## 第一步：准备平台 API Key
 
-登录麟飞科技控制台，在 API 密钥／令牌管理中创建用于应用调用的密钥，按需设置额度、有效期、模型权限和 IP 限制。若页面名称因权限或版本不同而变化，请联系平台管理员。
+登录睿元云控制台，在 API 密钥／令牌管理中创建用于应用调用的密钥，按需设置额度、有效期、模型权限和 IP 限制。若页面名称因权限或版本不同而变化，请联系平台管理员。
 
 使用平台签发的 API Key，并通过请求头传递：
 
@@ -187,7 +187,7 @@ Content-Type: application/json
   "choices": [
     {
       "index": 0,
-      "message": {"role": "assistant", "content": "欢迎使用麟飞科技模型平台。"},
+      "message": {"role": "assistant", "content": "欢迎使用睿元云模型平台。"},
       "finish_reason": "stop"
     }
   ],
@@ -241,7 +241,7 @@ data: {"choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_r
 
 data: {"choices":[{"index":0,"delta":{"content":"欢迎"},"finish_reason":null}]}
 
-data: {"choices":[{"index":0,"delta":{"content":"使用麟飞科技。"},"finish_reason":null}]}
+data: {"choices":[{"index":0,"delta":{"content":"使用睿元云。"},"finish_reason":null}]}
 
 data: {"choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}
 
@@ -404,7 +404,7 @@ console.log(result.choices[0].message?.content || '')
 
 ## 建议排查顺序
 
-1. 确认使用麟飞平台地址，根地址不含重复 `/v1`。
+1. 确认使用睿元云平台地址，根地址不含重复 `/v1`。
 2. 用同一 Key 查询 `GET /v1/models`，取得精确模型 ID。
 3. 将对话缩减到一条短 `user` 文本，移除高级参数，关闭流式。
 4. 检查账号和令牌额度、有效期、分组、模型权限及 IP 条件。

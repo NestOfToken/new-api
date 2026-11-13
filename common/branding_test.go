@@ -15,10 +15,10 @@ func TestResolveSystemName(t *testing.T) {
 		{"New API", "睿元云"},
 		{" new-api ", "睿元云"},
 		{"NewAPI", "睿元云"},
-		{"麟飞科技", "睿元云"},
+		{"\u9e9f\u98de\u79d1\u6280", "睿元云"},
 		{"麟飛科技", "睿元雲"},
 		{"Linfei Technology", "nerioncloud"},
-		{"麟飞科技 · 企业服务", "睿元云 · 企业服务"},
+		{"\u9e9f\u98de\u79d1\u6280 · 企业服务", "睿元云 · 企业服务"},
 		{"睿元云 · 企业服务", "睿元云 · 企业服务"},
 		{"Example Company", "Example Company"},
 	} {

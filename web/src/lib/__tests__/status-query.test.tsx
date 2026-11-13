@@ -267,7 +267,7 @@ describe('module guard status freshness', () => {
 })
 
 describe('customer-facing system branding', () => {
-  test.each(['New API', 'new-api', 'NewAPI', '', '麟飞科技'])(
+  test.each(['New API', 'new-api', 'NewAPI', '', '\u9e9f\u98de\u79d1\u6280'])(
     'maps the inherited %j brand to nerioncloud without changing currency settings',
     (name) => {
       const config = mapStatusDataToConfig({
@@ -294,7 +294,7 @@ describe('customer-facing system branding', () => {
 test('a cached previous brand resolves before a status request finishes', () => {
   useSystemConfigStore
     .getState()
-    .setConfig({ systemName: '麟飞科技', logo: '/logo.png' })
+    .setConfig({ systemName: '\u9e9f\u98de\u79d1\u6280', logo: '/logo.png' })
   const queryClient = createQueryClient()
   const { result } = renderHook(() => useSystemConfig(), {
     wrapper: wrapper(queryClient),

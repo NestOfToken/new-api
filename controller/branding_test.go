@@ -16,7 +16,7 @@ func TestOptionsResolveStoredBrandWithoutChangingStoredValuesOrPasskeyDomains(t 
 	common.OptionMapRWMutex.Lock()
 	previous := common.OptionMap
 	common.OptionMap = map[string]string{
-		"SystemName":              "麟飞科技",
+		"SystemName":              "\u9e9f\u98de\u79d1\u6280",
 		"passkey.rp_display_name": "Linfei Technology",
 		"passkey.rp_id":           "api.example.com",
 		"passkey.origins":         "https://api.example.com",
@@ -47,6 +47,6 @@ func TestOptionsResolveStoredBrandWithoutChangingStoredValuesOrPasskeyDomains(t 
 	assert.Equal(t, "nerioncloud", values["passkey.rp_display_name"])
 	assert.Equal(t, "api.example.com", values["passkey.rp_id"])
 	assert.Equal(t, "https://api.example.com", values["passkey.origins"])
-	assert.Equal(t, "麟飞科技", common.OptionMap["SystemName"])
+	assert.Equal(t, "\u9e9f\u98de\u79d1\u6280", common.OptionMap["SystemName"])
 	assert.Equal(t, "Linfei Technology", common.OptionMap["passkey.rp_display_name"])
 }

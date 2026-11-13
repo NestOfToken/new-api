@@ -14,7 +14,7 @@ if (window.Scalar?.createApiReference) {
     withDefaultFonts: false,
     proxyUrl: '',
     metadata: {
-      title: '麟飞科技 API 文档',
+      title: '睿元云 API 文档',
       description: '现有模型目录、接入示例与接口参考。',
     },
   })

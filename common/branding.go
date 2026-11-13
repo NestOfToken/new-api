@@ -12,8 +12,9 @@ func ResolveSystemName(name string) string {
 	case "", "new api", "new-api", "newapi":
 		return DefaultSystemName
 	default:
+		// Keep recognizing persisted names from releases before the brand migration.
 		return strings.NewReplacer(
-			"麟飞科技", "睿元云",
+			"\u9e9f\u98de\u79d1\u6280", "睿元云",
 			"麟飛科技", "睿元雲",
 			"Linfei Technology", "nerioncloud",
 		).Replace(name)

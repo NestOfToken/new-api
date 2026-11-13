@@ -22,8 +22,9 @@ import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 export function resolveSystemName(value: unknown): string {
   const name = typeof value === 'string' ? value.trim() : ''
   if (!name || /^new[\s-]*api$/i.test(name)) return DEFAULT_SYSTEM_NAME
+  // Keep recognizing persisted names from releases before the brand migration.
   return name
-    .replaceAll('麟飞科技', '睿元云')
+    .replaceAll('\u9e9f\u98de\u79d1\u6280', '睿元云')
     .replaceAll('麟飛科技', '睿元雲')
     .replaceAll('Linfei Technology', 'nerioncloud')
 }
