@@ -27,6 +27,7 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, expect, it } from 'vitest'
 
 import { AuthLayout } from '@/features/auth/auth-layout'
+import { resolveSystemLogo } from '@/lib/system-branding'
 import { useSystemConfigStore } from '@/stores/system-config-store'
 
 import { SystemBrand } from '../components/system-brand'
@@ -72,7 +73,20 @@ it('shows the customer brand in auth and console layouts when cached config and 
     '睿元云'
   )
   for (const image of screen.getAllByRole('img')) {
-    expect(image).toHaveAttribute('src', '/images/lftech/brand-mark.svg')
+    expect(image).toHaveAttribute('src', '/images/ruiyuan/key-mark.svg')
   }
   expect(screen.queryByText('New API')).not.toBeInTheDocument()
+})
+
+it('resolves inherited logos to the key while preserving explicitly configured artwork', () => {
+  expect(resolveSystemLogo('/logo.png')).toBe('/images/ruiyuan/key-mark.svg')
+  expect(resolveSystemLogo('/images/lftech/brand-mark.svg')).toBe(
+    '/images/ruiyuan/key-mark.svg'
+  )
+  expect(resolveSystemLogo('https://brand.example/custom.svg')).toBe(
+    'https://brand.example/custom.svg'
+  )
+  expect(resolveSystemLogo('/uploads/team-logo.svg')).toBe(
+    '/uploads/team-logo.svg'
+  )
 })

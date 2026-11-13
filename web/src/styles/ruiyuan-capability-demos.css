@@ -1,0 +1,104 @@
+/* Copyright (C) 2023-2026 QuantumNous. SPDX-License-Identifier: AGPL-3.0-or-later */
+.lf-platform-journey .lf-product-window {
+  min-height: 0;
+  border: 1px solid var(--lf-line);
+  border-radius: 12px;
+  box-shadow: none;
+}
+.lf-usage-activity {
+  color: var(--lf-ink);
+  padding: 24px;
+  min-height: 290px;
+}
+.lf-home .lf-usage-title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+}
+.lf-usage-comparison {
+  display: grid;
+  gap: 30px;
+  margin-top: 32px;
+}
+.lf-usage-row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+}
+.lf-usage-row-label {
+  color: var(--lf-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.lf-usage-row[data-usage-track='usage'] .lf-usage-row-label {
+  color: var(--lf-accent);
+}
+.lf-usage-units {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+}
+.lf-usage-unit {
+  display: block;
+  height: 24px;
+  border-radius: 4px;
+  background: var(--lf-soft);
+  overflow: hidden;
+}
+.lf-usage-unit > i {
+  display: block;
+  height: 100%;
+  background: var(--lf-muted);
+  opacity: 0;
+  transform: scaleY(0.45);
+  transform-origin: bottom;
+  transition:
+    opacity 400ms ease-out,
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lf-usage-row[data-usage-track='usage'] .lf-usage-unit > i {
+  background: var(--lf-accent);
+}
+.lf-usage-unit[data-active='true'] > i {
+  opacity: 1;
+  transform: scaleY(1);
+}
+.lf-activity-footer {
+  margin: 30px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--lf-line);
+  color: var(--lf-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+@media (max-width: 700px) {
+  .lf-usage-activity {
+    padding: 20px 18px;
+    min-height: 280px;
+  }
+  .lf-usage-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .lf-usage-comparison {
+    gap: 22px;
+    margin-top: 26px;
+  }
+  .lf-usage-units {
+    gap: 5px;
+  }
+  .lf-usage-unit {
+    height: 22px;
+  }
+  .lf-activity-footer {
+    margin-top: 26px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-usage-unit > i {
+    transition: none;
+  }
+}

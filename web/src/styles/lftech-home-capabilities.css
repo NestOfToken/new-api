@@ -1,0 +1,293 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+.lf-capabilities {
+  padding-block: 88px 100px;
+}
+.lf-showcase-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+}
+.lf-showcase-intro p {
+  color: var(--lf-muted);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-top: 18px;
+  max-width: 60ch;
+}
+.lf-showcase-intro > [data-slot='button'] {
+  flex-shrink: 0;
+}
+.lf-catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+  margin-block: 34px 15px;
+}
+.lf-catalog-sync {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--lf-muted);
+  font-size: 12px;
+}
+.lf-catalog-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lf-accent);
+  flex-shrink: 0;
+}
+.lf-catalog-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lf-muted);
+  border: 1px solid var(--lf-line);
+  border-radius: 12px;
+  padding-inline: 12px 4px;
+  width: 300px;
+  min-height: 40px;
+}
+.lf-catalog-search:focus-within {
+  border-color: var(--lf-accent);
+}
+.lf-home .lf-catalog-search input {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0;
+  font-size: 12px;
+  color: var(--lf-ink);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: 0;
+  caret-color: var(--lf-accent);
+  --tw-ring-shadow: 0 0 #0000;
+}
+.lf-catalog-search input::placeholder {
+  color: var(--lf-muted);
+}
+.lf-catalog-search button {
+  flex-shrink: 0;
+}
+.lf-home .lf-model-type-tabs {
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0;
+  border-bottom: 1px solid var(--lf-line);
+  scrollbar-width: thin;
+  scrollbar-color: var(--lf-line) transparent;
+}
+.lf-home .lf-model-type-tabs [data-slot='tabs-trigger'] {
+  height: 48px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 0;
+  flex: 0 0 auto;
+  gap: 8px;
+  color: var(--lf-muted);
+  font-size: 13px;
+  box-shadow: none;
+}
+.lf-home .lf-model-type-tabs [aria-selected='true'] {
+  color: var(--lf-accent);
+}
+.lf-home .lf-model-type-tabs [data-slot='tabs-trigger']::after {
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--lf-accent);
+}
+.lf-model-type-tabs [data-slot='tabs-trigger'] > span {
+  font-size: 11px;
+  opacity: 0.85;
+}
+.lf-home .lf-catalog-panel {
+  padding-top: 22px;
+}
+.lf-model-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lf-home .lf-model-card {
+  display: flex;
+  width: 100%;
+  height: auto;
+  min-height: 92px;
+  gap: 14px;
+  padding: 20px;
+  justify-content: flex-start;
+  text-align: start;
+  border: 1px solid var(--lf-line);
+  border-radius: 12px;
+  color: var(--lf-ink);
+  background: var(--lf-paper);
+  transition:
+    background 250ms,
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 250ms;
+}
+.lf-home .lf-model-card:hover {
+  border-color: var(--lf-accent);
+  background: var(--lf-soft);
+  transform: translateY(-3px);
+}
+.lf-model-card-logo {
+  flex-shrink: 0;
+  width: 32px;
+  display: grid;
+  place-items: center;
+}
+.lf-model-card-copy {
+  min-width: 0;
+  flex: 1;
+  white-space: normal;
+}
+.lf-model-card-copy strong {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.lf-model-card-copy small {
+  display: block;
+  color: var(--lf-muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.lf-model-card > svg {
+  flex-shrink: 0;
+  color: var(--lf-muted);
+}
+.lf-home.lf-provider-flyout {
+  width: min(380px, calc(100vw - 32px));
+  padding: 24px;
+  gap: 18px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--lf-surface);
+  color: var(--lf-ink);
+  box-shadow: 0 16px 60px rgba(18, 52, 96, 0.17);
+  --tw-ring-shadow: 0 0 #0000;
+}
+.lf-provider-flyout-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+.lf-provider-flyout [data-slot='popover-title'] {
+  font-size: 18px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.lf-provider-flyout-heading p {
+  font-size: 12px;
+  color: var(--lf-muted);
+  margin-top: 6px;
+}
+.lf-provider-flyout-heading button {
+  flex-shrink: 0;
+}
+.lf-model-source-note {
+  color: var(--lf-muted);
+  font-size: 12px;
+}
+.lf-catalog-footnote {
+  color: var(--lf-muted);
+  font-size: 11px;
+  margin-top: 24px !important;
+}
+.lf-catalog-message {
+  min-height: 130px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--lf-muted);
+  font-size: 14px;
+}
+.lf-refreshing {
+  animation: lf-refresh 900ms linear infinite;
+}
+@keyframes lf-refresh {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 1000px) {
+  .lf-model-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .lf-capabilities {
+    padding-block: 65px;
+  }
+  .lf-showcase-intro {
+    display: block;
+  }
+  .lf-showcase-intro > [data-slot='button'] {
+    margin-top: 18px;
+  }
+  .lf-catalog-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  .lf-catalog-search {
+    width: 100%;
+  }
+  .lf-model-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .lf-home .lf-model-card {
+    min-height: 82px;
+    padding: 16px;
+  }
+  .lf-home .lf-model-type-tabs {
+    gap: 0;
+  }
+  .lf-home .lf-model-type-tabs [data-slot='tabs-trigger'] {
+    padding-inline: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-home .lf-model-card {
+    transition: none;
+  }
+  .lf-refreshing {
+    animation: none;
+  }
+}

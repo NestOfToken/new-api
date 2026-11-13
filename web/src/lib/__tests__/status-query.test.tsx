@@ -276,7 +276,7 @@ describe('customer-facing system branding', () => {
         quota_per_unit: 700000,
       })
       expect(config.systemName).toBe('睿元云')
-      expect(config.logo).toBe('/images/lftech/brand-mark.svg')
+      expect(config.logo).toBe('/images/ruiyuan/key-mark.svg')
       expect(config.currency?.quotaPerUnit).toBe(700000)
     }
   )
@@ -300,5 +300,5 @@ test('a cached previous brand resolves before a status request finishes', () => 
     wrapper: wrapper(queryClient),
   })
   expect(result.current.systemName).toBe('睿元云')
-  expect(result.current.logo).toBe('/images/lftech/brand-mark.svg')
+  expect(result.current.logo).toBe('/images/ruiyuan/key-mark.svg')
 })

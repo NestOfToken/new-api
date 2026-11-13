@@ -1,0 +1,298 @@
+/* Copyright (C) 2023-2026 QuantumNous. SPDX-License-Identifier: AGPL-3.0-or-later */
+/* The night sky opens into a quiet daylight observatory beneath the hero. */
+.lf-home main {
+  --lf-orbit-line: rgb(111 132 163 / 40%);
+  --lf-orbit-light: rgb(123 145 178 / 9%);
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      ellipse 55% 13% at 100% 18%,
+      var(--lf-orbit-light),
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 65% 16% at 100% 48%,
+      var(--lf-orbit-light),
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 60% 18% at 0% 85%,
+      var(--lf-orbit-light),
+      transparent 80%
+    );
+}
+.lf-home main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* Daylight uses visible orbital markers instead of tiny night-sky stars. */
+  background:
+    radial-gradient(
+      circle at 70px 160px,
+      transparent 5px,
+      rgb(85 119 166 / 27%) 5.5px 6.5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 570px 510px,
+      rgb(111 146 192 / 10%) 0 5px,
+      transparent 6px 10px,
+      rgb(85 119 166 / 24%) 10.5px 11.5px,
+      transparent 12px
+    ),
+    radial-gradient(
+      circle at 130px 650px,
+      rgb(111 146 192 / 20%) 0 3px,
+      transparent 4px
+    );
+  background-size: 720px 820px;
+  mask-image: linear-gradient(
+    90deg,
+    #000,
+    transparent 28%,
+    transparent 72%,
+    #000
+  );
+}
+/* Larger, nearer stars live at the edges; the reading column stays quiet. */
+.lf-home main::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('../../public/images/ruiyuan/distant-stars.svg') center
+    190px / 2100px auto repeat;
+  opacity: 0.42;
+  mask-image: linear-gradient(
+    90deg,
+    #000,
+    transparent 28%,
+    transparent 72%,
+    #000
+  );
+}
+.lf-home
+  :is(.lf-capabilities, .lf-continuity, .lf-platform-journey, .lf-integration) {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+.lf-home
+  :is(
+    .lf-capabilities,
+    .lf-continuity,
+    .lf-platform-journey,
+    .lf-integration
+  )::before,
+.lf-home :is(.lf-capabilities, .lf-continuity, .lf-platform-journey)::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border: 1.25px solid var(--lf-orbit-line);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 32% 6%,
+      rgb(105 142 193 / 16%) 0 4px,
+      transparent 5px 8px,
+      rgb(92 127 175 / 36%) 8.5px 9.5px,
+      transparent 10px
+    ),
+    radial-gradient(
+      circle at 72% 90%,
+      rgb(105 142 193 / 25%) 0 3px,
+      transparent 4px
+    );
+  animation: lf-orbit-drift 48s ease-in-out infinite alternate;
+  animation-play-state: paused;
+  mask-image: linear-gradient(
+    100deg,
+    transparent,
+    #000 30%,
+    #000 70%,
+    transparent
+  );
+}
+.lf-home :is(.lf-capabilities, .lf-continuity, .lf-platform-journey)::after {
+  border-width: 0.8px;
+  opacity: 0.58;
+  animation-duration: 64s;
+  animation-direction: alternate-reverse;
+}
+.lf-home [data-atmosphere-playing='true']::before,
+.lf-home [data-atmosphere-playing='true']::after {
+  animation-play-state: running;
+}
+@keyframes lf-orbit-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 12px -8px;
+  }
+}
+.lf-home .lf-catalog-search {
+  background: var(--lf-paper);
+}
+.lf-home .lf-capabilities::before {
+  width: 1040px;
+  height: 440px;
+  right: -390px;
+  top: 55px;
+  transform: rotate(-18deg);
+}
+.lf-home .lf-capabilities::after {
+  width: 920px;
+  height: 364px;
+  right: -326px;
+  top: 92px;
+  transform: rotate(-18deg);
+}
+.lf-home .lf-continuity::before {
+  width: 1100px;
+  height: 420px;
+  left: -700px;
+  top: -20px;
+  transform: rotate(16deg);
+}
+.lf-home .lf-continuity::after {
+  width: 1020px;
+  height: 350px;
+  left: -657px;
+  top: 16px;
+  transform: rotate(16deg);
+}
+.lf-home .lf-platform-journey {
+  --lf-line: #dce1e8;
+  --lf-soft: #edf0f5;
+}
+.lf-home .lf-platform-journey::before {
+  width: 1600px;
+  height: 650px;
+  left: 35%;
+  top: 115px;
+  transform: rotate(16deg);
+}
+.lf-home .lf-platform-journey::after {
+  width: 1450px;
+  height: 560px;
+  left: calc(35% + 75px);
+  top: 160px;
+  transform: rotate(16deg);
+}
+.lf-home .lf-journey-tabs [aria-selected='true'] {
+  background: #e9edf3;
+  color: #18324f;
+}
+.lf-home .lf-integration::before {
+  width: 1550px;
+  height: 390px;
+  left: -860px;
+  top: 112px;
+  transform: rotate(-14deg);
+  mask-image: linear-gradient(to bottom, transparent 28%, #000 58%);
+}
+.dark .lf-home main {
+  --lf-orbit-line: rgb(137 163 202 / 38%);
+  --lf-orbit-light: rgb(109 149 206 / 7%);
+}
+.dark .lf-home main::before {
+  background: url('../../public/images/ruiyuan/distant-stars.svg') center top /
+    1600px auto repeat;
+  filter: none;
+  opacity: 0.5;
+  mask-image: linear-gradient(90deg, #000, #0008 22%, #0007 65%, #000);
+}
+.dark .lf-home main::after {
+  content: '';
+  filter: none;
+  opacity: 0.42;
+}
+.dark
+  .lf-home
+  :is(
+    .lf-capabilities,
+    .lf-continuity,
+    .lf-platform-journey,
+    .lf-integration
+  )::before,
+.dark
+  .lf-home
+  :is(.lf-capabilities, .lf-continuity, .lf-platform-journey)::after {
+  background:
+    radial-gradient(
+      circle at 32% 6%,
+      rgb(211 229 255 / 75%) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 72% 90%,
+      rgb(211 229 255 / 55%) 0 1px,
+      transparent 2px
+    );
+}
+.dark .lf-home .lf-platform-journey {
+  --lf-line: #2d3d52;
+  --lf-soft: #192b43;
+}
+.dark .lf-home .lf-journey-tabs [aria-selected='true'] {
+  background: #21334c;
+  color: #dbe9ff;
+}
+@media (max-width: 900px) {
+  .lf-home main::before {
+    background-size: 620px 820px;
+    background-position: -30px 0;
+  }
+  .lf-home main::after {
+    background-size: 1500px auto;
+    opacity: 0.3;
+  }
+  .lf-home
+    :is(
+      .lf-capabilities,
+      .lf-continuity,
+      .lf-platform-journey,
+      .lf-integration
+    )::before {
+    border-width: 1px;
+  }
+  .lf-home .lf-capabilities::before,
+  .lf-home .lf-capabilities::after {
+    right: -650px;
+  }
+  .lf-home .lf-platform-journey::before {
+    left: 5%;
+    top: 50px;
+    width: 950px;
+    height: 430px;
+  }
+  .lf-home .lf-platform-journey::after {
+    left: calc(5% + 50px);
+    top: 85px;
+    width: 850px;
+    height: 360px;
+  }
+  .dark .lf-home main::before {
+    background-size: 1200px auto;
+    opacity: 0.46;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lf-home
+    :is(
+      .lf-capabilities,
+      .lf-continuity,
+      .lf-platform-journey,
+      .lf-integration
+    )::before,
+  .lf-home :is(.lf-capabilities, .lf-continuity, .lf-platform-journey)::after {
+    animation: none;
+    translate: none;
+  }
+}

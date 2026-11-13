@@ -1,0 +1,339 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+/* The source-measured galaxy is shared with the local comparison entry. */
+.lf-home {
+  --or-background: var(--lf-surface);
+  --or-foreground: var(--lf-ink);
+  --or-muted: var(--lf-muted);
+  --or-border: var(--lf-line);
+  --or-accent: var(--lf-accent);
+}
+.lf-home .lf-ruiyuan-hero {
+  --lf-ink: #f1f6ff;
+  --lf-muted: #afc3e0;
+  --or-background: #050c1b;
+  --or-foreground: #dae9ff;
+  --or-muted: #afc3e0;
+  --or-accent: #69b1ff;
+  color: var(--lf-ink);
+  background: #050c1b;
+  padding-top: 72px;
+  padding-bottom: 96px;
+  overflow: visible;
+}
+.lf-ruiyuan-opening {
+  --lf-header-tone-offset: 100px;
+  --lf-header-brand-lag: 60px;
+  isolation: isolate;
+  overflow: visible;
+}
+/* A broad page-colored shadow joins the sky without colored gradient stops. */
+.lf-ruiyuan-horizon {
+  position: absolute;
+  inset-inline: -240px;
+  bottom: -240px;
+  z-index: 4;
+  height: 216px;
+  pointer-events: none;
+  background-color: var(--lf-paper);
+  background-image: none;
+  border-radius: 50% 50% 0 0 / 80px 80px 0 0;
+  transform: rotate(-2deg);
+  box-shadow:
+    0 -24px 48px 24px var(--lf-paper),
+    0 -56px 160px 64px var(--lf-paper);
+}
+.lf-ruiyuan-hero + .lf-capabilities {
+  position: relative;
+  z-index: 5;
+}
+.lf-ruiyuan-opening::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* Distant stars share viewport coordinates across home, flight and auth. */
+  background: url('../../public/images/ruiyuan/distant-stars.svg') center /
+    cover fixed;
+  opacity: 0.8;
+}
+.lf-ruiyuan-hero .or-galaxy-mask {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 64px,
+    #000 78%,
+    transparent
+  );
+}
+.lf-home .lf-ruiyuan-hero :is(a, button, [tabindex]):focus-visible {
+  outline-color: #69b1ff;
+}
+.lf-home .lf-ruiyuan-hero .or-galaxy-disc {
+  background: #f7fbff;
+  border-color: #dce6f2;
+}
+.lf-home .lf-ruiyuan-hero .or-favicon {
+  background: #f7fbff;
+  color: #102c54;
+}
+.lf-home .lf-ruiyuan-hero [data-hero-actions] .lf-primary {
+  min-height: 52px;
+  padding: 13px 25px;
+  gap: 24px;
+  font-size: 16px;
+  font-weight: 650;
+}
+.lf-home .lf-ruiyuan-hero [data-hero-actions] .lf-primary:focus-visible {
+  outline: 2px solid #c1d4e9;
+  outline-offset: 4px;
+}
+.lf-home .lf-ruiyuan-hero [data-hero-actions] .lf-primary svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 180ms ease-out;
+}
+.lf-home .lf-ruiyuan-hero [data-hero-actions] .lf-primary:hover svg {
+  transform: translate(2px, -2px);
+}
+.lf-home .lf-ruiyuan-hero .lf-inline-link:disabled {
+  color: #afc3e0;
+  opacity: 0.6;
+}
+.lf-ruiyuan-opening:has(.or-galaxy:focus-visible)::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  z-index: 4;
+  border: 2px solid var(--lf-accent);
+  pointer-events: none;
+}
+.lf-home .lf-ruiyuan-opening .or-galaxy:focus-visible {
+  outline: none;
+}
+.lf-ruiyuan-intro {
+  max-width: 512px;
+  pointer-events: none;
+}
+.lf-ruiyuan-intro :is(h1, p, dt, dd, a, button) {
+  pointer-events: auto;
+}
+.lf-home .lf-ruiyuan-intro h1 {
+  margin: 0;
+  font-size: 72px;
+  font-weight: 650;
+  line-height: 1.14;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.lf-ruiyuan-intro h1 > span {
+  display: block;
+}
+.lf-home .lf-ruiyuan-intro > p {
+  max-width: 37ch;
+  margin: 24px 0 0;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--lf-muted);
+}
+.lf-home .lf-ruiyuan-intro .lf-actions {
+  margin-top: 26px;
+  gap: 16px;
+}
+.lf-ruiyuan-intro .lf-primary {
+  min-height: 44px;
+  border-radius: 8px;
+  padding-inline: 24px;
+}
+.lf-ruiyuan-intro .lf-inline-link {
+  min-height: 44px;
+  padding-inline: 4px;
+  color: var(--lf-ink);
+}
+.lf-ruiyuan-facts {
+  display: flex;
+  gap: 28px;
+  margin: 22px 0 0;
+}
+.lf-ruiyuan-facts > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+.lf-ruiyuan-facts dt {
+  color: var(--lf-muted);
+  font-size: 12px;
+}
+.lf-ruiyuan-facts dd {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.lf-home .or-galaxy {
+  font-family: inherit;
+}
+.lf-galaxy-popover {
+  font-family: var(--font-public-sans), sans-serif;
+  min-width: 160px;
+  max-width: min(320px, calc(100vw - 24px));
+}
+.lf-galaxy-popover .or-popup-name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.lf-galaxy-model-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #52647c;
+}
+.lf-galaxy-model-info p {
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lf-galaxy-model-info > span {
+  color: #0064ff;
+}
+.dark .lf-galaxy-popover {
+  background: #14253c;
+  border-color: #2d4564;
+  color: #f1f6ff;
+}
+.dark .lf-galaxy-model-info {
+  color: #a9bdd6;
+}
+.dark .lf-galaxy-model-info > span {
+  color: #69b1ff;
+}
+.lf-home .or-galaxy-disc {
+  background: var(--lf-surface);
+  border-color: var(--lf-line);
+}
+.lf-home .or-favicon {
+  background: var(--lf-surface);
+  color: var(--lf-ink);
+}
+.lf-galaxy-popover .or-favicon {
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+}
+@media (min-width: 1024px) {
+  .lf-ruiyuan-opening {
+    height: clamp(500px, calc(100dvh - 224px), 700px);
+  }
+}
+@media (min-width: 1024px) and (max-height: 800px) {
+  .lf-ruiyuan-opening {
+    --lf-header-tone-offset: 20px;
+  }
+  .lf-home .lf-ruiyuan-hero {
+    padding-bottom: 176px;
+  }
+  .lf-ruiyuan-horizon {
+    bottom: -320px;
+  }
+}
+@media (max-width: 1023px) {
+  .lf-ruiyuan-opening {
+    --lf-header-tone-offset: 8px;
+    --lf-header-brand-lag: 20px;
+  }
+  .lf-home .lf-ruiyuan-hero {
+    padding-bottom: 112px;
+  }
+  .lf-ruiyuan-horizon {
+    inset-inline: -80px;
+    bottom: -272px;
+    height: 208px;
+    box-shadow:
+      0 -16px 48px 16px var(--lf-paper),
+      0 -32px 112px 40px var(--lf-paper);
+  }
+  .lf-ruiyuan-opening::before {
+    background: linear-gradient(
+      to bottom,
+      transparent 32%,
+      #050c1b88 55%,
+      #050c1b 80%
+    );
+  }
+  .lf-ruiyuan-hero .or-copy-container {
+    padding-bottom: 48px;
+  }
+  .lf-ruiyuan-opening:has(.or-galaxy:focus-visible)::after {
+    bottom: auto;
+    height: 384px;
+  }
+  .lf-ruiyuan-intro {
+    max-width: 576px;
+  }
+  .lf-home .lf-ruiyuan-intro h1 {
+    font-size: 56px;
+  }
+  .lf-home .lf-ruiyuan-intro > p {
+    max-width: 44ch;
+  }
+}
+@media (max-width: 800px) {
+  .lf-home .lf-ruiyuan-hero {
+    padding-top: 64px;
+  }
+}
+@media (max-width: 639px) {
+  .lf-ruiyuan-opening:has(.or-galaxy:focus-visible)::after {
+    height: 324px;
+  }
+  .lf-home .lf-ruiyuan-intro h1 {
+    font-size: 40px;
+  }
+  .lf-home .lf-ruiyuan-intro > p {
+    font-size: 15px;
+    margin-top: 20px;
+  }
+  .lf-home .lf-ruiyuan-intro .lf-actions {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .lf-ruiyuan-intro .lf-primary {
+    padding-inline: 18px;
+  }
+  .lf-ruiyuan-facts {
+    gap: 24px;
+  }
+}
+.or-galaxy[data-renderer='static'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 40px;
+}
+.or-galaxy[data-renderer='static'] .or-galaxy-lab {
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}

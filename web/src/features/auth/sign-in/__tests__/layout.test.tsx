@@ -16,6 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { readFileSync } from 'node:fs'
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
   createMemoryHistory,
@@ -35,6 +37,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { useSystemConfigStore } from '@/stores/system-config-store'
 
 import { SignIn } from '..'
+import { PublicGalaxyAnchor } from '../../components/public-galaxy-anchor'
 import { PublicRibbonProvider } from '../../components/public-ribbon-provider'
 import { publicAuthViewTransition } from '../../lib/public-auth-motion'
 
@@ -56,6 +59,7 @@ afterEach(() => {
   client.clear()
   vi.restoreAllMocks()
   localStorage.clear()
+  delete document.documentElement.dataset.lfGalaxyTransition
 })
 
 async function renderSignIn(
@@ -89,7 +93,12 @@ async function renderSignIn(
   const home = createRoute({
     getParentRoute: () => root,
     path: '/',
-    component: () => <h1>Homepage destination</h1>,
+    component: () => (
+      <>
+        <h1>Homepage destination</h1>
+        <PublicGalaxyAnchor className='test-home-scene' mode='home' />
+      </>
+    ),
   })
   const router = createRouter({
     routeTree: root.addChildren([auth.addChildren([login]), home]),
@@ -130,10 +139,17 @@ it('opens a directly linked login with a focused heading, password-manager field
     'href',
     '/'
   )
-  expect(document.querySelector('.lf-sign-in-fallback')).toHaveAttribute(
-    'src',
-    '/images/lftech/api-ribbon.webp'
+  expect(
+    document.querySelector('.lf-shared-scene-fallback svg')
+  ).toBeInTheDocument()
+  expect(document.querySelector('.lf-sign-in-galaxy')).toHaveAttribute('inert')
+  expect(document.querySelector('.lf-sign-in-galaxy')).toHaveAttribute(
+    'aria-hidden',
+    'true'
   )
+  expect(
+    document.querySelector('[data-lf-ribbon-anchor]')
+  ).not.toBeInTheDocument()
   expect(router.state.location.search).toEqual({ redirect: '/pricing' })
 })
 
@@ -141,18 +157,90 @@ it('allows keyboard playback control and returns home without submitting a login
   const post = vi.spyOn(api, 'post')
   const router = await renderSignIn()
   const user = userEvent.setup()
+  await waitFor(() =>
+    expect(document.querySelector('.or-galaxy-back')).not.toBeNull()
+  )
+  const canvas = document.querySelector('.or-galaxy-back')
   const pause = screen.getByRole('button', { name: 'Pause animation' })
   pause.focus()
   await user.keyboard('{Enter}')
   expect(
     screen.getByRole('button', { name: 'Resume animation' })
   ).toHaveAttribute('aria-pressed', 'true')
+  expect(document.querySelector('.lf-sign-in-galaxy')).toHaveAttribute(
+    'data-paused',
+    'true'
+  )
+  await user.type(
+    screen.getByLabelText('Password', { exact: true }),
+    'local-transition-password'
+  )
   await user.click(screen.getByRole('link', { name: 'Back to home' }))
   expect(
     await screen.findByRole('heading', { name: 'Homepage destination' })
   ).toBeVisible()
   expect(router.state.location.pathname).toBe('/')
+  expect(document.querySelector('.or-galaxy-back')).toBe(canvas)
+  expect(document.querySelector('input[type=password]')).not.toBeInTheDocument()
+  expect(document.querySelector('.lf-public-outgoing')).not.toBeInTheDocument()
   expect(post).not.toHaveBeenCalled()
+})
+
+it('keeps the live portal canvas across both routes and bypasses native snapshots', async () => {
+  const router = await renderSignIn()
+  await waitFor(() =>
+    expect(document.querySelector('.or-galaxy-back')).not.toBeNull()
+  )
+  const canvas = document.querySelector('.or-galaxy-back')
+  const host = document.querySelector('.lf-public-galaxy-host')
+  expect(canvas).not.toBeNull()
+  await act(async () => {
+    await router.navigate({ to: '/' })
+  })
+  expect(document.querySelector('.or-galaxy-back')).toBe(canvas)
+  expect(document.querySelector('.test-home-scene')?.firstElementChild).toBe(
+    host
+  )
+  await act(async () => {
+    router.history.back()
+  })
+  await screen.findByRole('heading', { name: 'Welcome back!' })
+  expect(document.querySelector('.or-galaxy-back')).toBe(canvas)
+  expect(document.querySelectorAll('.lf-public-galaxy-host')).toHaveLength(1)
+  const types = publicAuthViewTransition.types
+  if (typeof types !== 'function') {
+    throw new Error('Missing transition resolver')
+  }
+  expect(
+    types({
+      fromLocation: { ...router.state.location, pathname: '/' },
+      toLocation: router.state.location,
+      pathChanged: true,
+      hrefChanged: true,
+      hashChanged: false,
+    })
+  ).toBe(false)
+})
+it('keeps solar provider badges legible when dark theme styles load after the auth stylesheet', () => {
+  const style = document.createElement('style')
+  style.textContent =
+    readFileSync('src/styles/lftech-auth.css', 'utf8') +
+    readFileSync('src/styles/openrouter-replica.css', 'utf8')
+  const dark = document.createElement('div')
+  dark.className = 'dark'
+  dark.innerHTML =
+    '<main class="lf-sign-in"><div class="lf-sign-in-galaxy"><span class="or-favicon"></span></div></main>'
+  document.head.append(style)
+  document.body.append(dark)
+  try {
+    const badge = dark.querySelector<HTMLElement>('.or-favicon')
+    if (!badge) throw new Error('Missing provider badge')
+    expect(getComputedStyle(badge).backgroundColor).toBe('rgb(247, 251, 255)')
+    expect(getComputedStyle(badge).color).toBe('rgb(16, 44, 84)')
+  } finally {
+    dark.remove()
+    style.remove()
+  }
 })
 
 it('keeps legal-consent enforcement and sends the original password login contract from the new layout', async () => {

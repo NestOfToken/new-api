@@ -18,15 +18,27 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useTranslation } from 'react-i18next'
 
-export function LandingRequestPath() {
+import { useSystemConfig } from '@/hooks/use-system-config'
+
+import '@/styles/ruiyuan-capability-demos.css'
+
+import { LandingStabilityTimeline } from './landing-stability-timeline'
+import { LandingUsageActivity } from './landing-usage-activity'
+
+export function LandingPlatformDemo(props: { scene: string }) {
   const { t } = useTranslation()
+  const brand = useSystemConfig()
+  let title = t('Upstream providers')
+  if (props.scene === 'usage') title = t('Flexible usage')
   return (
-    <div className='lf-request-path' aria-label={t('API request path')}>
-      <span>{t('Your application')}</span>
-      <i />
-      <span className='lf-path-brand'>{t('nerioncloud platform')}</span>
-      <i />
-      <span>{t('Model')}</span>
+    <div className='lf-product-window' data-scene={props.scene}>
+      <div className='lf-product-chrome'>
+        <strong>{title}</strong>
+      </div>
+      {props.scene === 'stability' && (
+        <LandingStabilityTimeline name={brand.systemName} logo={brand.logo} />
+      )}
+      {props.scene === 'usage' && <LandingUsageActivity />}
     </div>
   )
 }

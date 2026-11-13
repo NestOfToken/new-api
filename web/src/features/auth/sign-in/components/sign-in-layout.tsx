@@ -27,6 +27,7 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Button } from '@/components/ui/button'
 
 import { RibbonPlaybackButton } from '../../components/public-ribbon-provider'
+import { SignInGalaxy } from './sign-in-galaxy'
 
 export function SignInLayout(props: { children: ReactNode; heading?: string }) {
   const { t } = useTranslation()
@@ -58,16 +59,9 @@ export function SignInLayout(props: { children: ReactNode; heading?: string }) {
       </div>
       <section
         className='lf-sign-in-art'
-        data-lf-ribbon-anchor
         aria-label={t('Bring AI model capabilities')}
       >
-        <img
-          className='lf-sign-in-fallback'
-          src='/images/lftech/api-ribbon.webp'
-          alt=''
-          width={1672}
-          height={941}
-        />
+        <SignInGalaxy />
         <div className='lf-sign-in-story'>
           <h2 className='lf-public-headline'>
             {t('Bring AI model capabilities')}

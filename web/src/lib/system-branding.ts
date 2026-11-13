@@ -30,7 +30,10 @@ export function resolveSystemName(value: unknown): string {
 
 export function resolveSystemLogo(value: unknown): string {
   const logo = typeof value === 'string' ? value.trim() : ''
-  return !logo || /^\/?(?:logo\.png|favicon\.ico)$/i.test(logo)
+  return !logo ||
+    /^\/?(?:logo\.png|favicon\.ico|images\/lftech\/brand-mark\.svg)$/i.test(
+      logo
+    )
     ? DEFAULT_LOGO
     : logo
 }

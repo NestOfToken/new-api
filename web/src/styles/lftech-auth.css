@@ -16,55 +16,165 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-/* The approved ribbon login extends the public blue palette; homepage light levels stay unchanged. */
+/* The public solar-system scene continues into the guarded sign-in surface. */
 .lf-home {
   isolation: isolate;
 }
-.lf-public-ribbon-canvas {
+/* Let existing foreground layers sit above the traveling sky, not behind it. */
+body:has(.lf-public-galaxy-flight) .lf-home,
+body:has(.lf-public-galaxy-flight) .lf-home main,
+body:has(.lf-public-galaxy-flight) .lf-ruiyuan-opening {
+  isolation: auto;
+}
+body:has(.lf-public-galaxy-flight) .lf-ruiyuan-opening .or-copy-container {
+  z-index: 70;
+}
+body:has(.lf-public-galaxy-flight) .lf-home-header {
+  z-index: 90;
+}
+body:has(.lf-public-galaxy-flight) #home-content > :not(.lf-ruiyuan-hero),
+body:has(.lf-public-galaxy-flight) .lf-home-footer {
+  position: relative;
+  z-index: 70;
+}
+.lf-home-galaxy-slot {
+  position: absolute;
+  inset: 0;
+}
+.lf-public-galaxy-host {
+  overflow-anchor: none;
+  --or-background: #050c1b;
+  --or-foreground: #dae9ff;
+  --or-muted: #afc3e0;
+  --or-accent: #69b1ff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.lf-public-galaxy-host[hidden] {
+  display: none;
+}
+.lf-public-galaxy-host[data-mode='home'] .or-galaxy {
+  pointer-events: auto;
+}
+.lf-public-galaxy-host[data-mode] :is(.or-galaxy-disc, .or-favicon) {
+  background: #f7fbff;
+  color: #102c54;
+  border-color: #dce6f2;
+}
+.lf-public-galaxy-host .or-galaxy-mark[data-state='loading'] > svg {
+  visibility: visible;
+}
+.lf-public-galaxy-flight {
   position: fixed;
   inset: 0;
-  z-index: 20;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.lf-public-ribbon-canvas[hidden] {
-  display: none;
-}
-.lf-public-outgoing {
-  position: fixed;
-  inset: 0 auto 0 0;
-  z-index: 10;
-  height: 100%;
+  z-index: 60;
   overflow: hidden;
   pointer-events: none;
-  contain: paint;
+  isolation: isolate;
 }
-.lf-public-outgoing:empty {
-  display: none;
+.lf-public-galaxy-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* The live canvas owns the light; landing must not swap a second color field. */
+  background: #050c1b;
 }
-.lf-public-outgoing,
-.lf-public-outgoing * {
-  view-transition-name: none !important;
+.lf-public-galaxy-pane {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--lf-pane-paper, var(--background));
+  will-change: transform;
 }
-.lf-public-outgoing .lf-optical-lane {
-  visibility: hidden !important;
+.lf-public-galaxy-pane::before,
+.lf-public-galaxy-pane::after {
+  content: '';
+  position: absolute;
+  left: -28px;
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(
+    circle at 0 100%,
+    transparent 28px,
+    var(--lf-pane-paper, var(--background)) 28.5px
+  );
 }
-.lf-public-outgoing .lf-hero-copy {
-  animation: none !important;
+.lf-public-galaxy-pane::before {
+  top: 0;
 }
-.lf-public-outgoing[data-lf-ribbon-ready='true'] .lf-sign-in-fallback {
+.lf-public-galaxy-pane::after {
+  bottom: 0;
+  background: radial-gradient(
+    circle at 0 0,
+    transparent 28px,
+    var(--lf-pane-paper, var(--background)) 28.5px
+  );
+}
+.lf-public-galaxy-flight .lf-public-galaxy-horizon {
+  top: 0;
+  bottom: auto;
+  height: calc(100vh + 480px);
+  transform-origin: 50% 108px;
+  will-change: transform;
+}
+body:has(.lf-public-galaxy-flight) .lf-sign-in-panel {
+  position: relative;
+  z-index: 70;
+}
+body:has(.lf-public-galaxy-flight) .lf-sign-in-toolbar {
+  z-index: 80;
+}
+.lf-home[data-header-tone='inverse'] .lf-home-header::before {
+  backdrop-filter: none;
+}
+.lf-public-galaxy-sky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../../public/images/ruiyuan/distant-stars.svg') center /
+    cover fixed;
+  opacity: 0.8;
+}
+.lf-shared-scene-fallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.lf-public-galaxy-host:has(.or-galaxy[data-ready='true'])
+  .lf-shared-scene-fallback {
   visibility: hidden;
 }
-.lf-sign-in[data-lf-scene-arrived='true'] .lf-sign-in-panel {
-  animation: none;
+.lf-shared-scene-fallback :is(span, svg) {
+  position: absolute;
+  left: var(--lf-core-x, 50%);
+  top: var(--lf-core-y, 50%);
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+.lf-shared-scene-fallback span {
+  width: var(--lf-core-span, 100%);
+  height: calc(var(--lf-core-span, 800px) * 0.26);
+  border: 1px solid rgb(175 195 224 / 20%);
+  border-radius: 50%;
+}
+.lf-shared-scene-fallback span:nth-child(2) {
+  scale: 1.4;
+}
+.lf-shared-scene-fallback span:nth-child(3) {
+  scale: 1.8;
+}
+.lf-shared-scene-fallback svg {
+  width: calc(var(--lf-core-span, 800px) * 0.22);
+  height: auto;
+  fill: #acbed7;
 }
 .lf-sign-in {
   --lf-auth-paper: #fff;
   --lf-auth-ink: #202124;
   --lf-auth-muted: #5f6368;
-  --lf-auth-blue: #1a73e8;
-  --lf-auth-readable: #1967d2;
+  --lf-auth-blue: #0064ff;
+  --lf-auth-readable: #0052d9;
   --lf-auth-soft: #eef5ff;
   --lf-auth-line: #dadce0;
   position: relative;
@@ -89,7 +199,7 @@ For commercial licensing, please contact support@quantumnous.com
   height: 36px;
   gap: 10px;
   padding: 0;
-  color: var(--lf-auth-ink);
+  color: #f1f6ff;
 }
 .lf-sign-in-brand a > div {
   width: 28px;
@@ -98,6 +208,9 @@ For commercial licensing, please contact support@quantumnous.com
 .lf-sign-in-brand .brand-wordmark {
   font-size: 19px;
   font-weight: 700;
+}
+.lf-sign-in-brand img {
+  filter: brightness(0) invert(1);
 }
 .lf-sign-in-toolbar {
   position: absolute;
@@ -120,31 +233,72 @@ For commercial licensing, please contact support@quantumnous.com
   align-self: start;
   height: 100svh;
   min-height: 680px;
-  overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--lf-auth-paper),
-    var(--lf-auth-soft)
-  );
-  border-radius: 0 18% 18% 0 / 0 50% 50% 0;
+  overflow: clip;
+  isolation: isolate;
+  color: #f1f6ff;
+  background: #050c1b;
+  border-radius: 0 28px 28px 0;
 }
-.lf-sign-in-fallback {
+.lf-sign-in-art::before {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 66%;
-  object-fit: cover;
-  opacity: 0.35;
+  pointer-events: none;
+  background: url('../../public/images/ruiyuan/distant-stars.svg') center /
+    cover fixed;
+  opacity: 0.8;
 }
-.lf-sign-in-art[data-ribbon-ready='true'] .lf-sign-in-fallback {
+/* The moving sky owns the background until both it and the camera have landed. */
+body:has(.lf-public-galaxy-flight) .lf-sign-in-art {
+  background: transparent;
+}
+body:has(.lf-public-galaxy-flight) .lf-sign-in-art::before {
+  opacity: 0;
+}
+body:has(.lf-public-galaxy-flight)
+  :is(.lf-sign-in-brand, .lf-sign-in-art .lf-ribbon-playback) {
   visibility: hidden;
+}
+body:has(.lf-public-galaxy-flight) .lf-home .lf-ruiyuan-hero {
+  background: transparent;
+}
+body:has(.lf-public-galaxy-flight) .lf-ruiyuan-opening::after {
+  opacity: 0;
+}
+body:has(.lf-public-galaxy-flight) .lf-home .lf-ruiyuan-horizon {
+  visibility: hidden;
+}
+.lf-sign-in-galaxy {
+  --or-background: #050c1b;
+  --or-foreground: #dae9ff;
+  --or-muted: #afc3e0;
+  --or-accent: #69b1ff;
+  position: absolute;
+  inset: 72px -8% 25%;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 75%,
+    transparent
+  );
+}
+.lf-sign-in .lf-sign-in-galaxy :is(.or-galaxy-disc, .or-favicon) {
+  background: #f7fbff;
+  color: #102c54;
+  border-color: #dce6f2;
 }
 .lf-sign-in-story {
   position: absolute;
   z-index: 25;
   right: 12%;
-  bottom: 15%;
+  bottom: 13%;
   left: 10%;
+  transition: opacity 240ms ease-out;
+}
+body:has(.lf-public-galaxy-flight[data-moving]) .lf-sign-in-story {
+  opacity: 0;
 }
 .lf-sign-in-story h2 {
   margin: 0;
@@ -156,7 +310,7 @@ For commercial licensing, please contact support@quantumnous.com
 }
 .lf-sign-in-story em {
   display: block;
-  color: var(--lf-auth-readable);
+  color: #8fc5ff;
   font-style: normal;
 }
 .lf-sign-in-story p {
@@ -164,7 +318,7 @@ For commercial licensing, please contact support@quantumnous.com
   margin: 18px 0 0;
   font-size: 14px;
   line-height: 1.8;
-  color: var(--lf-auth-muted);
+  color: #afc3e0;
 }
 .lf-sign-in-art .lf-ribbon-playback {
   position: absolute;
@@ -173,7 +327,7 @@ For commercial licensing, please contact support@quantumnous.com
   left: 10%;
   min-height: 44px;
   gap: 8px;
-  color: var(--lf-auth-muted);
+  color: #afc3e0;
   font-size: 12px;
   white-space: normal;
 }
@@ -184,7 +338,7 @@ For commercial licensing, please contact support@quantumnous.com
   min-height: 100svh;
   min-width: 0;
   padding: 112px clamp(28px, 4vw, 72px) 64px;
-  animation: lf-auth-unfold 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: none;
 }
 .lf-sign-in-form {
   width: 100%;
@@ -258,6 +412,10 @@ For commercial licensing, please contact support@quantumnous.com
   outline: 2px solid var(--lf-auth-readable);
   outline-offset: 4px;
 }
+.lf-sign-in-brand a:focus-visible,
+.lf-sign-in-art button:focus-visible {
+  outline-color: #8fc5ff;
+}
 .dark .lf-sign-in {
   --lf-auth-paper: #101418;
   --lf-auth-ink: #e8eaed;
@@ -271,43 +429,9 @@ For commercial licensing, please contact support@quantumnous.com
   background: #c2d7ff;
 }
 
-/* Capture only public branding and the marketing headline, never a credential form. */
-.lf-home[data-lf-auth-return='true'] .lf-hero-copy {
-  animation: none;
-}
+/* Capture only the public sky and brand. The form never receives a snapshot name. */
 html:has([data-lf-public-surface]) {
   view-transition-name: none;
-}
-.lf-home-header .public-brand-link,
-.lf-sign-in-brand {
-  view-transition-name: lf-public-brand;
-}
-.lf-home #lf-hero-title,
-.lf-sign-in-story .lf-public-headline {
-  view-transition-name: lf-public-headline;
-}
-::view-transition-group(lf-public-brand),
-::view-transition-group(lf-public-headline) {
-  animation-duration: 850ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-::view-transition-old(lf-public-brand),
-::view-transition-new(lf-public-brand),
-::view-transition-old(lf-public-headline),
-::view-transition-new(lf-public-headline) {
-  height: 100%;
-  object-fit: contain;
-  object-position: left top;
-}
-@keyframes lf-auth-unfold {
-  from {
-    clip-path: inset(0 0 0 100%);
-    transform: translateX(32px);
-  }
-  to {
-    clip-path: inset(0);
-    transform: translateX(0);
-  }
 }
 @media (max-width: 900px) {
   .lf-sign-in {
@@ -342,6 +466,13 @@ html:has([data-lf-public-surface]) {
   .lf-sign-in-toolbar .lf-sign-in-back {
     padding-inline: 6px;
     font-size: 12px;
+    color: #dae9ff;
+  }
+  .lf-sign-in-toolbar :is(button, a) {
+    color: #dae9ff;
+  }
+  .lf-sign-in-toolbar :is(button, a):focus-visible {
+    outline-color: #8fc5ff;
   }
   .lf-sign-in-art {
     position: relative;
@@ -349,6 +480,9 @@ html:has([data-lf-public-surface]) {
     height: 340px;
     min-height: 340px;
     border-radius: 0;
+  }
+  .lf-sign-in-galaxy {
+    inset: 52px -40% 16px 0;
   }
   .lf-sign-in-story {
     right: 48%;
@@ -374,16 +508,6 @@ html:has([data-lf-public-surface]) {
   }
   .lf-sign-in-form h1 {
     font-size: 30px;
-  }
-  @keyframes lf-auth-unfold {
-    from {
-      clip-path: inset(100% 0 0);
-      transform: translateY(24px);
-    }
-    to {
-      clip-path: inset(0);
-      transform: translateY(0);
-    }
   }
 }
 @media (max-width: 400px) {
@@ -414,9 +538,5 @@ html:has([data-lf-public-surface]) {
   .lf-sign-in * {
     scroll-behavior: auto;
     transition-duration: 0.01ms !important;
-  }
-  ::view-transition-group(lf-public-brand),
-  ::view-transition-group(lf-public-headline) {
-    animation-duration: 0.01ms;
   }
 }

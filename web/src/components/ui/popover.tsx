@@ -29,6 +29,10 @@ function PopoverTrigger({ ...props }: PopoverPrimitive.Trigger.Props) {
   return <PopoverPrimitive.Trigger data-slot='popover-trigger' {...props} />
 }
 
+function PopoverClose({ ...props }: PopoverPrimitive.Close.Props) {
+  return <PopoverPrimitive.Close data-slot='popover-close' {...props} />
+}
+
 function PopoverContent({
   className,
   align = 'center',
@@ -38,6 +42,8 @@ function PopoverContent({
   collisionPadding,
   collisionBoundary,
   collisionAvoidance,
+  anchor,
+  positionMethod,
   ...props
 }: PopoverPrimitive.Popup.Props &
   Pick<
@@ -49,6 +55,8 @@ function PopoverContent({
     | 'collisionPadding'
     | 'collisionBoundary'
     | 'collisionAvoidance'
+    | 'anchor'
+    | 'positionMethod'
   >) {
   return (
     <PopoverPrimitive.Portal>
@@ -60,6 +68,8 @@ function PopoverContent({
         collisionPadding={collisionPadding}
         collisionBoundary={collisionBoundary}
         collisionAvoidance={collisionAvoidance}
+        anchor={anchor}
+        positionMethod={positionMethod}
         className='isolate z-50'
       >
         <PopoverPrimitive.Popup
@@ -110,6 +120,7 @@ function PopoverDescription({
 
 export {
   Popover,
+  PopoverClose,
   PopoverContent,
   PopoverDescription,
   PopoverHeader,

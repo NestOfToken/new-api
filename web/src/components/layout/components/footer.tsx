@@ -38,6 +38,7 @@ interface FooterColumnProps {
 interface FooterProps {
   logo?: string
   name?: string
+  description?: string
   columns?: FooterColumnProps[]
   copyright?: string
   className?: string
@@ -273,7 +274,7 @@ export function Footer(props: FooterProps) {
               <span className='brand-wordmark text-base'>{displayName}</span>
             </Link>
             <p className='text-muted-foreground/60 mt-3 max-w-[200px] text-xs leading-relaxed'>
-              {t('Powerful API Management Platform')}
+              {props.description ?? t('Powerful API Management Platform')}
             </p>
           </div>
 

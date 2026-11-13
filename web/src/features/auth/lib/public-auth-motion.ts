@@ -18,6 +18,8 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import type { NavigateOptions } from '@tanstack/react-router'
 
+export const PUBLIC_GALAXY_TRAVEL_MS = 600
+
 export function isPublicAuthTransition(from?: string, to?: string) {
   return (
     (from === '/' && to === '/sign-in') || (from === '/sign-in' && to === '/')
@@ -28,15 +30,6 @@ export const publicAuthViewTransition: Exclude<
   NavigateOptions['viewTransition'],
   boolean | undefined
 > = {
-  types: ({ fromLocation, toLocation }) => {
-    if (
-      !isPublicAuthTransition(fromLocation?.pathname, toLocation.pathname) ||
-      typeof document === 'undefined' ||
-      !document.querySelector('[data-lf-public-surface]') ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return false
-    }
-    return ['lf-public-auth']
-  },
+  // The live portal scene moves itself. Native snapshots would freeze/replay it.
+  types: () => false,
 }

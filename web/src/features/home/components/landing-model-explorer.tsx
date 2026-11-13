@@ -17,66 +17,206 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  MessageSquare,
-  ScanText,
-  SlidersHorizontal,
-} from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { formatNumber } from '@/lib/format'
+import { getLobeIcon } from '@/lib/lobe-icon'
 
-export function LandingModelExplorer() {
+import type { LandingCatalog } from '../hooks/use-landing-catalog'
+
+export function LandingModelExplorer(props: {
+  catalog: LandingCatalog
+  selectedType: string
+  onSelectType: (id: string) => void
+  search: string
+  onSearchChange: (value: string) => void
+}) {
   const { t } = useTranslation()
+  const catalog = props.catalog
+  const category = catalog.modelTypes.find(
+    (type) => type.id === props.selectedType
+  )
+  const selected = category?.id ?? 'all'
+  const query = props.search.trim().toLocaleLowerCase(catalog.locale)
+  const models = (category?.models ?? catalog.models).filter((model) => {
+    return (
+      !query ||
+      `${model.model_name} ${model.vendor_name || t('Other models')}`
+        .toLocaleLowerCase(catalog.locale)
+        .includes(query)
+    )
+  })
+  let message = t('Explore all available models in the catalog.')
+  if (catalog.isLoading) {
+    message = t('Loading model catalog...')
+  } else if (catalog.error) {
+    message = t('Browse the catalog to explore available models.')
+  } else if (query) {
+    message = t('No matching models. Try another name.')
+  }
+
   return (
-    <article className='lf-model-panel'>
-      <h3>
-        {t('Choose models.')}
-        <br />
-        {t('Connect your business.')}
-      </h3>
-      <p className='lf-panel-description'>
-        {t(
-          'Explore models and prices for your application. Availability follows the current model catalog.'
-        )}
-      </p>
-      <Tabs defaultValue='content' className='lf-model-explorer'>
-        <TabsList className='lf-model-tabs' aria-label={t('Application needs')}>
-          <TabsTrigger value='content'>{t('Content and answers')}</TabsTrigger>
-          <TabsTrigger value='analysis'>
-            {t('Understanding and analysis')}
-          </TabsTrigger>
-          <TabsTrigger value='choice'>{t('Choose as you need')}</TabsTrigger>
-        </TabsList>
-        <TabsContent value='content' className='lf-task-panel'>
-          <MessageSquare className='lf-task-icon' aria-hidden='true' />
+    <div className='lf-model-showcase'>
+      <div className='lf-showcase-intro'>
+        <div>
+          <h2 id='lf-models-title'>{t('One platform. Every possibility.')}</h2>
           <p>
             {t(
-              'Choose models for content generation, information processing, and question answering.'
+              'Real models, ready to explore. Find the right fit for your next task.'
             )}
           </p>
-        </TabsContent>
-        <TabsContent value='analysis' className='lf-task-panel'>
-          <ScanText className='lf-task-icon' aria-hidden='true' />
-          <p>
-            {t('Explore models and integration options that fit your tasks.')}
-          </p>
-        </TabsContent>
-        <TabsContent value='choice' className='lf-task-panel'>
-          <SlidersHorizontal className='lf-task-icon' aria-hidden='true' />
-          <p>{t('Find model availability and pricing in the catalog.')}</p>
+        </div>
+        <Button
+          variant='link'
+          className='lf-inline-link'
+          render={<Link to='/pricing' />}
+        >
+          {t('Explore all models')}
+          <ArrowUpRight aria-hidden='true' />
+        </Button>
+      </div>
+      <div className='lf-catalog-toolbar'>
+        <div className='lf-catalog-search'>
+          <Search size={17} aria-hidden='true' />
+          <Input
+            aria-label={t('Search models or providers')}
+            placeholder={t('Search models or providers')}
+            value={props.search}
+            onChange={(event) => props.onSearchChange(event.target.value)}
+          />
+          {props.search && (
+            <Button
+              variant='ghost'
+              size='icon-sm'
+              aria-label={t('Clear search')}
+              onClick={() => props.onSearchChange('')}
+            >
+              <X aria-hidden='true' />
+            </Button>
+          )}
+        </div>
+      </div>
+      <Tabs
+        value={selected}
+        onValueChange={(value) => {
+          props.onSelectType(String(value))
+        }}
+      >
+        <TabsList
+          activateOnFocus
+          variant='line'
+          className='lf-model-type-tabs'
+          aria-label={t('Filter by model type')}
+        >
+          <TabsTrigger value='all'>
+            {t('All models')}{' '}
+            <span>{formatNumber(catalog.models.length, catalog.locale)}</span>
+          </TabsTrigger>
+          {catalog.modelTypes.map((type) => (
+            <TabsTrigger key={type.id} value={type.id}>
+              {type.name}{' '}
+              <span>{formatNumber(type.models.length, catalog.locale)}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <TabsContent value={selected} className='lf-catalog-panel'>
+          <div className='lf-model-gallery' aria-busy={catalog.isLoading}>
+            {models.length ? (
+              <ul
+                className='lf-model-card-grid'
+                aria-label={t('Models in the catalog')}
+              >
+                {models.slice(0, 6).map((model) => (
+                  <li key={model.model_name}>
+                    <Popover modal={false}>
+                      <PopoverTrigger
+                        render={
+                          <Button variant='ghost' className='lf-model-card' />
+                        }
+                      >
+                        <span className='lf-model-card-logo' aria-hidden='true'>
+                          {getLobeIcon(
+                            model.icon ||
+                              model.vendor_icon ||
+                              model.vendor_name ||
+                              'Other models',
+                            27
+                          )}
+                        </span>
+                        <span className='lf-model-card-copy'>
+                          <strong>{model.model_name}</strong>
+                          <small>
+                            {model.vendor_name || t('Other models')}
+                          </small>
+                        </span>
+                        <ArrowUpRight size={16} aria-hidden='true' />
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className='lf-home lf-provider-flyout'
+                        sideOffset={10}
+                        collisionPadding={{
+                          top: 80,
+                          right: 16,
+                          bottom: 16,
+                          left: 16,
+                        }}
+                      >
+                        <div className='lf-provider-flyout-heading'>
+                          <div>
+                            <PopoverTitle>{model.model_name}</PopoverTitle>
+                            <p>{model.vendor_name || t('Other models')}</p>
+                          </div>
+                          <PopoverClose
+                            render={
+                              <Button
+                                variant='ghost'
+                                size='icon-sm'
+                                aria-label={t('Close')}
+                              />
+                            }
+                          >
+                            <X aria-hidden='true' />
+                          </PopoverClose>
+                        </div>
+                        {model.description && <p>{model.description}</p>}
+                        {!!model.context_length && (
+                          <p>
+                            {t('Context length')}:{' '}
+                            {formatNumber(model.context_length, catalog.locale)}
+                          </p>
+                        )}
+                        <Button
+                          className='lf-inline-link'
+                          variant='link'
+                          render={<Link to='/pricing' />}
+                        >
+                          {t('Open model catalog')}
+                          <ArrowRight aria-hidden='true' />
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className='lf-catalog-message' role='status'>
+                {message}
+              </p>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
-      <Button
-        variant='link'
-        className='lf-inline-link'
-        render={<Link to='/pricing' />}
-      >
-        {t('View models and pricing')}
-        <ArrowRight aria-hidden='true' />
-      </Button>
-    </article>
+    </div>
   )
 }
