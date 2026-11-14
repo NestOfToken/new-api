@@ -126,7 +126,7 @@ function IcpRegistration() {
       className='text-muted-foreground hover:text-foreground focus-visible:ring-ring inline-flex min-h-11 items-center rounded-sm whitespace-nowrap underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none'
     >
       {/* The registration identifier stays unchanged in every language. */}
-      渝ICP备2026029137
+      渝ICP备2026029137号
     </a>
   )
 }

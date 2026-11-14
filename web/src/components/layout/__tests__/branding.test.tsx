@@ -113,7 +113,7 @@ it.each(['', '<p>Customer footer</p>'])(
       </QueryClientProvider>
     )
     const registration = await screen.findByRole('link', {
-      name: '渝ICP备2026029137',
+      name: '渝ICP备2026029137号',
     })
     expect(registration).toHaveAttribute('href', 'https://beian.miit.gov.cn/')
     expect(registration).toHaveAttribute('target', '_blank')

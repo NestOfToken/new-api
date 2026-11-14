@@ -732,7 +732,7 @@ describe('enterprise homepage', () => {
       within(screen.getByRole('banner')).getByRole('link', { name: /睿元云/ })
     ).toHaveAttribute('href', '/')
     expect(
-      screen.getByRole('link', { name: '渝ICP备2026029137' })
+      screen.getByRole('link', { name: '渝ICP备2026029137号' })
     ).toHaveAttribute('href', 'https://beian.miit.gov.cn/')
     const registration = await screen.findAllByRole('button', {
       name: 'Sign in / Register',
