@@ -79,6 +79,11 @@ def startup(engine, root, old=False):
         raise RuntimeError("Application startup failed: " + run("docker", "logs", name)[-12000:])
     finally:
         subprocess.run(["docker", "rm", "-f", name], capture_output=True)
+        if engine == "sqlite":
+            # The released image writes as root; return only this disposable
+            # fixture's files to the CI runner before seeding or inspecting it.
+            run("docker", "run", "--rm", "-v", str(root) + ":/fixture",
+                "--entrypoint", "chown", BASELINE, "-R", f"{os.getuid()}:{os.getgid()}", "/fixture")
 
 
 def reset(engine, root):
