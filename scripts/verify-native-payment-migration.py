@@ -110,7 +110,7 @@ def verify(engine, root, upgraded):
         assert str(sql(engine, root, "main", "SELECT cny_price_cents FROM subscription_plans WHERE id=90001")[0][0]) in ("0", "None", "")
         assert str(sql(engine, root, "logs", "SELECT content FROM logs WHERE id=90001")[0][0]) == "existing-log"
         try:
-            sql(engine, root, "main", "INSERT INTO users(id,username) VALUES(90002,'migration-fixture')")
+            sql(engine, root, "main", "INSERT INTO users(id,username,password) VALUES(90002,'migration-fixture','fixture-login-disabled')")
         except (sqlite3.IntegrityError, subprocess.CalledProcessError):
             pass
         else:
@@ -145,7 +145,7 @@ def main():
                     before = {}
                     if upgrade:
                         startup(engine, root, old=True)
-                        sql(engine, root, "main", "INSERT INTO users(id,username,quota) VALUES(90001,'migration-fixture',600001)")
+                        sql(engine, root, "main", "INSERT INTO users(id,username,password,quota) VALUES(90001,'migration-fixture','fixture-login-disabled',600001)")
                         sql(engine, root, "main", "INSERT INTO subscription_plans(id,title,price_amount,currency) VALUES(90001,'Existing plan',12.5,'USD')")
                         sql(engine, root, "logs", "INSERT INTO logs(id,user_id,type,content) VALUES(90001,90001,1,'existing-log')")
                         before = {db: indexes(engine, root, db) for db in ("main", "logs")}
