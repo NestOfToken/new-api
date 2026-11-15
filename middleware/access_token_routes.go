@@ -58,6 +58,19 @@ var accessTokenRouteRules = map[string]accessTokenRouteRule{
 	"GET /api/verify/methods":             accessTokenAnyRule,
 	"POST /api/verify":                    accessTokenAnyRule,
 
+	// Native payments use the existing wallet and billing grants. Money
+	// refunds require a browser session and a bound strong-factor proof.
+	"GET /api/payments/capabilities":                      accessTokenScopeRule("wallet:read"),
+	"POST /api/payments/quote":                            accessTokenScopeRule("wallet:write"),
+	"POST /api/payments/orders":                           accessTokenScopeRule("wallet:write"),
+	"GET /api/payments/orders":                            accessTokenScopeRule("wallet:read"),
+	"GET /api/payments/orders/:order_no":                  accessTokenScopeRule("wallet:read"),
+	"POST /api/payments/orders/:order_no/cancel":          accessTokenScopeRule("wallet:write"),
+	"GET /api/payments/admin/orders":                      accessTokenScopeRule("billing:read"),
+	"GET /api/payments/admin/bills":                       accessTokenScopeRule("billing:read"),
+	"POST /api/payments/admin/orders/:order_no/reconcile": accessTokenScopeRule("billing:write"),
+	"POST /api/payments/admin/orders/:order_no/refund":    accessTokenSessionRule,
+
 	// router/api-router.go: /api/user (self)
 	"GET /api/user/sessions":                       accessTokenSessionRule,
 	"DELETE /api/user/sessions/:sid":               accessTokenSessionRule,

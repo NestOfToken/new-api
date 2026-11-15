@@ -34,6 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { NativePaymentOptions } from '@/features/native-payments/payment-options'
 import { formatNumber } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -81,6 +82,8 @@ interface RechargeFormCardProps {
   waffoMinTopup?: number
   onWaffoMethodSelect?: (method: WaffoPayMethod, index: number) => void
   enableWaffoPancakeTopup?: boolean
+  enableNativeTopup?: boolean
+  onNativePaymentSuccess?: () => void | Promise<void>
 }
 
 export function RechargeFormCard({
@@ -111,6 +114,8 @@ export function RechargeFormCard({
   waffoMinTopup,
   onWaffoMethodSelect,
   enableWaffoPancakeTopup,
+  enableNativeTopup,
+  onNativePaymentSuccess,
 }: RechargeFormCardProps) {
   const { t } = useTranslation()
   const [localAmount, setLocalAmount] = useState(topupAmount.toString())
@@ -134,8 +139,15 @@ export function RechargeFormCard({
     topupInfo?.enable_online_topup ||
     topupInfo?.enable_stripe_topup ||
     enableWaffoTopup ||
-    enableWaffoPancakeTopup
+    enableWaffoPancakeTopup ||
+    enableNativeTopup
   const hasAnyTopup = hasConfigurableTopup || enableCreemTopup
+  const nativeOnly =
+    enableNativeTopup &&
+    !topupInfo?.enable_online_topup &&
+    !topupInfo?.enable_stripe_topup &&
+    !enableWaffoTopup &&
+    !enableWaffoPancakeTopup
   const hasStandardPaymentMethods =
     Array.isArray(topupInfo?.pay_methods) && topupInfo.pay_methods.length > 0
   const hasWaffoPaymentMethods =
@@ -265,25 +277,29 @@ export function RechargeFormCard({
                               </div>
                             )}
                           </div>
-                          <div className='text-muted-foreground mt-1.5 w-full text-xs sm:mt-2'>
-                            {hasDiscount && savedAmount > 0 ? (
-                              <Trans
-                                t={t}
-                                i18nKey='Pay {{amount}} <savings>• Save {{saved}}</savings>'
-                                values={{
+                          {!nativeOnly && (
+                            <div className='text-muted-foreground mt-1.5 w-full text-xs sm:mt-2'>
+                              {hasDiscount && savedAmount > 0 ? (
+                                <Trans
+                                  t={t}
+                                  i18nKey='Pay {{amount}} <savings>• Save {{saved}}</savings>'
+                                  values={{
+                                    amount: formatCurrency(actualPrice),
+                                    saved: formatCurrency(savedAmount),
+                                  }}
+                                  components={{
+                                    savings: (
+                                      <span className='text-green-600' />
+                                    ),
+                                  }}
+                                />
+                              ) : (
+                                t('Pay {{amount}}', {
                                   amount: formatCurrency(actualPrice),
-                                  saved: formatCurrency(savedAmount),
-                                }}
-                                components={{
-                                  savings: <span className='text-green-600' />,
-                                }}
-                              />
-                            ) : (
-                              t('Pay {{amount}}', {
-                                amount: formatCurrency(actualPrice),
-                              })
-                            )}
-                          </div>
+                                })
+                              )}
+                            </div>
+                          )}
                         </Button>
                       )
                     })}
@@ -308,19 +324,26 @@ export function RechargeFormCard({
                     placeholder={t('Minimum {{amount}}', { amount: minTopup })}
                     className='h-9 text-base sm:h-10 sm:text-lg'
                   />
-                  <div className='bg-muted/30 flex min-h-9 items-center justify-between gap-2 rounded-md border px-3 lg:min-w-52'>
-                    <span className='text-muted-foreground truncate text-xs'>
-                      {t('Amount to pay:')}
-                    </span>
-                    {calculating ? (
-                      <Skeleton className='h-5 w-16' />
-                    ) : (
-                      <span className='text-sm font-semibold'>
-                        {formatCurrency(paymentAmount)}
+                  {!nativeOnly && (
+                    <div className='bg-muted/30 flex min-h-9 items-center justify-between gap-2 rounded-md border px-3 lg:min-w-52'>
+                      <span className='text-muted-foreground truncate text-xs'>
+                        {t('Amount to pay:')}
                       </span>
-                    )}
-                  </div>
+                      {calculating ? (
+                        <Skeleton className='h-5 w-16' />
+                      ) : (
+                        <span className='text-sm font-semibold'>
+                          {formatCurrency(paymentAmount)}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
+                {nativeOnly && (
+                  <p className='text-muted-foreground text-xs'>
+                    {t('The final payment amount is shown in CNY.')}
+                  </p>
+                )}
               </div>
 
               <div className='space-y-2.5 sm:space-y-3'>
@@ -394,15 +417,25 @@ export function RechargeFormCard({
                     })}
                   </div>
                 ) : null}
-                {!hasStandardPaymentMethods && !hasWaffoPaymentMethods && (
-                  <Alert>
-                    <AlertDescription>
-                      {t(
-                        'No payment methods available. Please contact administrator.'
-                      )}
-                    </AlertDescription>
-                  </Alert>
+                {enableNativeTopup && (
+                  <NativePaymentOptions
+                    kind='topup'
+                    amount={topupAmount}
+                    disabled={topupAmount < minTopup}
+                    onSuccess={onNativePaymentSuccess}
+                  />
                 )}
+                {!hasStandardPaymentMethods &&
+                  !hasWaffoPaymentMethods &&
+                  !enableNativeTopup && (
+                    <Alert>
+                      <AlertDescription>
+                        {t(
+                          'No payment methods available. Please contact administrator.'
+                        )}
+                      </AlertDescription>
+                    </Alert>
+                  )}
               </div>
 
               {enableWaffoTopup &&

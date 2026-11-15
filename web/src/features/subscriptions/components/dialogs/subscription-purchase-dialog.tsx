@@ -27,7 +27,11 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Combobox } from '@/components/ui/combobox'
 import { Separator } from '@/components/ui/separator'
+import { useNativeCapabilities } from '@/features/native-payments/hooks'
+import { NativePaymentOptions } from '@/features/native-payments/payment-options'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { toIntlLocale } from '@/i18n/languages'
+import { formatSettlementAmount } from '@/lib/currency'
 import { formatQuota } from '@/lib/format'
 import { handleServerError } from '@/lib/handle-server-error'
 import { DEFAULT_CURRENCY_CONFIG } from '@/stores/system-config-store'
@@ -63,7 +67,9 @@ interface Props {
 }
 
 export function SubscriptionPurchaseDialog(props: Props) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = toIntlLocale(i18n.resolvedLanguage || i18n.language)
+  const nativeCapabilities = useNativeCapabilities(props.open)
   const { currency } = useSystemConfig()
   const [paying, setPaying] = useState(false)
   const [selectedEpayMethod, setSelectedEpayMethod] = useState('')
@@ -393,6 +399,27 @@ export function SubscriptionPurchaseDialog(props: Props) {
             )}
           </div>
         )}
+        {nativeCapabilities.data?.enabled &&
+          nativeCapabilities.data.channels.length > 0 &&
+          Number(plan.cny_price_cents) > 0 && (
+            <div className='space-y-2 rounded-md border p-3'>
+              <p className='text-sm'>
+                {t('WeChat Pay / Alipay')} ·{' '}
+                {formatSettlementAmount(
+                  Number(plan.cny_price_cents) / 100,
+                  'CNY',
+                  locale
+                )}
+              </p>
+              <NativePaymentOptions
+                kind='subscription'
+                planId={plan.id}
+                enabled={props.open}
+                disabled={paying || limitReached}
+                onSuccess={props.onPurchaseSuccess}
+              />
+            </div>
+          )}
       </div>
     </Dialog>
   )

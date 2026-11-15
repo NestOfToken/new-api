@@ -1,0 +1,28 @@
+{
+  "profiles": [
+    {
+      "id": "wechat-v1",
+      "provider": "wechat",
+      "enabled": false,
+      "app_id": "REPLACE_WITH_WECHAT_APP_ID",
+      "merchant_id": "REPLACE_WITH_WECHAT_MERCHANT_ID",
+      "scenes": ["native", "h5"],
+      "private_key_file": "wechat/apiclient_key.pem",
+      "wechat_serial_no": "REPLACE_WITH_MERCHANT_CERT_SERIAL",
+      "wechat_public_key_id": "REPLACE_WITH_WECHAT_PUBLIC_KEY_ID",
+      "wechat_public_key_file": "wechat/wechatpay_public_key.pem",
+      "wechat_api_v3_key_file": "wechat/api_v3_key.txt"
+    },
+    {
+      "id": "alipay-v1",
+      "provider": "alipay",
+      "enabled": false,
+      "app_id": "REPLACE_WITH_ALIPAY_APP_ID",
+      "merchant_id": "REPLACE_WITH_ALIPAY_SELLER_ID",
+      "scenes": ["page", "wap"],
+      "sandbox": false,
+      "private_key_file": "alipay/app_private_key.pem",
+      "alipay_public_key_file": "alipay/alipay_public_key.pem"
+    }
+  ]
+}

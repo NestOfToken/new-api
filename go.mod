@@ -39,6 +39,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/samber/hot v0.11.0
 	github.com/samber/lo v1.53.0
+	github.com/smartwalle/alipay/v3 v3.2.31
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.12.1
@@ -49,6 +50,7 @@ require (
 	github.com/tidwall/sjson v1.2.5
 	github.com/tiktoken-go/tokenizer v0.8.1 // indirect
 	github.com/waffo-com/waffo-go v1.3.2
+	github.com/wechatpay-apiv3/wechatpay-go v0.2.21
 	github.com/yapingcat/gomedia v0.0.0-20240906162731-17feea57090c
 	golang.org/x/crypto v0.52.0
 	golang.org/x/image v0.41.0
@@ -81,6 +83,9 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.25 // indirect
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
+	github.com/smartwalle/ncrypto v1.0.4 // indirect
+	github.com/smartwalle/ngx v1.1.2 // indirect
+	github.com/smartwalle/nsign v1.0.9 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.opentelemetry.io/otel v1.41.0 // indirect
 	go.opentelemetry.io/otel/trace v1.41.0 // indirect

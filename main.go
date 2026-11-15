@@ -156,6 +156,12 @@ func main() {
 	// switch are enforced inside the runner and each handler's Enabled().
 	controller.RegisterScheduledSystemTasks()
 	service.StartSystemTaskRunner()
+	paymentCtx, stopPaymentRecovery := context.WithCancel(context.Background())
+	defer stopPaymentRecovery()
+	if common.IsMasterNode {
+		go service.RunNativePaymentRecovery(paymentCtx)
+		go service.RunNativePaymentBillSchedule(paymentCtx)
+	}
 
 	if os.Getenv("BATCH_UPDATE_ENABLED") == "true" {
 		common.BatchUpdateEnabled = true
@@ -220,6 +226,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-quit
+	stopPaymentRecovery()
 	common.SysLog(common.LogText("received signal: %v, shutting down...", sig))
 
 	// SSE streams may run for minutes; give them time to finish before forced exit
@@ -342,6 +349,9 @@ func InitResources() error {
 	}
 
 	perfmetrics.Init()
+	if err = service.InitNativePayments(); err != nil {
+		return err
+	}
 
 	// 启动系统监控
 	common.StartSystemMonitor()

@@ -97,3 +97,31 @@ jobs:
 
       - name: Test
         run: bun run test
+
+  native-payment-databases:
+    name: Native payment database startup and upgrade
+    if: github.event.action != 'closed' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GOWORK: 'off'
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+            relaykit/go.sum
+            tokenkit/go.sum
+      - name: Build isolated application candidate
+        run: |
+          mkdir -p web/dist
+          touch web/dist/index.html
+          CGO_ENABLED=0 go build -o "$RUNNER_TEMP/native-payment-candidate" .
+      - name: Verify fresh startup and production upgrade twice on three engines
+        env:
+          NATIVE_PAYMENT_CANDIDATE: ${{ runner.temp }}/native-payment-candidate
+        run: python3 scripts/verify-native-payment-migration.py

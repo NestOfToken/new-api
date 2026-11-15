@@ -168,7 +168,7 @@ func TryReserveUserQuota(id int, quota int) (bool, error) {
 	if quota == 0 {
 		return true, nil
 	}
-	if !common.RedisEnabled {
+	if !common.RedisEnabled || NativePaymentWalletMode() {
 		return reserveUserQuotaDB(id, quota)
 	}
 
