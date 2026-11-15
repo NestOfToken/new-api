@@ -62,6 +62,23 @@ func SetApiRouter(router *gin.Engine) {
 		apiRouter.GET("/ratio_config", middleware.CriticalRateLimit(), controller.GetRatioConfig)
 
 		apiRouter.POST("/stripe/webhook", anonymousRequestBodyLimit, controller.StripeWebhook)
+		apiRouter.POST("/payments/:provider/notify/:profile", anonymousRequestBodyLimit, controller.NativePaymentNotify)
+		payments := apiRouter.Group("/payments", middleware.DisableCache(), middleware.UserAuth())
+		{
+			payments.GET("/capabilities", controller.NativePaymentCapabilities)
+			payments.POST("/quote", middleware.CriticalRateLimit(), controller.QuoteNativePayment)
+			payments.POST("/orders", middleware.CriticalRateLimit(), controller.CreateNativePayment)
+			payments.GET("/orders", controller.ListNativePayments)
+			payments.GET("/orders/:order_no", controller.GetNativePayment)
+			payments.POST("/orders/:order_no/cancel", middleware.CriticalRateLimit(), controller.CancelNativePayment)
+		}
+		paymentAdmin := apiRouter.Group("/payments/admin", middleware.DisableCache(), middleware.RootAuth())
+		{
+			paymentAdmin.GET("/orders", controller.AdminListNativePayments)
+			paymentAdmin.GET("/bills", controller.AdminListNativePaymentBills)
+			paymentAdmin.POST("/orders/:order_no/reconcile", middleware.CriticalRateLimit(), controller.AdminReconcileNativePayment)
+			paymentAdmin.POST("/orders/:order_no/refund", middleware.CriticalRateLimit(), middleware.UserCriticalRateLimit("native-refund"), controller.AdminRefundNativePayment)
+		}
 		apiRouter.POST("/creem/webhook", anonymousRequestBodyLimit, controller.CreemWebhook)
 		apiRouter.POST("/waffo/webhook", anonymousRequestBodyLimit, controller.WaffoWebhook)
 		// :env separates test vs prod URLs so the operator can register each

@@ -148,6 +148,10 @@ func AdminCreateSubscriptionPlan(c *gin.Context) {
 		return
 	}
 	req.Plan.Id = 0
+	if req.Plan.CNYPriceCents < 0 || req.Plan.CNYPriceCents > 100000000 {
+		common.ApiErrorT(c, "Invalid parameters")
+		return
+	}
 	if strings.TrimSpace(req.Plan.Title) == "" {
 		common.ApiErrorT(c, "Subscription plan title cannot be empty")
 		return
@@ -231,6 +235,10 @@ func AdminUpdateSubscriptionPlan(c *gin.Context) {
 		common.ApiErrorT(c, "Subscription plan title cannot be empty")
 		return
 	}
+	if req.Plan.CNYPriceCents < 0 || req.Plan.CNYPriceCents > 100000000 {
+		common.ApiErrorT(c, "Invalid parameters")
+		return
+	}
 	if req.Plan.PriceAmount < 0 {
 		common.ApiErrorT(c, "Price cannot be negative")
 		return
@@ -284,6 +292,7 @@ func AdminUpdateSubscriptionPlan(c *gin.Context) {
 			"title":                      req.Plan.Title,
 			"subtitle":                   req.Plan.Subtitle,
 			"price_amount":               req.Plan.PriceAmount,
+			"cny_price_cents":            req.Plan.CNYPriceCents,
 			"currency":                   req.Plan.Currency,
 			"duration_unit":              req.Plan.DurationUnit,
 			"duration_value":             req.Plan.DurationValue,

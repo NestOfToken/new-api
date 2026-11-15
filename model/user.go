@@ -1250,7 +1250,7 @@ func ValidateAccessToken(token string) (*User, error) {
 
 // GetUserQuota gets quota from Redis first, falls back to DB if needed
 func GetUserQuota(id int, fromDB bool) (quota int, err error) {
-	if !fromDB && common.RedisEnabled {
+	if !fromDB && common.RedisEnabled && !NativePaymentWalletMode() {
 		return getUserQuotaCache(id)
 	}
 	err = DB.Model(&User{}).Where("id = ?", id).Select("quota").Find(&quota).Error
@@ -1344,6 +1344,9 @@ func IncreaseUserQuota(id int, quota int, db bool) (err error) {
 	if err := common.ValidateWalletQuota(quota); err != nil {
 		return err
 	}
+	if NativePaymentWalletMode() {
+		return increaseUserQuota(id, quota)
+	}
 	if !db && common.BatchUpdateEnabled {
 		addNewRecord(BatchUpdateTypeUserQuota, id, quota)
 		gopool.Go(func() {
@@ -1387,6 +1390,9 @@ func increaseUserQuota(id int, quota int) (err error) {
 func DecreaseUserQuota(id int, quota int, db bool) (err error) {
 	if quota < 0 {
 		return errors.New("quota cannot be negative")
+	}
+	if NativePaymentWalletMode() {
+		return decreaseUserQuota(id, quota)
 	}
 	gopool.Go(func() {
 		err := cacheDecrUserQuota(id, int64(quota))

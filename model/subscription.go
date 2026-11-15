@@ -152,6 +152,8 @@ type SubscriptionPlan struct {
 	// Display money amount (follow existing code style: float64 for money)
 	PriceAmount float64 `json:"price_amount" gorm:"type:decimal(10,6);not null;default:0"`
 	Currency    string  `json:"currency" gorm:"type:varchar(8);not null;default:'USD'"`
+	// Explicit RMB price for direct mainland payments; zero disables this method.
+	CNYPriceCents int64 `json:"cny_price_cents" gorm:"not null;default:0"`
 
 	DurationUnit  string `json:"duration_unit" gorm:"type:varchar(16);not null;default:'month'"`
 	DurationValue int    `json:"duration_value" gorm:"type:int;not null;default:1"`
@@ -266,6 +268,10 @@ type UserSubscription struct {
 
 	LastResetTime int64 `json:"last_reset_time" gorm:"type:bigint;default:0"`
 	NextResetTime int64 `json:"next_reset_time" gorm:"type:bigint;default:0;index"`
+	// Native purchases preserve the reset schedule promised at checkout.
+	NativeResetSnapshot bool   `json:"-"`
+	ResetPeriod         string `json:"-" gorm:"type:varchar(16)"`
+	ResetCustomSeconds  int64  `json:"-"`
 
 	UpgradeGroup  string `json:"upgrade_group" gorm:"type:varchar(64);default:''"`
 	PrevUserGroup string `json:"prev_user_group" gorm:"type:varchar(64);default:''"`
@@ -502,7 +508,7 @@ func CreateUserSubscriptionFromPlanTx(tx *gorm.DB, userId int, plan *Subscriptio
 			return nil, common.NewMessage("Purchase limit for this plan has been reached")
 		}
 	}
-	nowUnix := GetDBTimestamp()
+	nowUnix := getDBTimestamp(tx)
 	now := time.Unix(nowUnix, 0)
 	endUnix, err := calcPlanEndTime(now, plan)
 	if err != nil {
@@ -1267,6 +1273,12 @@ func (r *SubscriptionPreConsumeRecord) BeforeUpdate(tx *gorm.DB) error {
 func maybeResetUserSubscriptionWithPlanTx(tx *gorm.DB, sub *UserSubscription, plan *SubscriptionPlan, now int64) error {
 	if tx == nil || sub == nil || plan == nil {
 		return errors.New("invalid reset args")
+	}
+	if sub.NativeResetSnapshot {
+		snapshot := *plan
+		snapshot.QuotaResetPeriod = sub.ResetPeriod
+		snapshot.QuotaResetCustomSeconds = sub.ResetCustomSeconds
+		plan = &snapshot
 	}
 	if sub.NextResetTime > 0 && sub.NextResetTime > now {
 		return nil

@@ -400,6 +400,36 @@ export function SubscriptionsMutateDrawer({
                 />
               </div>
 
+              <FormField
+                control={form.control}
+                name='cny_price_cents'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('WeChat / Alipay price (CNY cents)')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type='number'
+                        min={0}
+                        max={100000000}
+                        step={1}
+                        onChange={(event) =>
+                          field.onChange(Number(event.target.value))
+                        }
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t(
+                        '100 cents = CNY 1.00. Set 0 to disable direct payments for this plan.'
+                      )}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
                 <FormField
                   control={form.control}

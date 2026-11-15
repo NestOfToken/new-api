@@ -20,6 +20,8 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SectionPageLayout } from '@/components/layout'
+import { useNativeCapabilities } from '@/features/native-payments/hooks'
+import { NativeOrdersButton } from '@/features/native-payments/orders-dialog'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { getSelf } from '@/lib/api'
@@ -83,6 +85,7 @@ export function Wallet(props: WalletProps) {
   const { status } = useStatus()
   const { currency } = useSystemConfig()
   const { topupInfo, presetAmounts, loading: topupLoading } = useTopupInfo()
+  const nativePayments = useNativeCapabilities()
 
   // Calculate effective exchange rate - when display type is USD, use rate of 1
   const effectiveUsdExchangeRate = useMemo(() => {
@@ -289,6 +292,9 @@ export function Wallet(props: WalletProps) {
         <SectionPageLayout.Content>
           <div className='mx-auto flex w-full max-w-7xl flex-col gap-4 sm:gap-5'>
             <WalletStatsCard user={user} loading={userLoading} />
+            <div className='flex justify-end'>
+              <NativeOrdersButton />
+            </div>
 
             <div
               className={
@@ -328,6 +334,11 @@ export function Wallet(props: WalletProps) {
                   enableWaffoPancakeTopup={
                     topupInfo?.enable_waffo_pancake_topup
                   }
+                  enableNativeTopup={
+                    nativePayments.data?.enabled &&
+                    nativePayments.data.channels.length > 0
+                  }
+                  onNativePaymentSuccess={fetchUser}
                 />
               </div>
 

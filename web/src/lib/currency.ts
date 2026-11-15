@@ -635,3 +635,19 @@ export function formatLocalCurrencyAmount(
 
   return formatCurrencyValue(amount, merged, meta)
 }
+
+/** Format a payment in its explicit settlement currency, without display-rate conversion. */
+export function formatSettlementAmount(
+  amount: number,
+  currencyCode: string,
+  locale?: Intl.LocalesArgument
+): string {
+  if (!Number.isFinite(amount)) return '-'
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currencyCode,
+    currencyDisplay: 'code',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+}
