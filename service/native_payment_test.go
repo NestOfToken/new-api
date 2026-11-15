@@ -111,6 +111,9 @@ func TestNativePaymentReceiptBeforeDelivery(t *testing.T) {
 }
 
 func TestNativePaymentRefundProofBindsOrderAndAmount(t *testing.T) {
+	scope, listed := AccessTokenVerificationScope(VerificationScopeNativePaymentRefund)
+	assert.True(t, listed)
+	assert.Empty(t, scope, "personal access tokens cannot request money-refund proofs")
 	operation := VerificationOperation{Scope: VerificationScopeNativePaymentRefund, Context: []byte(`{"order_no":"NPaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","amount_cents":1990}`)}
 	binding, err := BindVerificationOperation(operation)
 	require.NoError(t, err)

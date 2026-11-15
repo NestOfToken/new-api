@@ -319,6 +319,7 @@ func TestUserAuthAppliesAccessTokenRouteRules(t *testing.T) {
 	admin := createMiddlewarePATUser(t, "route-rule-admin", legacy)
 	require.NoError(t, model.DB.Model(admin).Update("role", common.RoleAdminUser).Error)
 	profile, _ := createMiddlewareScopedToken(t, admin.Id, 0, "profile:read")
+	wallet, _ := createMiddlewareScopedToken(t, admin.Id, 0, "wallet:read")
 	channel, _ := createMiddlewareScopedToken(t, admin.Id, time.Now().Unix()+3600, "channel:read")
 	expired, _ := createMiddlewareScopedToken(t, admin.Id, time.Now().Unix()-1, "profile:read")
 
@@ -329,6 +330,8 @@ func TestUserAuthAppliesAccessTokenRouteRules(t *testing.T) {
 	router.GET("/api/undeclared", UserAuth(), ok)
 	router.GET("/api/channel/", AdminAuth(), RequirePermission(authz.ChannelRead), ok)
 	router.GET("/api/pricing", TryUserAuth(), ok)
+	router.GET("/api/payments/orders", UserAuth(), ok)
+	router.POST("/api/payments/admin/orders/:order_no/refund", UserAuth(), ok)
 
 	for _, test := range []struct {
 		name, path, token, code, reason string
@@ -336,6 +339,8 @@ func TestUserAuthAppliesAccessTokenRouteRules(t *testing.T) {
 	}{
 		{name: "granted scope on a never expiring token", path: "/api/user/self", token: profile, status: http.StatusOK},
 		{name: "missing scope", path: "/api/user/self", token: channel, status: http.StatusForbidden, code: "ACCESS_TOKEN_SCOPE_DENIED", reason: "scope_denied"},
+		{name: "native payment history with wallet scope", path: "/api/payments/orders", token: wallet, status: http.StatusOK},
+		{name: "native payment history without wallet scope", path: "/api/payments/orders", token: profile, status: http.StatusForbidden, code: "ACCESS_TOKEN_SCOPE_DENIED", reason: "scope_denied"},
 		{name: "undeclared route", path: "/api/undeclared", token: profile, status: http.StatusForbidden, code: "ACCESS_TOKEN_ROUTE_UNDECLARED", reason: "route_undeclared"},
 		{name: "session route", path: "/api/user/access_tokens", token: profile, status: http.StatusForbidden, code: "AUTH_SESSION_REQUIRED", reason: "session_required"},
 		{name: "permission route with its scope", path: "/api/channel/", token: channel, status: http.StatusOK},
@@ -365,6 +370,16 @@ func TestUserAuthAppliesAccessTokenRouteRules(t *testing.T) {
 				assert.Contains(t, string(params), `"required_scope":"`)
 			}
 		})
+	}
+
+	// The token grant never widens the account: revoking the Casbin permission
+	for _, token := range []string{wallet, legacy} {
+		request := httptest.NewRequest(http.MethodPost, "/api/payments/admin/orders/NPtest/refund", nil)
+		request.Header.Set("Authorization", "Bearer "+token)
+		response := httptest.NewRecorder()
+		router.ServeHTTP(response, request)
+		assert.Equal(t, http.StatusForbidden, response.Code)
+		assert.Contains(t, response.Body.String(), "AUTH_SESSION_REQUIRED")
 	}
 
 	// The token grant never widens the account: revoking the Casbin permission
