@@ -208,7 +208,6 @@ jobs:
           LFTECH_CLB_ID: ${{ vars.LFTECH_CLB_ID }}
           LFTECH_CLB_LISTENER_ID: ${{ vars.LFTECH_CLB_LISTENER_ID }}
           LFTECH_CLB_LOCATION_ID: ${{ vars.LFTECH_CLB_LOCATION_ID }}
-          LFTECH_DRAIN_SECONDS: '600'
           DEPLOY_DIR: ${{ vars.DEPLOY_DIR }}
           LFTECH_IMAGE_REF: ${{ vars.DOCKERHUB_IMAGE }}@${{ needs.build.outputs.digest }}
           LFTECH_SOURCE_SHA: ${{ needs.prepare.outputs.sha }}

@@ -1,124 +1,203 @@
+import json
 import os
 import unittest
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import fleet_deploy
+import tat_deploy
+
+
+def target(name, weight=20):
+    return {"id": "ins-" + name, "name": name, "port": 18080, "weight": weight}
 
 
 class FleetDeploymentTests(unittest.TestCase):
-    def test_rolling_order_and_failure_isolation(self):
-        for fail in (False, True):
-            with self.subTest(fail=fail):
-                targets = [
-                    {"id": "ins-master", "name": "master", "port": 18080, "weight": 20},
-                    {"id": "ins-slave", "name": "slave", "port": 18080, "weight": 10},
-                ]
-                states = {(t["id"], t["port"]): (True, t["weight"]) for t in targets}
-                events = []
+    def setUp(self):
+        self.enterContext(patch.object(fleet_deploy, "release_event"))
+        self.fixed = [target("master"), target("slave", 10)]
+        self.existing = [target("autoscaled")]
+        self.surge = [target("surge1"), target("surge2")]
+        self.retained = self.fixed + self.existing
+        fleet = self.retained + self.surge
+        self.weights = {t["id"]: t["weight"] for t in fleet}
+        self.images = {t["id"]: "current" for t in self.retained}
+        self.images.update({t["id"]: "candidate" for t in self.surge})
+        self.healthy = {t["id"]: True for t in fleet}
+        self.container_healthy = dict(self.healthy)
+        self.events = []
+        self.calls = []
+        self.phase = "warming"
+        self.fail = None
+        self.drain_result = {"drained": True}
+        self.enterContext(patch.dict(os.environ, {
+            "LFTECH_IMAGE_REF": "candidate", "LFTECH_SOURCE_SHA": "a" * 40,
+            "LFTECH_VERSION": "v2", "LFTECH_RUN_ID": "123-3",
+        }))
+        self.enterContext(patch.object(fleet_deploy, "capacity_operation", side_effect=self.capacity))
+        self.enterContext(patch.object(fleet_deploy, "change_weight", side_effect=self.weight))
+        self.enterContext(patch.object(fleet_deploy, "target_health", side_effect=self.health))
+        self.enterContext(patch.object(fleet_deploy, "remote_deploy", side_effect=self.remote))
+        self.enterContext(patch.object(fleet_deploy.time, "sleep"))
 
-                def remote(status_only=False, prepare_only=False, prepared=False):
-                    node = os.environ["TENCENTCLOUD_INSTANCE_ID"]
-                    if status_only:
-                        return {"image": "old", "health": "healthy"}
-                    if prepare_only:
-                        events.append(("prepare", node))
-                        return
-                    self.assertTrue(prepared)
-                    events.append(("deploy", node))
-                    if fail:
-                        raise RuntimeError("deployment failed")
+    def health(self, *_):
+        return {(node, 18080): (self.healthy[node], weight) for node, weight in self.weights.items()}
 
-                def weight(client, settings, target, value):
-                    peer = targets[1] if target == targets[0] else targets[0]
-                    self.assertGreater(states[(peer["id"], peer["port"])][1], 0)
-                    states[(target["id"], target["port"])] = (True, value)
-                    events.append(("weight", target["id"], value))
+    def weight(self, client, settings, node, value):
+        self.weights[node["id"]] = value
+        self.events.append(("weight", node["name"], value))
 
-                with patch.dict(os.environ, {"LFTECH_IMAGE_REF": "new"}), \
-                     patch.object(fleet_deploy, "target_health", side_effect=lambda *_: dict(states)), \
-                     patch.object(fleet_deploy, "remote_deploy", side_effect=remote), \
-                     patch.object(fleet_deploy, "change_weight", side_effect=weight):
-                    if fail:
-                        with self.assertRaisesRegex(RuntimeError, "deployment failed"):
-                            fleet_deploy.rollout(None, {"drain_seconds": 0}, targets)
-                        self.assertEqual(events, [("prepare", "ins-master"), ("prepare", "ins-slave"), ("weight", "ins-master", 0), ("deploy", "ins-master")])
-                        self.assertEqual(states[("ins-master", 18080)], (True, 0))
-                        self.assertEqual(states[("ins-slave", 18080)], (True, 10))
-                    else:
-                        fleet_deploy.rollout(None, {"drain_seconds": 0}, targets)
-                        self.assertEqual(events, [
-                            ("prepare", "ins-master"), ("prepare", "ins-slave"),
-                            ("weight", "ins-master", 0), ("deploy", "ins-master"), ("weight", "ins-master", 20),
-                            ("weight", "ins-slave", 0), ("deploy", "ins-slave"), ("weight", "ins-slave", 10),
-                        ])
+    def remote(self, **options):
+        node = os.environ["TENCENTCLOUD_INSTANCE_ID"]
+        self.assertEqual(len(options), 1)
+        mode = next(iter(options))
+        self.events.append((mode, node.removeprefix("ins-")))
+        if self.fail == (mode, node):
+            raise RuntimeError("injected failure")
+        if mode == "status_only":
+            health = "healthy" if self.container_healthy[node] else "unhealthy"
+            return {"health": health, "image": self.images[node]}
+        if mode == "prepared":
+            self.images[node] = "candidate"
+        if mode == "drain_only":
+            return self.drain_result
 
-    def test_unhealthy_peer_blocks_release(self):
-        targets = [{"id": "ins-a", "name": "a", "port": 18080, "weight": 10},
-                   {"id": "ins-b", "name": "b", "port": 18080, "weight": 10}]
-        with patch.object(fleet_deploy, "target_health", return_value={
-            ("ins-a", 18080): (True, 10), ("ins-b", 18080): (False, 10),
-        }), patch.object(fleet_deploy, "remote_deploy") as remote:
-            with self.assertRaisesRegex(RuntimeError, "All targets"):
-                fleet_deploy.rollout(None, {}, targets)
-            remote.assert_not_called()
+    def capacity(self, client, name, event):
+        self.calls.append(event)
+        if event["action"] == "poll_surge":
+            self.phase = "rolling"
+        if event["action"] == "finish_surge":
+            self.assertTrue(all(self.images[t["id"]] == "candidate" for t in self.retained))
+            self.assertTrue(all(self.weights[t["id"]] == t["weight"] for t in self.retained))
+            self.assertTrue(all(self.weights[t["id"]] == 0 for t in self.surge if t["id"] in self.weights))
+            self.phase = "done" if self.phase == "finishing" else "finishing"
+        return {"ok": True, "phase": self.phase, "ready": self.phase == "rolling",
+                "done": self.phase == "done", "existing": self.existing, "surge": self.surge}
 
-    def test_healthy_same_image_does_not_drain(self):
-        targets = [{"id": "ins-a", "name": "a", "port": 18080, "weight": 10},
-                   {"id": "ins-b", "name": "b", "port": 18080, "weight": 10}]
-        with patch.dict(os.environ, {"LFTECH_IMAGE_REF": "same"}), \
-             patch.object(fleet_deploy, "target_health", return_value={
-                 ("ins-a", 18080): (True, 10), ("ins-b", 18080): (True, 10),
-             }), patch.object(fleet_deploy, "remote_deploy", return_value={"image": "same", "health": "healthy"}) as remote, \
-             patch.object(fleet_deploy, "change_weight") as weight:
-            fleet_deploy.rollout(None, {}, targets)
-            self.assertEqual(remote.call_count, 6)
-            self.assertEqual([call.args[3] for call in weight.call_args_list], [10, 10])
+    def release(self):
+        fleet_deploy.surge_release(None, {}, self.fixed, None, "controller")
+
+    def test_full_release_preserves_existing_capacity_and_confirms_removal(self):
+        self.release()
+        self.assertEqual(self.calls[0], {"action": "begin_surge", "run_id": "123-1", "count": 2,
+                                        "release": {"image": "candidate", "source_sha": "a" * 40, "version": "v2"}})
+        self.assertEqual([event["action"] for event in self.calls],
+                         ["begin_surge", "poll_surge", "finish_surge", "finish_surge"])
+        writes = [e for e in self.events if e[0] != "status_only"]
+        expected = [("prepare_only", t["name"]) for t in self.retained]
+        for t in self.retained:
+            expected.extend([("weight", t["name"], 0), ("drain_only", t["name"]),
+                             ("prepared", t["name"]), ("weight", t["name"], t["weight"])])
+        for t in self.surge:
+            expected.extend([("weight", t["name"], 0), ("drain_only", t["name"])])
+        self.assertEqual(writes, expected)
+
+    def test_candidate_and_load_balancer_checks_precede_any_traffic_change(self):
+        for failure in ("digest", "container", "clb", "weight"):
+            with self.subTest(failure=failure):
+                node = self.surge[1]["id"]
+                self.images[node] = "wrong" if failure == "digest" else "candidate"
+                self.container_healthy[node] = failure != "container"
+                self.healthy[node] = failure != "clb"
+                self.weights[node] = 3 if failure == "weight" else 20
+                with self.assertRaises(RuntimeError):
+                    self.release()
+                self.assertFalse(any(e[0] in {"weight", "prepared"} for e in self.events))
+                self.assertFalse(any(e["action"] == "finish_surge" for e in self.calls))
+
+    def test_invalid_target_inventory_cannot_change_fixed_nodes(self):
+        for invalid in ([target("master"), target("surge2")], [target("only")],
+                        [target("bad", 10), target("surge2")]):
+            with self.subTest(invalid=invalid):
+                self.surge = invalid
+                with self.assertRaises((RuntimeError, ValueError)):
+                    self.release()
+                self.assertEqual(self.events, [])
+
+    def test_preparation_fails_before_any_drain(self):
+        self.fail = ("prepare_only", self.existing[0]["id"])
+        with self.assertRaisesRegex(RuntimeError, "injected"):
+            self.release()
+        self.assertFalse(any(e[0] == "weight" for e in self.events))
+
+    def test_failed_apply_keeps_peer_and_surge_online_and_owner_can_resume(self):
+        self.fail = ("prepared", "ins-slave")
+        with self.assertRaisesRegex(RuntimeError, "injected"):
+            self.release()
+        self.assertEqual(self.weights["ins-slave"], 0)
+        self.assertTrue(all(self.weights[t["id"]] == 20 for t in self.surge + self.existing))
+        self.assertFalse(any(e["action"] == "finish_surge" for e in self.calls))
+        self.assertNotIn(("prepared", "autoscaled"), self.events)
+        self.events.clear()
+        self.fail = None
+        self.release()
+        self.assertEqual(next(e for e in self.events if e[0] == "prepared"), ("prepared", "slave"))
+
+    def test_surge_loss_during_drain_stops_before_replacing_original(self):
+        remote = self.remote
+
+        def lose_peer(**options):
+            result = remote(**options)
+            if options.get("drain_only"):
+                self.healthy["ins-surge2"] = False
+            return result
+
+        with patch.object(fleet_deploy, "remote_deploy", side_effect=lose_peer), self.assertRaisesRegex(RuntimeError, "CLB"):
+            self.release()
+        self.assertEqual(self.images["ins-master"], "current")
+        self.assertNotIn(("weight", "slave", 0), self.events)
+        self.assertFalse(any(e["action"] == "finish_surge" for e in self.calls))
+
+    def test_known_drain_deadline_can_proceed_but_unconfirmed_result_cannot(self):
+        self.drain_result = {}
+        with self.assertRaisesRegex(RuntimeError, "Unconfirmed drain"):
+            self.release()
+        self.assertEqual(self.images["ins-master"], "current")
+        self.drain_result = {"drained": False}
+        self.release()
+        self.assertEqual(self.phase, "done")
+
+    def test_partial_surge_drain_requires_all_originals_on_new_image(self):
+        self.phase = "rolling"
+        self.weights["ins-surge1"] = 0
+        with self.assertRaisesRegex(RuntimeError, "Running image"):
+            self.release()
+        self.assertFalse(any(e[0] == "weight" for e in self.events))
+        self.images.update({t["id"]: "candidate" for t in self.retained})
+        self.release()
+        self.assertNotIn(("prepared", "master"), self.events)
+        self.assertTrue(all(e[1].startswith("surge") for e in self.events if e[0] == "weight"))
+        self.assertEqual(self.phase, "done")
+
+    def test_rerun_during_removal_does_not_contact_terminating_nodes(self):
+        self.phase = "finishing"
+        self.images.update({t["id"]: "candidate" for t in self.retained})
+        for t in self.surge:
+            del self.weights[t["id"]]
+        self.release()
+        self.assertFalse(any(e[1].startswith("surge") for e in self.events))
+        self.assertEqual(self.phase, "done")
+        self.events.clear()
+        self.release()
+        self.assertEqual(self.events, [])
 
 
-    def test_capacity_rpc_uses_the_scf_result_contract(self):
-        client = SimpleNamespace(Invoke=lambda request: SimpleNamespace(Result=SimpleNamespace(ErrMsg="", RetMsg='{"ok":true,"targets":[]}')))
-        self.assertEqual(fleet_deploy.capacity_operation(client, "controller", {"action": "begin_release", "run_id": "1-1"}), {"ok": True, "targets": []})
-        failing = SimpleNamespace(Invoke=lambda request: SimpleNamespace(Result=SimpleNamespace(ErrMsg="sensitive diagnostics", RetMsg="")))
-        with self.assertRaisesRegex(RuntimeError, "Capacity controller invocation failed"):
-            fleet_deploy.capacity_operation(failing, "controller", {})
+class CapacityRpcTests(unittest.TestCase):
+    def test_only_admission_failures_are_retried(self):
+        def reply(invocation_error="", **value):
+            return SimpleNamespace(Result=SimpleNamespace(ErrMsg=invocation_error, RetMsg=json.dumps(value)))
 
-    def test_elastic_peer_is_included_in_same_image_release(self):
-        targets = [{"id": "ins-a", "name": "master", "port": 18080, "weight": 20},
-                   {"id": "ins-b", "name": "slave", "port": 18080, "weight": 10},
-                   {"id": "ins-elastic", "name": "elastic", "port": 18080, "weight": 20}]
-        states = {(t["id"], t["port"]): (True, t["weight"]) for t in targets}
-        with patch.dict(os.environ, {"LFTECH_IMAGE_REF": "same"}), \
-             patch.object(fleet_deploy, "target_health", return_value=states), \
-             patch.object(fleet_deploy, "remote_deploy", return_value={"image": "same", "health": "healthy"}) as remote, \
-             patch.object(fleet_deploy, "change_weight") as weight:
-            fleet_deploy.rollout(None, {}, targets)
-            self.assertEqual(remote.call_count, 9)
-            self.assertEqual([call.args[3] for call in weight.call_args_list], [20, 10, 20])
-
-    def test_preparation_failure_never_drains_or_applies_any_target(self):
-        targets = [{"id": "ins-a", "name": "master", "port": 18080, "weight": 20},
-                   {"id": "ins-b", "name": "slave", "port": 18080, "weight": 10},
-                   {"id": "ins-elastic", "name": "elastic", "port": 18080, "weight": 20}]
-        states = {(t["id"], t["port"]): (True, t["weight"]) for t in targets}
-        for failing in targets:
-            with self.subTest(failing=failing["id"]):
-                def remote(**options):
-                    self.assertEqual(options, {"prepare_only": True})
-                    if os.environ["TENCENTCLOUD_INSTANCE_ID"] == failing["id"]:
-                        raise RuntimeError("preparation failed or unresolved")
-
-                with patch.object(fleet_deploy, "target_health", return_value=states), \
-                     patch.object(fleet_deploy, "remote_deploy", side_effect=remote), \
-                     patch.object(fleet_deploy, "change_weight") as weight:
-                    with self.assertRaisesRegex(RuntimeError, "preparation failed"):
-                        fleet_deploy.rollout(None, {}, targets)
-                    weight.assert_not_called()
+        client = Mock()
+        client.Invoke.side_effect = [reply(invocation_error="Concurrency limit"), reply(ok=False, error="LockError"), reply(ok=True)]
+        with patch.object(fleet_deploy.time, "sleep"):
+            self.assertEqual(fleet_deploy.capacity_operation(client, "controller", {"action": "finish_surge"}), {"ok": True})
+        self.assertEqual(client.Invoke.call_count, 3)
+        client.Invoke.side_effect = [reply(invocation_error="sensitive diagnostics")]
+        with self.assertRaisesRegex(RuntimeError, "^Capacity controller invocation failed$"):
+            fleet_deploy.capacity_operation(client, "controller", {})
 
     def test_tat_modes_are_mutually_exclusive(self):
-        import tat_deploy
-        for options in ({"status_only": True, "prepared": True},
-                        {"prepare_only": True, "prepared": True}):
+        for options in ({"status_only": True, "prepared": True}, {"prepare_only": True, "prepared": True}):
             with self.subTest(options=options), self.assertRaisesRegex(ValueError, "Conflicting"):
                 tat_deploy.deploy(**options)
 

@@ -14,8 +14,8 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.tat.v20201028 import models, tat_client
 
 
-def deploy(status_only=False, prepare_only=False, prepared=False):
-    if sum((status_only, prepare_only, prepared)) > 1:
+def deploy(status_only=False, prepare_only=False, prepared=False, drain_only=False):
+    if sum((status_only, prepare_only, prepared, drain_only)) > 1:
         raise ValueError("Conflicting deployment modes")
     required = (
         "TENCENTCLOUD_SECRET_ID", "TENCENTCLOUD_SECRET_KEY", "TENCENTCLOUD_REGION",
@@ -56,7 +56,9 @@ def deploy(status_only=False, prepare_only=False, prepared=False):
         "sudo", "-n", "--", deploy_dir.rstrip("/") + "/scripts/deploy-new-api.sh",
         image, source_sha, version, run_id,
     ])
-    if prepare_only or prepared:
+    if drain_only:
+        command += " drain"
+    elif prepare_only or prepared:
         command += " " + ("prepare" if prepare_only else "apply")
     if status_only:
         command = shlex.join([
@@ -64,7 +66,7 @@ def deploy(status_only=False, prepare_only=False, prepared=False):
             '{"image":{{json .Config.Image}},"health":{{json .State.Health.Status}}}',
         ])
     request = models.RunCommandRequest()
-    timeout = 60 if status_only else 480 if prepare_only else 1200
+    timeout = 60 if status_only else 480 if prepare_only else 660 if drain_only else 1200
     request.from_json_string(json.dumps({
         "Content": base64.b64encode(command.encode()).decode(),
         "CommandType": "SHELL", "CommandName": "lftech-new-api-deploy",
@@ -91,6 +93,7 @@ def deploy(status_only=False, prepare_only=False, prepared=False):
                 last_status = task.TaskStatus
             if task.TaskStatus not in active:
                 result = task.TaskResult
+                output = ""
                 if result and result.Output:
                     output = base64.b64decode(result.Output).decode(errors="replace")
                     # Values intentionally hidden by the operator must not be printed.
@@ -103,6 +106,11 @@ def deploy(status_only=False, prepare_only=False, prepared=False):
                     raise RuntimeError("Remote deployment failed; inspect the TAT invocation")
                 if status_only:
                     return json.loads(output)
+                if drain_only:
+                    report = json.loads(output)
+                    if not isinstance(report, dict) or set(report) != {"drained"} or type(report["drained"]) is not bool:
+                        raise RuntimeError("Invalid proxy drain report from the host")
+                    return report
                 summary = os.environ.get("GITHUB_STEP_SUMMARY")
                 if summary:
                     with open(summary, "a", encoding="utf-8") as stream:
