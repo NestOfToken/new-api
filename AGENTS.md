@@ -8,7 +8,7 @@ DO NOT send optional commentary
 - The first bootstrap is a manual rebuild of RC46 source `7d8b91268dab69d7150f345c448b5e250163146a`. Later automatic builds use the new main commit; review application and database upgrade compatibility before merging.
 - `.github/workflows/lftech-deploy-image.yml` manually deploys an existing digest without rebuilding. Database recovery is not automatic. Both workflows use the same deployment concurrency group.
 - Cloud credentials are Secrets in the `production` Environment. Region and instance ID are repository Secrets, Docker Hub credentials are an organization Secret, and non-sensitive publishing settings are repository Variables. Never print or copy Secret values into source, image layers, or TAT command content.
-- The root-managed server deployment script is maintained in the private `NestOfToken/new-api-deploy` repository. It preserves server credentials, backs up PostgreSQL, and only replaces the New API service. Runtime image overrides and release records remain on the server.
+- The root-managed server deployment script is maintained in the private `NestOfToken/new-api-deploy` repository. It preserves server credentials and only replaces the New API service. Image and configuration releases do not trigger PostgreSQL backups. Runtime image overrides and release records remain on the server.
 - Inherited upstream publishing/release workflows are disabled for this fork. Preserve upstream attribution and do not accidentally re-enable publication to upstream image repositories.
 
 ## Overview
